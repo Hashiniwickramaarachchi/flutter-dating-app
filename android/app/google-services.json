@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "972396664960",
+    "firebase_url": "https://appexlove-e7972-default-rtdb.firebaseio.com",
+    "project_id": "appexlove-e7972",
+    "storage_bucket": "appexlove-e7972.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972396664960:android:b25e40942b206391c7ee65",
+        "android_client_info": {
+          "package_name": "com.example.datingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972396664960-r35o85qq36dnrv9pg4emir2l1727v178.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.datingapp",
+            "certificate_hash": "c409edc83fe3aa19ca308975c7b0821e3c54439b"
+          }
+        },
+        {
+          "client_id": "972396664960-h8cjklq3hhv6a899iaoq5ovujbf16be3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdhu31nFWneuo6-oEkadtgqViRbHQLevI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972396664960-h8cjklq3hhv6a899iaoq5ovujbf16be3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "972396664960-boiij8g0ebke1fdqt24rr7lgpslpqv9p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.datingapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
