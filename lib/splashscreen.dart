@@ -1,8 +1,14 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/Landingpages/ladingpage.dart';
 import 'package:datingapp/Usermanegement/signin.dart';
+import 'package:datingapp/ambassdor/newuser/homepage.dart';
+import 'package:datingapp/ambassdor/olduser/showresultsignin.dart';
+import 'package:datingapp/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class splashscreen extends StatefulWidget {
   const splashscreen({super.key});
@@ -14,12 +20,52 @@ class splashscreen extends StatefulWidget {
 class _splashscreenState extends State<splashscreen> {
 
 
-  void initState(){
+ void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5),() {
-      Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-        return landingpage();
-      },));
+    // Check if the user is logged in
+    Timer(const Duration(seconds: 5), () async {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+                final userSnapshot = await FirebaseFirestore.instance
+       .collection('users')
+       .doc(user.email!)
+       .get();
+         // Check if the chat partner is in the 'ambassador' collection
+         final ambassadorSnapshot = await FirebaseFirestore.instance
+       .collection('Ambassdor')
+       .doc(user.email!)
+       .get();
+         if (userSnapshot.exists) {
+     // Print message if the chat partner is in the 'user' collection
+     Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+       return homepage();
+     },));
+         }
+                     
+                     
+    
+             else  if (ambassadorSnapshot.exists) {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    double latitude = position.latitude;
+    double longitude = position.longitude;
+
+         Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+     return        showsigninresult(
+           userLatitude: latitude,
+           userLongitude: longitude,
+           useremail: user.email.toString());
+         },));
+       }         
+        // User is logged in, navigate to home page
+    
+    
+      } else {
+        // User is not logged in, navigate to landing page
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+          return landingpage();
+        }));
+      }
     });
   }
 
@@ -32,23 +78,21 @@ final width=MediaQuery.of(context).size.width;
 
 
 
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          color: const Color.fromARGB(255, 125, 5, 245),
-        height: height,
-        width: width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-           Image.asset("images/logo white.png")
-        
-          ],
-        ),
-        
-        
-        ),
+    return Scaffold(
+      body: Container(
+        color: const Color.fromARGB(255, 125, 5, 245),
+      height: height,
+      width: width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+         Image.asset("images/logo white.png")
+      
+        ],
+      ),
+      
+      
       ),
     );
   }

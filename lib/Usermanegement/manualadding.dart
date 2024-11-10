@@ -131,64 +131,70 @@ class _ManualState extends State<Manual> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          color: Color.fromARGB(255, 255, 255, 255),
-          height: height,
-          width: width,
-          child: Padding(
-            padding: EdgeInsets.only(
-                top: height / 30,
-                bottom: height / 60,
-                right: width / 30,
-                left: width / 30),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: height / 10,
-                        width: width / 10,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            width: 1,
-                            color: Colors.black,
-                          ),
-                        ),
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: const Color.fromARGB(255, 121, 5, 245),
-                          ),
+    return Scaffold(
+                                               appBar: AppBar(
+     toolbarHeight:height/400,
+     foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+     automaticallyImplyLeading: false,
+   backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+   surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+   ),
+      body: Container(
+        color: Color.fromARGB(255, 255, 255, 255),
+        height: height,
+        width: width,
+        child: Padding(
+          padding: EdgeInsets.only(
+              bottom: height / 60,
+              right: width / 30,
+              left: width / 30),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: height / 10,
+                      width: width / 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.black,
                         ),
                       ),
-                      SizedBox(width: width / 20),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            "Enter your location",
-                            style: TextStyle(
-                                color: const Color(0xff26150F),
-                                fontFamily: "defaultfontsbold",
-                                fontWeight: FontWeight.w500,
-                                fontSize: height / 35),
-                          ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: const Color.fromARGB(255, 121, 5, 245),
                         ),
                       ),
-                      SizedBox(width: width / 20)
-                    ],
-                  ),
-                  SizedBox(height: height / 70),
-                  // Search field to search for location
-                  Container(
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          "Enter your location",
+                          style: TextStyle(
+                              color: const Color(0xff26150F),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: width / 20)
+                  ],
+                ),
+                SizedBox(height: height / 50),
+                // Search field to search for location
+                Padding(
+                  padding:  EdgeInsets.only(left: width/30,right: width/30),
+                  child: Container(
                     height: height / 22,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -201,81 +207,81 @@ class _ManualState extends State<Manual> {
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(
                             left: width / 20,
-                            top: height / 10,
+                            top: height / 2,
                             bottom: height / 150),
                         hintText: "Search location",
                         border: InputBorder.none,
                         suffixIcon: Icon(
                           Icons.search,
                           color: Color(0xff565656),
-                          size: height / 40,
+                          size: 20,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: height / 30),
-
-                  // Display search results// Display search results
-_searchResults.isNotEmpty && _locations.isNotEmpty
-    ? ListView.builder(
-        shrinkWrap: true,
-        itemCount: _searchResults.length,
-        itemBuilder: (context, index) {
-          if (index >= _locations.length) {
-            return Container(); // Safety check: If locations are fewer, don't show more items
-          }
-          
-          Placemark place = _searchResults[index];
-          Location location = _locations[index];
-          
-          return ListTile(
-            title: Text(
-              "${place.street}, ${place.locality}, ${place.country}",
-            ),
-            onTap: () {
-              setState(() {
-                _currentLatLng = LatLng(
-                  location.latitude,
-                  location.longitude,
-                );
-                _currentAddress =
-                    "${place.street}, ${place.locality}, ${place.country}";
-                _currentAddressDB =
-                    "${place.locality}, ${place.country}";
-              });
-              _searchController.clear();
-              _searchResults.clear();
-            },
-          );
-        },
-      )
-    : Container(),
-
-
-                  // Manual location input field (read-only, opens map)
-                  TextField(
-                    onTap: _openMap, // Open map when tapping
-                    readOnly: true,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    decoration: InputDecoration(
-                      hintText: _currentAddress ?? "Use current location",
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff8F9DA6)),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff8F9DA6)),
-                      ),
-                      contentPadding:
-                          EdgeInsets.only(left: width / 50, top: height / 50),
-                      prefixIcon: Icon(
-                        Icons.navigation,
-                        color: Color(0xff565656),
-                        size: height / 40,
-                      ),
+                ),
+                SizedBox(height: height / 30),
+    
+                // Display search results// Display search results
+    _searchResults.isNotEmpty && _locations.isNotEmpty
+        ? ListView.builder(
+      shrinkWrap: true,
+      itemCount: _searchResults.length,
+      itemBuilder: (context, index) {
+        if (index >= _locations.length) {
+          return Container(); // Safety check: If locations are fewer, don't show more items
+        }
+        
+        Placemark place = _searchResults[index];
+        Location location = _locations[index];
+        
+        return ListTile(
+          title: Text(
+            "${place.street}, ${place.locality}, ${place.country}",
+          ),
+          onTap: () {
+            setState(() {
+              _currentLatLng = LatLng(
+                location.latitude,
+                location.longitude,
+              );
+              _currentAddress =
+                  "${place.street}, ${place.locality}, ${place.country}";
+              _currentAddressDB =
+                  "${place.locality}, ${place.country}";
+            });
+            _searchController.clear();
+            _searchResults.clear();
+          },
+        );
+      },
+    )
+        : Container(),
+    
+    
+                // Manual location input field (read-only, opens map)
+                TextField(
+                  onTap: _openMap, // Open map when tapping
+                  readOnly: true,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  decoration: InputDecoration(
+                    hintText: _currentAddress ?? "Use current location",
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xff8F9DA6)),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xff8F9DA6)),
+                    ),
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 50),
+                    prefixIcon: Icon(
+                      Icons.navigation,
+                      color: Color(0xff565656),
+                      size: 20
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

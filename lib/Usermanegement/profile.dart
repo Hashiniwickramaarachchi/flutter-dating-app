@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/bootmnavbar.dart';
+import 'package:datingapp/homepage.dart';
 import 'package:datingapp/premium/allpremiumusers.dart';
 import 'package:datingapp/settingpage.dart/setting&activitypage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,8 +43,16 @@ class _profileState extends State<profile> {
             final userdataperson =
                 snapshot.data!.data() as Map<String, dynamic>;
 
-            return SafeArea(
+            return WillPopScope(
+              onWillPop: () async => false,
               child: Scaffold(
+                appBar: AppBar(
+                  toolbarHeight: height / 400,
+                  foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  automaticallyImplyLeading: false,
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+                ),
                 backgroundColor: Color.fromARGB(255, 255, 255, 255),
                 body: Container(
                   height: height,
@@ -53,31 +62,14 @@ class _profileState extends State<profile> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                            top: height / 30,
-                            bottom: height / 60,
-                            right: width / 30,
-                            left: width / 30),
+                            right: width / 20, left: width / 20),
                         child: Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Container(
-                                  height: height / 10,
-                                  width: width / 10,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 1, color: Colors.black)),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_back,
-                                        color: Color.fromARGB(255, 121, 5, 245),
-                                      )),
+                                SizedBox(
+                                  width: width / 20,
                                 ),
                                 Expanded(
                                   child: Center(
@@ -87,7 +79,7 @@ class _profileState extends State<profile> {
                                         color:
                                             const Color.fromARGB(255, 0, 0, 0),
                                         fontFamily: "defaultfontsbold",
-                                        fontSize: height / 32),
+                                        fontSize: 20),
                                   )),
                                 ),
                                 GestureDetector(
@@ -106,7 +98,7 @@ class _profileState extends State<profile> {
                             ),
                             Center(
                               child: Padding(
-                                padding: EdgeInsets.only(top: height / 50),
+                                padding: EdgeInsets.only(top: height / 30),
                                 child: Container(
                                   height: height / 5,
                                   width: width / 2.5,
@@ -142,122 +134,92 @@ class _profileState extends State<profile> {
                             SizedBox(
                               height: height / 50,
                             ),
-                            Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  userdataperson['name'],
-                                  style: TextStyle(
-                                      color: const Color.fromARGB(255, 0, 0, 0),
-                                      fontFamily: "defaultfontsbold",
-                                      fontSize: height / 32),
-                                ),
-         if (userdataperson['profile'] == "premium") ...[
-                 
-            Padding(
-              padding:  EdgeInsets.only(left: width/50),
-              child: 
-              Container(
-                    height: height / 20,
-                    width: width / 20,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                image:
-                    AssetImage("assetss/Vector.png",),)),
-                  ),
-            ),
-         ],
-                              ],
-                            )),
-                            if (userdataperson['profile'] == "standard") ...[
-                              SizedBox(
-                                height: height / 60,
-                              ),
-                            ],
-                            if (userdataperson['profile'] == "premium") ...[
-                              SizedBox(
-                                height: height / 90,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-  return allpremium(userLatitude: userdataperson['X'], userLongitude: userdataperson["Y"], useremail: userdataperson['email']);
-},));
-
-                                },
-                                child: Center(
-                                    child: Text(
-                                  "See Premium Users",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 121, 5, 245),
-                                      fontFamily: "defaultfontsbold",
-                                      fontSize: height / 50),
-                                )),
-                              ),
-                            ],
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: width / 70,
-                                  right: width / 70,
-                                  top: height / 60),
-                              child: Container(
-                                height:
-                                    height / 8.5, // Adjust based on your design
-                                color: Colors.transparent,
-                                width: width,
-                                child: GridView.builder(
-                                  physics:
-                                      ScrollPhysics(), // Prevents extra scrolling
-                                  shrinkWrap: true,
-                                  itemCount: userdataperson['Interest'].length,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount:
-                                        3, // Number of items per row
-                                    crossAxisSpacing: width / 90,
-                                    mainAxisSpacing: height * 0.01,
-                                    childAspectRatio:
-                                        3, // Ensures the grid items are square
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffD9D9D9),
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              IconData(
-                                                userdataperson['Icon'][index],
-                                                fontFamily: 'MaterialIcons',
-                                              ),
-                                              color: Color(0xff565656),
-                                              size: height / 42,
-                                            ),
-                                            Text(
-                                              userdataperson['Interest'][index],
-                                              style: TextStyle(
-                                                  color:
-                                                      const Color(0xff565656),
-                                                  fontFamily:
-                                                      "defaultfontsbold",
-                                                  fontSize: height / 62),
-                                            ),
-                                          ],
-                                        ),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Center(
+                                      child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        userdataperson['name'],
+                                        style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 0, 0, 0),
+                                            fontFamily: "defaultfontsbold",
+                                            fontSize: 20),
                                       ),
-                                    );
+                                      if (userdataperson['profile'] ==
+                                          "premium") ...[
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.only(left: width / 50),
+                                          child: Container(
+                                            height: height / 20,
+                                            width: width / 20,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                              image: AssetImage(
+                                                "assetss/Vector.png",
+                                              ),
+                                            )),
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  )),
+                                  if (userdataperson['profile'] ==
+                                      "standard") ...[
+                                    SizedBox(
+                                      height: height / 60,
+                                    ),
+                                  ],
+                                  if (userdataperson['profile'] ==
+                                      "premium") ...[
+                                    SizedBox(
+                                      height: height / 90,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) {
+                                            return allpremium(
+                                                userLatitude:
+                                                    userdataperson['X'],
+                                                userLongitude:
+                                                    userdataperson["Y"],
+                                                useremail:
+                                                    userdataperson['email']);
+                                          },
+                                        ));
+                                      },
+                                      child: Text(
+                                        "See Premium Users",
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 121, 5, 245),
+                                            fontFamily: "defaultfontsbold",
+                                            fontSize: 11),
+                                      ),
+                                    ),
+                                  ],
+                                ]),
+                            Wrap(
+                                spacing: 3,
+                                children: List<Widget>.generate(
+                                  userdataperson['Interest'].length,
+                                  (int index) {
+                                    return _buildInterestChip(
+                                        curentuser.email!,
+                                        context,
+                                        userdataperson['Interest'][index],
+                                        userdataperson['Icon'][index],
+                                        height);
                                   },
-                                ),
-                              ),
-                            ),
+                                )),
                             SizedBox(
-                              height: height / 60,
+                              height: height / 30,
                             ),
                             Expanded(
                               child: GridView.builder(
@@ -289,7 +251,7 @@ Navigator.of(context).push(MaterialPageRoute(builder:(context) {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: height / 1.23,
+                            top: height / 1.25,
                             left: width / 20,
                             right: width / 20),
                         child: BottomNavBar(
@@ -309,5 +271,26 @@ Navigator.of(context).push(MaterialPageRoute(builder:(context) {
             return CircularProgressIndicator();
           }
         });
+  }
+
+  Widget _buildInterestChip(String email, BuildContext context, String label,
+      int iconname, final height) {
+    return Chip(
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(30)),
+        avatar: Icon(
+          size: 18,
+          IconData(iconname, fontFamily: 'MaterialIcons'),
+          color: Color(0xff565656),
+        ), // Ensure the correct font family
+        label: Text(
+          label,
+          style: TextStyle(
+              color: const Color(0xff565656),
+              fontFamily: "defaultfontsbold",
+              fontSize: 10),
+        ),
+        backgroundColor: Color(0xffD9D9D9));
   }
 }

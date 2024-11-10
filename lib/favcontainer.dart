@@ -130,7 +130,7 @@ class _favcontainerState extends State<favcontainer> {
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 255, 255, 255),
                                     fontFamily: "defaultfonts",
-                                    fontSize: height / 67),
+                                    fontSize: 10),
                               ),
                             ),
                           ),
@@ -182,13 +182,21 @@ class _favcontainerState extends State<favcontainer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  widget.name.toUpperCase(),
-                                  style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontFamily: "defaultfontsbold",
-                                      fontSize: height / 45),
+                                Flexible(
+                                  child: Text(
+                                    
+                                    widget.name.toUpperCase(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      
+                                        color: const Color.fromARGB(
+                                            255, 255, 255, 255),
+                                        fontFamily: "defaultfontsbold",
+                                        fontSize: 20),
+                                            softWrap: true,
+    overflow: TextOverflow
+        .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+                                  ),
                                 ),
                                 Text(
                                   widget.location,
@@ -196,7 +204,7 @@ class _favcontainerState extends State<favcontainer> {
                                       color: const Color.fromARGB(
                                           255, 255, 255, 255),
                                       fontFamily: "defaultfontsbold",
-                                      fontSize: height / 60),
+                                      fontSize: 15),
                                   textAlign: TextAlign.center,
                                 ),
                               ],

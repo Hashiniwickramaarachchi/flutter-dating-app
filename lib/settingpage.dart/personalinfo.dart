@@ -15,6 +15,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   String? selectedHeight;
   String? selectedLanguage;
   final education = TextEditingController();
+    final desciption = TextEditingController();
+
 
   final List<Map<String, dynamic>> _interests = [
     {'icon': Icons.music_note, 'label': 'Music'},
@@ -176,410 +178,451 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             _selectedInterestIcons
                 .addAll(List<int>.from(userdataperson['Icon'] ?? []));
 
-            return SafeArea(
-              child: Scaffold(
-                backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                body: Container(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  height: deviceHeight,
-                  width: deviceWidth,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        top: deviceHeight / 30,
-                        bottom: deviceHeight / 60,
-                        right: deviceWidth / 15,
-                        left: deviceWidth / 15),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: deviceWidth / 60),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: deviceHeight / 10,
-                                  width: deviceWidth / 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      width: 1,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    icon: Icon(
-                                      Icons.arrow_back,
-                                      color: const Color.fromARGB(
-                                          255, 121, 5, 245),
-                                    ),
-                                  ),
+            return Scaffold(
+                appBar: AppBar(
+                       toolbarHeight:deviceHeight/400,
+                       foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                       automaticallyImplyLeading: false,
+                   backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                   surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+                   ),
+              backgroundColor: Color.fromARGB(255, 255, 255, 255),
+              body: Container(
+                color: Color.fromARGB(255, 255, 255, 255),
+                height: deviceHeight,
+                width: deviceWidth,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: deviceHeight / 60,
+                      right: deviceWidth / 20,
+                      left: deviceWidth / 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              height: deviceHeight / 10,
+                              width: deviceWidth / 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.black,
                                 ),
-                                SizedBox(width: deviceWidth / 20),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      "Personal Information",
-                                      style: TextStyle(
-                                          color: const Color(0xff26150F),
-                                          fontFamily: "defaultfontsbold",
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: deviceHeight / 35),
-                                    ),
-                                  ),
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: const Color.fromARGB(
+                                      255, 121, 5, 245),
                                 ),
-                                SizedBox(width: deviceWidth / 20)
-                              ],
+                              ),
                             ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: deviceHeight / 80),
+                            SizedBox(width: deviceWidth / 40),
+                            Expanded(
+                              child: Center(
                                 child: Text(
-                                  'Interest',
+                                  "Personal Information",
                                   style: TextStyle(
-                                      color: const Color(0xff4D4D4D),
+                                      color: const Color(0xff26150F),
                                       fontFamily: "defaultfontsbold",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: deviceHeight / 50),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    enableDrag: false,
-                                    
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(50),
-                                        topRight: Radius.circular(50),
-                                      ),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    context: context,
-                                    builder: (context) {
-                                      return interestedit();
-                                    },
-                                  );
-                                },
-                                child: SvgPicture.asset(
-                                  "images/Group.svg",
-                                  height: deviceHeight / 50,
-                                  width: deviceWidth / 50,
-                                ),
-                              ),
-                            ],
-                          ),
-                  
-                          //  Wrap(
-                          // spacing: 8.0,
-                          // runSpacing: 8.0,
-                          // children: List<Widget>.generate(_interests.length, (int index) {
-                          // return ChoiceChip(
-                          // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                          // avatar: Icon(_interests[index]['icon'], size: 20),
-                          // label: Text(_interests[index]['label']),
-                          // selected: _selectedInterestIndices.contains(_interests[index]['label']),
-                          // onSelected: (bool selected) {
-                          // if (selected) {
-                          // _addInterestToFirestore(curentuser.email!, _interests[index]['label'], _interests[index]['icon'].codePoint);
-                          // } else {
-                          // _removeInterestFromFirestore(curentuser.email!, _interests[index]['label'], _interests[index]['icon'].codePoint);
-                          // }
-                  
-                          // setState(() {
-                          // _setSelectedInterestsAndIcons(selected, _interests[index]);
-                          // });
-                          // },
-                          // selectedColor: const Color.fromARGB(255, 121, 5, 245),
-                          // backgroundColor: Colors.grey[300],
-                          // );
-                          // }),
-                          // ),
-                          //
-                  
-                          Wrap(
-                              spacing: deviceWidth / 90,
-                              runSpacing: deviceHeight / 70,
-                              children: List<Widget>.generate(
-                                userdataperson['Interest'].length,
-                                (int index) {
-                                  return _buildInterestChip(
-                                      curentuser.email!,
-                                      context,
-                                      userdataperson['Interest'][index],
-                                      userdataperson['Icon'][index],
-                                      deviceHeight);
-                                },
-                              )),
-                  
-                          SizedBox(height: 20),
-                          // Age Dropdown Section
-                          Text(
-                            'Age',
-                            style: TextStyle(
-                                color: const Color(0xff4D4D4D),
-                                fontFamily: "defaultfontsbold",
-                                fontWeight: FontWeight.bold,
-                                fontSize: deviceHeight / 50),
-                          ),
-                          SizedBox(height: 10),
-                          DropdownButtonFormField<String>(
-                            dropdownColor: Colors.white,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            value: selectedAge,
-                            hint: Text("Select Age"),
-                            items: ageList.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedAge = value;
-                              });
-                            },
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.transparent,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Color(0xff8F9DA6)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Color(0xff8F9DA6)),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  left: deviceWidth / 50,
-                                  top: deviceHeight / 50),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          // Height Dropdown Section
-                          Text(
-                            'Height',
-                            style: TextStyle(
-                                color: const Color(0xff4D4D4D),
-                                fontFamily: "defaultfontsbold",
-                                fontWeight: FontWeight.bold,
-                                fontSize: deviceHeight / 50),
-                          ),
-                          SizedBox(height: 10),
-                          DropdownButtonFormField<String>(
-                            dropdownColor: Colors.white,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            value: selectedHeight,
-                            hint: Text("Select Height",
-                                style: TextStyle(color: Colors.black)),
-                            items: heightList.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedHeight = value;
-                                print(selectedHeight);
-                              });
-                            },
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.transparent,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Color(0xff8F9DA6)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Color(0xff8F9DA6)),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  left: deviceWidth / 50,
-                                  top: deviceHeight / 50),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          // Languages Dropdown and Chips Section
-                          Text(
-                            'Languages',
-                            style: TextStyle(
-                                color: const Color(0xff4D4D4D),
-                                fontFamily: "defaultfontsbold",
-                                fontWeight: FontWeight.bold,
-                                fontSize: deviceHeight / 50),
-                          ),
-                          SizedBox(height: 10),
-                          DropdownButtonFormField<String>(
-                            dropdownColor: Colors.white,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            value: selectedLanguage,
-                            hint: Text("Select Language",
-                                style: TextStyle(color: Colors.black)),
-                            items: languages.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              if (value != null &&
-                                  !selectedLanguages.contains(value)) {
-                                setState(() {
-                                  selectedLanguages.add(value);
-                                  selectedLanguage = value;
-                                });
-                                _updateLanguagesInFirestore(
-                                    curentuser.email!); // Update Firestore
-                              }
-                            },
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.transparent,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Color(0xff8F9DA6)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Color(0xff8F9DA6)),
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  left: deviceWidth / 50,
-                                  top: deviceHeight / 50),
-                            ),
-                          ),
-                  
-                          SizedBox(height: 10),
-                          Wrap(
-                            spacing: 10,
-                            children: selectedLanguages.map((language) {
-                              return Chip(
-                                label: Text(language.toString()),
-                                backgroundColor: Color(0xffD9D9D9),
-                                labelStyle: TextStyle(
-                                  color: const Color(0xff565656),
-                                  fontFamily: "defaultfontsbold",
-                                  fontSize: deviceHeight / 55,
-                                ),
-                                onDeleted: () {
-                                  setState(() {
-                                    selectedLanguages.remove(language);
-                                  });
-                                  _removeLanguageFromFirestore(
-                                      curentuser.email!,
-                                      language); // Remove from Firestore
-                                },
-                              );
-                            }).toList(),
-                          ),
-                  
-                          SizedBox(height: 20),
-                          Text(
-                            'Education',
-                            style: TextStyle(
-                                color: const Color(0xff4D4D4D),
-                                fontFamily: "defaultfontsbold",
-                                fontWeight: FontWeight.bold,
-                                fontSize: deviceHeight / 50),
-                          ),
-                          SizedBox(height: 10),
-                          // TextField(
-                          // controller: education,
-                          // style: Theme.of(context).textTheme.headlineSmall,
-                          // decoration: InputDecoration(
-                          // hintText: 'Enter Education',
-                          // border: OutlineInputBorder(),
-                          // ),
-                          // ),
-                  
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.transparent),
-                            height: deviceHeight / 6,
-                            child: TextField(
-                              controller: education,
-                              maxLines: 10,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(
-                                    left: deviceWidth / 50,
-                                    top: deviceHeight / 90),
-                                hintText: 'Enter Education',
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      BorderSide(color: Color(0xff8F9DA6)),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      BorderSide(color: Color(0xff8F9DA6)),
-                                ),
-                              ),
-                              style:
-                                  Theme.of(context).textTheme.headlineSmall,
-                            ),
-                          ),
-                          // Center(
-                          // child: ElevatedButton(
-                          // onPressed: () async {
-                          // await _updateProfile(curentuser.email!);
-                          // },
-                          // child: Text('Update Profile'),
-                          // ),
-                          // ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: deviceHeight / 40,
-                              bottom: deviceHeight / 30,
-                            ),
-                            child: GestureDetector(
-                              onTap: () async {
-                                await _updateProfile(curentuser.email!);
-                              },
-                              child: Container(
-                                height: deviceHeight / 15,
-                                width: deviceWidth,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff7905F5),
-                                  borderRadius: BorderRadius.circular(
-                                      deviceHeight / 10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "Update Profile",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(width: deviceWidth / 20)
+                          ],
+                        ),
+                        SizedBox(height: 20,),
+                                            Text(
+                    'Description',
+                    style: TextStyle(
+                        color: const Color(0xff4D4D4D),
+                        fontFamily: "defaultfontsbold",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                  SizedBox(height: 10),
+                  // ),
+                        
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.transparent),
+                    height: deviceHeight / 6,
+                    child: TextField(
+                      controller: desciption,
+                      maxLines: 10,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                            left: deviceWidth / 50,
+                            top: deviceHeight / 90),
+                        hintText: 'Enter description',
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0xff8F9DA6)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0xff8F9DA6)),
+                        ),
                       ),
+                      style:
+                          Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
+                  SizedBox(height:20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: deviceHeight / 80),
+                              child: Text(
+                                'Interest',
+                                style: TextStyle(
+                                    color: const Color(0xff4D4D4D),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  enableDrag: false,
+                                  
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      topRight: Radius.circular(50),
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  context: context,
+                                  builder: (context) {
+                                    return interestedit();
+                                  },
+                                );
+                              },
+                              child: SvgPicture.asset(
+                                "images/Group.svg",
+                                height: deviceHeight / 50,
+                                width: deviceWidth / 50,
+                              ),
+                            ),
+                          ],
+                        ),
+                
+                        //  Wrap(
+                        // spacing: 8.0,
+                        // runSpacing: 8.0,
+                        // children: List<Widget>.generate(_interests.length, (int index) {
+                        // return ChoiceChip(
+                        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        // avatar: Icon(_interests[index]['icon'], size: 20),
+                        // label: Text(_interests[index]['label']),
+                        // selected: _selectedInterestIndices.contains(_interests[index]['label']),
+                        // onSelected: (bool selected) {
+                        // if (selected) {
+                        // _addInterestToFirestore(curentuser.email!, _interests[index]['label'], _interests[index]['icon'].codePoint);
+                        // } else {
+                        // _removeInterestFromFirestore(curentuser.email!, _interests[index]['label'], _interests[index]['icon'].codePoint);
+                        // }
+                
+                        // setState(() {
+                        // _setSelectedInterestsAndIcons(selected, _interests[index]);
+                        // });
+                        // },
+                        // selectedColor: const Color.fromARGB(255, 121, 5, 245),
+                        // backgroundColor: Colors.grey[300],
+                        // );
+                        // }),
+                        // ),
+                        //
+                
+                        Wrap(
+                            spacing: deviceWidth / 90,
+                            children: List<Widget>.generate(
+                              userdataperson['Interest'].length,
+                              (int index) {
+                                return _buildInterestChip(
+                                    curentuser.email!,
+                                    context,
+                                    userdataperson['Interest'][index],
+                                    userdataperson['Icon'][index],
+                                    deviceHeight);
+                              },
+                            )),
+                
+                        SizedBox(height: 20),
+                        // Age Dropdown Section
+                        Text(
+                          'Age',
+                          style: TextStyle(
+                              color: const Color(0xff4D4D4D),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        SizedBox(height: 10),
+                        DropdownButtonFormField<String>(
+                          dropdownColor: Colors.white,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          value: selectedAge,
+                          hint: Text("Select Age"),
+                          items: ageList.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedAge = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: Color(0xff8F9DA6)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: Color(0xff8F9DA6)),
+                            ),
+                            contentPadding: EdgeInsets.only(
+                                left: deviceWidth / 50,
+                                top: deviceHeight / 50),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        // Height Dropdown Section
+                        Text(
+                          'Height',
+                          style: TextStyle(
+                              color: const Color(0xff4D4D4D),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        SizedBox(height: 10),
+                        DropdownButtonFormField<String>(
+                          dropdownColor: Colors.white,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          value: selectedHeight,
+                          hint: Text("Select Height",
+                              style: TextStyle(color: Colors.black)),
+                          items: heightList.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedHeight = value;
+                              print(selectedHeight);
+                            });
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: Color(0xff8F9DA6)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: Color(0xff8F9DA6)),
+                            ),
+                            contentPadding: EdgeInsets.only(
+                                left: deviceWidth / 50,
+                                top: deviceHeight / 50),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        // Languages Dropdown and Chips Section
+                        Text(
+                          'Languages',
+                          style: TextStyle(
+                              color: const Color(0xff4D4D4D),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        SizedBox(height: 10),
+                        DropdownButtonFormField<String>(
+                          dropdownColor: Colors.white,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          value: selectedLanguage,
+                          hint: Text("Select Language",
+                              style: TextStyle(color: Colors.black)),
+                          items: languages.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (value != null &&
+                                !selectedLanguages.contains(value)) {
+                              setState(() {
+                                selectedLanguages.add(value);
+                                selectedLanguage = value;
+                              });
+                              _updateLanguagesInFirestore(
+                                  curentuser.email!); // Update Firestore
+                            }
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: Color(0xff8F9DA6)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: Color(0xff8F9DA6)),
+                            ),
+                            contentPadding: EdgeInsets.only(
+                                left: deviceWidth / 50,
+                                top: deviceHeight / 50),
+                          ),
+                        ),
+                
+                        SizedBox(height: 10),
+                        Wrap(
+                          spacing: 10,
+                          children: selectedLanguages.map((language) {
+                            return Chip(
+                              label: Text(language.toString()),
+                              backgroundColor: Color(0xffD9D9D9),
+                              labelStyle: TextStyle(
+                                color: const Color(0xff565656),
+                                fontFamily: "defaultfontsbold",
+                                fontSize: deviceHeight / 55,
+                              ),
+                              onDeleted: () {
+                                setState(() {
+                                  selectedLanguages.remove(language);
+                                });
+                                _removeLanguageFromFirestore(
+                                    curentuser.email!,
+                                    language); // Remove from Firestore
+                              },
+                            );
+                          }).toList(),
+                        ),
+                
+                        SizedBox(height: 20),
+                        Text(
+                          'Education',
+                          style: TextStyle(
+                              color: const Color(0xff4D4D4D),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        SizedBox(height: 10),
+                        // TextField(
+                        // controller: education,
+                        // style: Theme.of(context).textTheme.headlineSmall,
+                        // decoration: InputDecoration(
+                        // hintText: 'Enter Education',
+                        // border: OutlineInputBorder(),
+                        // ),
+                        // ),
+                
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.transparent),
+                          height: deviceHeight / 6,
+                          child: TextField(
+                            controller: education,
+                            maxLines: 10,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(
+                                  left: deviceWidth / 50,
+                                  top: deviceHeight / 90),
+                              hintText: 'Enter Education',
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: Color(0xff8F9DA6)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: Color(0xff8F9DA6)),
+                              ),
+                            ),
+                            style:
+                                Theme.of(context).textTheme.headlineSmall,
+                          ),
+                        ),
+                        // Center(
+                        // child: ElevatedButton(
+                        // onPressed: () async {
+                        // await _updateProfile(curentuser.email!);
+                        // },
+                        // child: Text('Update Profile'),
+                        // ),
+                        // ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: deviceHeight / 40,
+                            bottom: deviceHeight / 30,
+                          ),
+                          child: GestureDetector(
+                            onTap: () async {
+                              await _updateProfile(curentuser.email!);
+                            },
+                            child: Container(
+                              height: deviceHeight / 15,
+                              width: deviceWidth,
+                              decoration: BoxDecoration(
+                                color: Color(0xff7905F5),
+                                borderRadius: BorderRadius.circular(
+                                    deviceHeight / 10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Update Profile",
+                                  style:
+                                      Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

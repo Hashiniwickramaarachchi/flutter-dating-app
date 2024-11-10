@@ -102,8 +102,15 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
     var deviceHeight = MediaQuery.of(context).size.height;
 
     final curentuser = FirebaseAuth.instance.currentUser!;
-    return SafeArea(
-      child: Container(
+    return Scaffold(
+                                                                            appBar: AppBar(
+                      toolbarHeight:deviceHeight/400,
+                      foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                      automaticallyImplyLeading: false,
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+                  ),
+      body:  Container(
         width: deviceWidth,
         height: deviceHeight,
         color: const Color.fromARGB(255, 255, 255, 255),
@@ -117,15 +124,14 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                 final userdataperson =
                     snapshot.data!.data() as Map<String, dynamic>;
                 _initializeFields(userdataperson);
-
+      
                 return Scaffold(
                   backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   body: Padding(
                     padding: EdgeInsets.only(
-                        top: deviceHeight / 30,
                         bottom: deviceHeight / 60,
-                        right: deviceWidth / 30,
-                        left: deviceWidth / 30),
+                        right: deviceWidth / 20,
+                        left: deviceWidth / 20),
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,15 +168,14 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                                         color: const Color(0xff26150F),
                                         fontFamily: "defaultfontsbold",
                                         fontWeight: FontWeight.w500,
-                                        fontSize: deviceHeight / 35),
+                                        fontSize: 20),
                                   ),
                                 ),
                               ),
-                              SizedBox(width: deviceWidth / 20)
+                              SizedBox(width: deviceWidth / 15)
                             ],
                           ),
-                          SizedBox(height: deviceHeight / 20),
-
+      
                           // Profile picture section
                           Center(
                             child: Stack(
@@ -227,95 +232,59 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 20),
-
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
-                            child: Text(
-                              'Name',
-                              style: TextStyle(
-                                  color: const Color(0xff4D4D4D),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: deviceHeight / 50),
-                            ),
+                          SizedBox(height: 30),
+      
+                          Text(
+                            'Name',
+                            style: TextStyle(
+                                color: const Color(0xff4D4D4D),
+                                fontFamily: "defaultfontsbold",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
-                            child: customTextField('Name', nameController,
-                                false, deviceHeight, deviceWidth),
+                          customTextField('Name', nameController,
+                              false, deviceHeight, deviceWidth),
+      
+                          Text(
+                            'Phone Number',
+                            style: TextStyle(
+                                color: const Color(0xff4D4D4D),
+                                fontFamily: "defaultfontsbold",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
                           ),
-
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
-                            child: Text(
-                              'Phone Number',
-                              style: TextStyle(
-                                  color: const Color(0xff4D4D4D),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: deviceHeight / 50),
-                            ),
+                          customTextField2(
+                              'Phone number',
+                              phoneController,
+                              false,
+                              deviceHeight,
+                              deviceWidth),
+      
+                          Text(
+                            'Email',
+                            style: TextStyle(
+                                color: const Color(0xff4D4D4D),
+                                fontFamily: "defaultfontsbold",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
-                            child: customTextField2(
-                                'Phone number',
-                                phoneController,
-                                false,
-                                deviceHeight,
-                                deviceWidth),
+                          customTextField('Email', emailController,
+                              true, deviceHeight, deviceWidth),
+      
+                          Text(
+                            'Gender',
+                            style: TextStyle(
+                                color: const Color(0xff4D4D4D),
+                                fontFamily: "defaultfontsbold",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
                           ),
-
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
-                            child: Text(
-                              'Email',
-                              style: TextStyle(
-                                  color: const Color(0xff4D4D4D),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: deviceHeight / 50),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
-                            child: customTextField('Email', emailController,
-                                true, deviceHeight, deviceWidth),
-                          ),
-
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
-                            child: Text(
-                              'Gender',
-                              style: TextStyle(
-                                  color: const Color(0xff4D4D4D),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: deviceHeight / 50),
-                            ),
-                          ),
-
+      
                           Padding(
                             padding: EdgeInsets.only(
                                 top: deviceHeight / 60,
                                 bottom: deviceWidth / 40,
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
+                                ),
                             child: DropdownButtonFormField<String>(
                               dropdownColor: Colors.white,
                               value: selectedgender,
@@ -355,14 +324,13 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                             ),
                           ),
                           SizedBox(height: deviceHeight / 30),
-
+      
                           // Update Button
                           Padding(
                             padding: EdgeInsets.only(
                                 top: deviceHeight / 50,
                                 bottom: deviceHeight / 30,
-                                left: deviceWidth / 40,
-                                right: deviceWidth / 40),
+                                ),
                             child: GestureDetector(
                               onTap: () => _updateProfile(curentuser.email!),
                               child: Container(
@@ -431,6 +399,11 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
    return Padding(
      padding: EdgeInsets.only(top: height / 60, bottom: height / 40),
      child: TextField(
+                       maxLength: 10,
+buildCounter: (BuildContext context,
+ {int? currentLength, bool? isFocused, int? maxLength}) {
+   return null; // Hides the counter
+ },
        readOnly: check,
        controller: controller,
        keyboardType: TextInputType.number,

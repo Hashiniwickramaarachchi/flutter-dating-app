@@ -152,348 +152,353 @@ class _ChatPageState extends State<ChatPage> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 142, 118, 146),
-        body: Stack(
-          children: [
-            // Purple Top Section (Header)
-            Container(
-              height: height * 0.4, // Adjust height for header
-              width: width,
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 121, 5, 245),
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: height / 50, left: width / 25, right: width / 25),
-                child: Column(
-                  children: [
-                    // Row with Back button and Chat title
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: height / 10,
-                          width: width / 10,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
+    return Scaffold(
+                                                     appBar: AppBar(
+         toolbarHeight:height/400,
+         foregroundColor: Color.fromARGB(255, 121, 5, 245),
+         automaticallyImplyLeading: false,
+       backgroundColor: Color.fromARGB(255, 121, 5, 245),
+       surfaceTintColor:Color.fromARGB(255, 121, 5, 245),
+       ),
+                backgroundColor: Color.fromARGB(255, 121, 5, 245),
+      body: Stack(
+        children: [
+          // Purple Top Section (Header)
+          Container(
+            height: height * 0.4, // Adjust height for header
+            width: width,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 121, 5, 245),
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: width / 20, right: width / 20),
+              child: Column(
+                children: [
+                  // Row with Back button and Chat title
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Container(
+                        // height: height / 10,
+                        // width: width / 10,
+                        // decoration: BoxDecoration(
+                          // color: Colors.white,
+                          // shape: BoxShape.circle,
+                        // ),
+                        // child: IconButton(
+                            // onPressed: () {
+                              // Navigator.of(context).pop();
+                            // },
+                            // icon: Icon(
+                              // size: 20,
+                              // Icons.arrow_back,
+                              // color: Color.fromARGB(255, 121, 5, 245),
+                            // )),
+                      // ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(widget.chatPartnerimage),
+                            radius: 26,
                           ),
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              icon: Icon(
-                                size: 20,
-                                Icons.arrow_back,
-                                color: Color.fromARGB(255, 121, 5, 245),
-                              )),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(widget.chatPartnerimage),
-                              radius: 26,
-                            ),
-                            SizedBox(
-                              width: width / 40,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.chatPartnername,
-                                  style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontFamily: "defaultfontsbold",
-                                      fontSize: height / 45),
-                                ),
-                                Text(
-                                  widget.onlinecheck,
-                                  style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      fontFamily: "defaultfonts",
-                                      fontSize: height / 70),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        if (widget.onlinecheck == "Online") ...[
                           SizedBox(
-                            width: width / 10,
-                          )
-                        ],
-                        Container(
-                          height: height / 10,
-                          width: width / 10,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
+                            width: width / 40,
                           ),
-                          child: IconButton(
-                              onPressed: () async{
-                       
-          final userSnapshot = await _firestore
-         .collection('users')
-         .doc(widget.chatPartnerEmail)
-         .get();
-     // Check if the chat partner is in the 'ambassador' collection
-     final ambassadorSnapshot = await _firestore
-         .collection('Ambassdor')
-         .doc(widget.chatPartnerEmail)
-         .get();
-     if (userSnapshot.exists) {
-       // Print message if the chat partner is in the 'user' collection
-       Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-         return userprofile(email: widget.chatPartnerEmail);
-       },));
-     }
-                       
-                       
-
-                 if (ambassadorSnapshot.exists) {
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.chatPartnername,
+                                style: TextStyle(
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                    fontFamily: "defaultfontsbold",
+                                    fontSize: 20),
+                              ),
+                              Text(
+                                widget.onlinecheck,
+                                style: TextStyle(
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                    fontFamily: "defaultfonts",
+                                    fontSize: 13),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      if (widget.onlinecheck == "Online") ...[
+                        SizedBox(
+                          width: width / 10,
+                        )
+                      ],
+                      Container(
+                        height: height / 10,
+                        width: width / 10,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                            onPressed: () async{
+                     
+        final userSnapshot = await _firestore
+       .collection('users')
+       .doc(widget.chatPartnerEmail)
+       .get();
+         // Check if the chat partner is in the 'ambassador' collection
+         final ambassadorSnapshot = await _firestore
+       .collection('Ambassdor')
+       .doc(widget.chatPartnerEmail)
+       .get();
+         if (userSnapshot.exists) {
      // Print message if the chat partner is in the 'user' collection
      Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-       return ambassdorshowchat(useremail:widget.chatPartnerEmail);
+       return userprofile(email: widget.chatPartnerEmail);
      },));
-   }         
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                       
-                              },
-                              icon: Icon(
-                                size: 20,
-                                Icons.more_vert,
-                                color: Color(0xff7905F5),
-                              )),
+         }
+                     
+                     
+    
+               if (ambassadorSnapshot.exists) {
+         // Print message if the chat partner is in the 'user' collection
+         Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+     return ambassdorshowchat(useremail:widget.chatPartnerEmail);
+         },));
+       }         
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                            },
+                            icon: Icon(
+                              size: 20,
+                              Icons.more_vert,
+                              color: Color(0xff7905F5),
+                            )),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+    
+          // White Container for Chat Messages
+          Padding(
+            padding: EdgeInsets.only(top: height / 7),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xffF4EBFD),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: height / 40,
+                  ),
+                  // Messages List
+    
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: _firestore
+                          .collection('chats')
+                          .doc(_auth.currentUser!.email)
+                          .collection('history')
+                          .doc(widget.chatPartnerEmail)
+                          .collection('messages')
+                          .orderBy('timestamp', descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+    
+                        final messages = snapshot.data!.docs;
+    
+                        return ListView.builder(
+                          reverse:
+                              true, // Ensures the newest messages appear at the bottom
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            final message = messages[index];
+                            bool isSender =
+                                message['sender'] == _auth.currentUser!.email;
+                            bool isChatPartner =
+                                message['sender'] == widget.chatPartnerEmail;
+    
+                            // Highlight the last message from the chat partner
+                            Color messageBackgroundColor;
+                            if (isSender) {
+                              messageBackgroundColor = const Color(
+                                  0xffEAEAEA); // Your own messages
+                            } else if (isChatPartner && index == 0) {
+                              messageBackgroundColor = Color(0xffFFFFFF);
+                              // Highlight chat partner's last message
+                            } else {
+                              messageBackgroundColor = Color(0xffFFFFFF);
+                              // Other messages from the chat partner
+                            }
+    
+                            return Align(
+                              alignment: isSender
+                                  ? Alignment.centerRight
+                                  : Alignment.centerLeft,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    top: 4,
+                                    bottom: 4,
+                                    left: isSender ? width / 3 : 10,
+                                    right: isSender ? 10 : width / 3),
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: messageBackgroundColor,
+                                  borderRadius: isSender
+                                      ? BorderRadius.only(
+                                          bottomLeft: Radius.circular(15),
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15),
+                                        )
+                                      : BorderRadius.only(
+                                          bottomRight: Radius.circular(15),
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15),
+                                        ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: isSender
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  children: [
+                                    message['isImage'] == true
+                                        ? GestureDetector(
+                                          onTap: () {
+                                               Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => FullScreenImagePage(imageUrl: message['message']),
+                ));
+                                          },
+                                          child: Image.network(
+                                              message['message'],
+                                              fit: BoxFit.contain,
+                                              width: width / 2,
+                                              height: height / 5,
+                                            ),
+                                        )
+                                        : Text(
+                                            message['message'],
+                                            style: TextStyle(
+                                                color:
+                                                    const Color(0xff565656),
+                                                fontFamily: "defaultfonts",
+                                                fontSize: 12),
+                                          ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      message['timestamp'] != null
+                                          ? DateFormat('hh:mm a').format(
+                                              (message['timestamp']
+                                                      as Timestamp)
+                                                  .toDate()
+                                                  .toLocal())
+                                          : '',
+                                      style: TextStyle(
+                                          color: const Color(0xff979292),
+                                          fontFamily: "defaultfontsbold",
+                                          fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+    
+                  // Message Input Section
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: width / 15,
+                        bottom: height / 60,
+                        right: width / 40,
+                        top: height / 60),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            maxLines: null,
+                            controller: _messageController,
+                            style: TextStyle(
+                                color: const Color.fromARGB(255, 0, 0, 0),
+                                fontFamily: "defaultfonts",
+                                fontSize: height / 50),
+                            decoration: InputDecoration(
+                                prefixIcon: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: _sendImage,
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xff979292),
+                                        ),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                          size: 35,
+                                        )),
+                                  ),
+                                ),
+                                hintText: 'Type a message...',
+                                hintStyle: TextStyle(
+                                    color: const Color(0xff979292),
+                                    fontFamily: "defaultfontsbold",
+                                    fontSize: 14),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff979292)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff979292)),
+                                  borderRadius: BorderRadius.circular(10),
+                                )),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            size: 30,
+                            Icons.send,
+                            color: Color(0xff979292),
+                          ),
+                          onPressed: _sendMessage,
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-
-            // White Container for Chat Messages
-            Padding(
-              padding: EdgeInsets.only(top: height / 7),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xffF4EBFD),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
                   ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: height / 40,
-                    ),
-                    // Messages List
-
-                    Expanded(
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: _firestore
-                            .collection('chats')
-                            .doc(_auth.currentUser!.email)
-                            .collection('history')
-                            .doc(widget.chatPartnerEmail)
-                            .collection('messages')
-                            .orderBy('timestamp', descending: true)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Center(
-                                child: Text('Error: ${snapshot.error}'));
-                          }
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
-                          }
-
-                          final messages = snapshot.data!.docs;
-
-                          return ListView.builder(
-                            reverse:
-                                true, // Ensures the newest messages appear at the bottom
-                            itemCount: messages.length,
-                            itemBuilder: (context, index) {
-                              final message = messages[index];
-                              bool isSender =
-                                  message['sender'] == _auth.currentUser!.email;
-                              bool isChatPartner =
-                                  message['sender'] == widget.chatPartnerEmail;
-
-                              // Highlight the last message from the chat partner
-                              Color messageBackgroundColor;
-                              if (isSender) {
-                                messageBackgroundColor = const Color(
-                                    0xffEAEAEA); // Your own messages
-                              } else if (isChatPartner && index == 0) {
-                                messageBackgroundColor = Color(0xffFFFFFF);
-                                // Highlight chat partner's last message
-                              } else {
-                                messageBackgroundColor = Color(0xffFFFFFF);
-                                // Other messages from the chat partner
-                              }
-
-                              return Align(
-                                alignment: isSender
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      top: 4,
-                                      bottom: 4,
-                                      left: isSender ? width / 3 : 10,
-                                      right: isSender ? 10 : width / 3),
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: messageBackgroundColor,
-                                    borderRadius: isSender
-                                        ? BorderRadius.only(
-                                            bottomLeft: Radius.circular(15),
-                                            topLeft: Radius.circular(15),
-                                            topRight: Radius.circular(15),
-                                          )
-                                        : BorderRadius.only(
-                                            bottomRight: Radius.circular(15),
-                                            topLeft: Radius.circular(15),
-                                            topRight: Radius.circular(15),
-                                          ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: isSender
-                                        ? CrossAxisAlignment.end
-                                        : CrossAxisAlignment.start,
-                                    children: [
-                                      message['isImage'] == true
-                                          ? GestureDetector(
-                                            onTap: () {
-                                                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => FullScreenImagePage(imageUrl: message['message']),
-                  ));
-                                            },
-                                            child: Image.network(
-                                                message['message'],
-                                                fit: BoxFit.contain,
-                                                width: width / 2,
-                                                height: height / 5,
-                                              ),
-                                          )
-                                          : Text(
-                                              message['message'],
-                                              style: TextStyle(
-                                                  color:
-                                                      const Color(0xff565656),
-                                                  fontFamily: "defaultfonts",
-                                                  fontSize: height / 53),
-                                            ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        message['timestamp'] != null
-                                            ? DateFormat('hh:mm a').format(
-                                                (message['timestamp']
-                                                        as Timestamp)
-                                                    .toDate()
-                                                    .toLocal())
-                                            : '',
-                                        style: TextStyle(
-                                            color: const Color(0xff979292),
-                                            fontFamily: "defaultfontsbold",
-                                            fontSize: height / 57),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-
-                    // Message Input Section
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: width / 15,
-                          bottom: height / 60,
-                          right: width / 40,
-                          top: height / 60),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              maxLines: null,
-                              controller: _messageController,
-                              style: TextStyle(
-                                  color: const Color.fromARGB(255, 0, 0, 0),
-                                  fontFamily: "defaultfonts",
-                                  fontSize: height / 50),
-                              decoration: InputDecoration(
-                                  prefixIcon: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: GestureDetector(
-                                      onTap: _sendImage,
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(0xff979292),
-                                          ),
-                                          child: Icon(
-                                            Icons.add,
-                                            color: Colors.white,
-                                            size: 35,
-                                          )),
-                                    ),
-                                  ),
-                                  hintText: 'Type a message...',
-                                  hintStyle: TextStyle(
-                                      color: const Color(0xff979292),
-                                      fontFamily: "defaultfontsbold",
-                                      fontSize: height / 50),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff979292)),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff979292)),
-                                    borderRadius: BorderRadius.circular(10),
-                                  )),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              size: 30,
-                              Icons.send,
-                              color: Color(0xff979292),
-                            ),
-                            onPressed: _sendMessage,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

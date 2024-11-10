@@ -83,296 +83,303 @@ class _CoupleAddingPageState extends State<CoupleAddingPage> {
     final width = MediaQuery.of(context).size.width;
     final currentUser = FirebaseAuth.instance.currentUser!;
 
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          height: height,
-          width: width,
-          color: Color.fromARGB(255, 255, 255, 255),
-          padding: EdgeInsets.only(
-            top: height / 30,
-            bottom: height / 60,
-            right: width / 20,
-            left: width / 20,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Progress bar and back button
-                Row(
-                  children: [
-                    Container(
-                      height: height / 10,
-                      width: width / 10,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          width: 1,
-                          color: Colors.black,
-                        ),
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                                                   appBar: AppBar(
+               toolbarHeight:height/400,
+               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+               automaticallyImplyLeading: false,
+             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+             surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+             ),
+      body: Container(
+        height: height,
+        width: width,
+        color: Color.fromARGB(255, 255, 255, 255),
+        padding: EdgeInsets.only(
+          bottom: height / 60,
+          right: width / 20,
+          left: width / 20,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Progress bar and back button
+              Row(
+                children: [
+                  Container(
+                    height: height / 10,
+                    width: width / 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black,
                       ),
-                      child: IconButton(
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: const Color.fromARGB(255, 121, 5, 245),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: width / 10),
+                  Expanded(
+                    child: LinearProgressIndicator(
+                      value: 0.25, // Shows progress from 0.0 to 1.0
+                      minHeight: 10.0, // Adjust height of progress bar
+                      color: const Color.fromARGB(255, 121, 5, 245),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  SizedBox(width: width / 20),
+                  Text(
+                    "1/4",
+                    style:
+                        TextStyle(color: Colors.black, fontSize: height / 50),
+                  ),
+                  SizedBox(width: width/10,)
+                ],
+              ),
+              SizedBox(height: height / 60),
+              Center(
+                child: Text(
+                  "Add Partner",
+                  style: TextStyle(
+                      color: const Color(0xff26150F),
+                      fontFamily: "defaultfontsbold",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24),
+                ),
+              ),
+              SizedBox(height: height / 70),
+    
+              // CoupleAddingPage chip
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: height / 47,
+                ),
+                child: TextField(
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  controller: name,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'Name',
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 90),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: height / 47,
+                ),
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  controller: age,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'Age',
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 90),
+                  ),
+                ),
+              ),
+              Padding(
+     padding: EdgeInsets.only(
+       bottom: height / 47,
+     ),                  child: DropdownButtonFormField<String>(
+                  value: selectedgender,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 90),
+                    hintText: "Gender",
+                  ),
+                  items: genders.map((String district) {
+                    return DropdownMenuItem<String>(
+                      value: district,
+                      child: Text(
+                        district,
+                 
+                 
+                 
+                 
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedgender = newValue;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: height / 47,
+                ),
+                child: TextField(
+                  controller: email,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'Email',
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 90),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: height / 47,
+                ),
+                child: TextField(
+                  controller: password,
+                  obscureText: passwordshow,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'Password',
+                    suffixIcon: IconButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          setState(() {
+                            passwordshow = !passwordshow;
+                          });
                         },
                         icon: Icon(
-                          Icons.arrow_back,
-                          color: const Color.fromARGB(255, 121, 5, 245),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: width / 20),
-                    Expanded(
-                      child: LinearProgressIndicator(
-                        value: 0.25, // Shows progress from 0.0 to 1.0
-                        minHeight: 8.0, // Adjust height of progress bar
-                        color: const Color.fromARGB(255, 121, 5, 245),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    SizedBox(width: width / 20),
-                    Text(
-                      "1/4",
-                      style:
-                          TextStyle(color: Colors.black, fontSize: height / 50),
-                    ),
-                  ],
-                ),
-                SizedBox(height: height / 60),
-                Center(
-                  child: Text(
-                    "Add Partner",
-                    style: TextStyle(
-                        color: const Color(0xff26150F),
-                        fontFamily: "defaultfontsbold",
-                        fontWeight: FontWeight.w500,
-                        fontSize: height / 35),
+                          passwordshow
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Color(0xff4D4D4D),
+                          size: height / 40,
+                        )),
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 50),
                   ),
                 ),
-                SizedBox(height: height / 70),
-
-                // CoupleAddingPage chip
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height / 47,
-                  ),
-                  child: TextField(
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    controller: name,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Name',
-                      contentPadding:
-                          EdgeInsets.only(left: width / 50, top: height / 90),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height / 47,
-                  ),
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    controller: age,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Age',
-                      contentPadding:
-                          EdgeInsets.only(left: width / 50, top: height / 90),
-                    ),
-                  ),
-                ),
-                Padding(
- padding: EdgeInsets.only(
-   bottom: height / 47,
- ),                  child: DropdownButtonFormField<String>(
-                    value: selectedgender,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      contentPadding:
-                          EdgeInsets.only(left: width / 50, top: height / 90),
-                      hintText: "Gender",
-                    ),
-                    items: genders.map((String district) {
-                      return DropdownMenuItem<String>(
-                        value: district,
-                        child: Text(
-                          district,
-                   
-                   
-                   
-                   
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        selectedgender = newValue;
-                      });
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height / 47,
-                  ),
-                  child: TextField(
-                    controller: email,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Email',
-                      contentPadding:
-                          EdgeInsets.only(left: width / 50, top: height / 90),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height / 47,
-                  ),
-                  child: TextField(
-                    controller: password,
-                    obscureText: passwordshow,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'Password',
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              passwordshow = !passwordshow;
-                            });
-                          },
-                          icon: Icon(
-                            passwordshow
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: Color(0xff4D4D4D),
-                            size: height / 40,
-                          )),
-                      contentPadding:
-                          EdgeInsets.only(left: width / 50, top: height / 50),
-                    ),
-                  ),
-                ),
-                         Padding(
-           padding: EdgeInsets.only(
-             bottom: height / 47,
-           ),
-           child: TextField(
-             style: Theme.of(context).textTheme.headlineSmall,
-             controller: _height,
-             decoration: InputDecoration(
-               border: UnderlineInputBorder(),
-               hintText: 'Height (cm)',
-               contentPadding:
-                   EdgeInsets.only(left: width / 50, top: height / 90),
-             ),
+              ),
+                       Padding(
+         padding: EdgeInsets.only(
+           bottom: height / 47,
+         ),
+         child: TextField(
+          keyboardType: TextInputType.number,
+           style: Theme.of(context).textTheme.headlineSmall,
+           controller: _height,
+           decoration: InputDecoration(
+             border: UnderlineInputBorder(),
+             hintText: 'Height (cm)',
+             contentPadding:
+                 EdgeInsets.only(left: width / 50, top: height / 90),
            ),
          ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height / 30,
+       ),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: height / 30,
+                ),
+                child: TextField(
+                  onTap: _openMap, // Open map when tapping
+                  readOnly: true,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  decoration: InputDecoration(
+                    hintText: _currentAddress ?? "Use current location",
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xff8F9DA6)),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xff8F9DA6)),
+                    ),
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 50),
+                    suffixIcon: Icon(
+                      Icons.location_pin,
+                      color: Color(0xff565656),
+                      size: height / 40,
+                    ),
                   ),
+                ),
+              ),
+    
+              Padding(
+                padding: EdgeInsets.only(bottom: height / 47),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.transparent),
+                  height: height / 6,
                   child: TextField(
-                    onTap: _openMap, // Open map when tapping
-                    readOnly: true,
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    controller: education,
+                    maxLines: 10,
                     decoration: InputDecoration(
-                      hintText: _currentAddress ?? "Use current location",
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff8F9DA6)),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff8F9DA6)),
-                      ),
                       contentPadding:
-                          EdgeInsets.only(left: width / 50, top: height / 50),
-                      suffixIcon: Icon(
-                        Icons.location_pin,
-                        color: Color(0xff565656),
-                        size: height / 40,
-                      ),
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(bottom: height / 47),
-                  child: Container(
-                    decoration: BoxDecoration(
+                          EdgeInsets.only(left: width / 50, top: height / 90),
+                      hintText: 'Enter Education',
+                      enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.transparent),
-                    height: height / 6,
-                    child: TextField(
-                      controller: education,
-                      maxLines: 10,
-                      decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.only(left: width / 50, top: height / 90),
-                        hintText: 'Enter Education',
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Color(0xff8F9DA6)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Color(0xff8F9DA6)),
-                        ),
+                        borderSide: BorderSide(color: Color(0xff8F9DA6)),
                       ),
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Color(0xff8F9DA6)),
+                      ),
                     ),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
-                             Padding(
-               padding: EdgeInsets.only(
-                 bottom: height / 47,
-               ),
-               child: TextField(
-                 style: Theme.of(context).textTheme.headlineSmall,
-                 controller: job,
-                 decoration: InputDecoration(
-                   border: UnderlineInputBorder(),
-                   hintText: 'Job',
-                   contentPadding:
-                       EdgeInsets.only(left: width / 50, top: height / 90),
-                 ),
+              ),
+                           Padding(
+             padding: EdgeInsets.only(
+               bottom: height / 47,
+             ),
+             child: TextField(
+               style: Theme.of(context).textTheme.headlineSmall,
+               controller: job,
+               decoration: InputDecoration(
+                 border: UnderlineInputBorder(),
+                 hintText: 'Job',
+                 contentPadding:
+                     EdgeInsets.only(left: width / 50, top: height / 90),
                ),
              ),
-                // Submit button
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: height / 30,
-                      bottom: height / 30,
-                      left: width / 22,
-                      right: width / 22),
-                  child: GestureDetector(
-                    onTap: () async {
-                      return Singupcheck(currentUser);
-                    },
-                    child: Container(
-                      height: height / 15,
-                      width: width,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff7905F5),
-                        borderRadius: BorderRadius.circular(height / 10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Next",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
+           ),
+              // Submit button
+              Padding(
+                padding: EdgeInsets.only(
+                    top: height / 30,
+                    bottom: height / 30,
+                    left: width / 22,
+                    right: width / 22),
+                child: GestureDetector(
+                  onTap: () async {
+                    return Singupcheck(currentUser);
+                  },
+                  child: Container(
+                    height: height / 15,
+                    width: width,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff7905F5),
+                      borderRadius: BorderRadius.circular(height / 10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Next",
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -406,9 +413,10 @@ class _CoupleAddingPageState extends State<CoupleAddingPage> {
           'profile_pic': '',
           'lastSeen': FieldValue.serverTimestamp(),
           'status': 'Online',
-          'height': _height.text.trim(),
+          'height': "${_height.text.trim()} cm",
           "languages": ['English'],
           'education': education.text.trim(),
+          'description':'',
           'job':job.text.trim(),
                     'created':FieldValue.serverTimestamp(),
                               'profile': "standard"

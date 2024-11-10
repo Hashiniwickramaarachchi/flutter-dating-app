@@ -265,7 +265,7 @@ print(addedUsersEmails.length);
               iconss: user["Icon"],
               imagecollection: user['images'],
               ID: user['email'],
-              useremail: userdataperson['email'],
+              useremail: userdataperson['email'], languages: user['languages'], education: user['education'],
             );
                                 },
                               ),

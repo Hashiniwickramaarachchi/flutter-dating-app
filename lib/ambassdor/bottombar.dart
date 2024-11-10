@@ -28,11 +28,78 @@ class A_BottomNavBar extends StatefulWidget {
 }
 
 class _A_BottomNavBarState extends State<A_BottomNavBar> {
-  void _onItemTapped(int index) {
-    setState(() {
+  void _onItemTapped(int index,String email) async{
+       Position position =
+       await Geolocator.getCurrentPosition(
+           desiredAccuracy:
+               LocationAccuracy.high);
+   double latitude = position.latitude;
+   double longitude = position.longitude;
+    setState(()  {
       widget.selectedIndex2 = index;
+
+      if (index==0) {
+
+           if (widget.check == 'already') {
+             Navigator.of(context)
+                 .push(MaterialPageRoute(
+               builder: (context) {
+                 return showsigninresult(
+                     userLatitude: latitude,
+                     userLongitude: longitude,
+                     useremail:
+                         email);
+               },
+             ));
+           } else {
+             Navigator.of(context)
+                 .push(MaterialPageRoute(
+               builder: (context) {
+                 return A_homepage();
+               },
+             ));
+           }
+
+      }
+      else if(index==1){
+                        if (widget.check == 'already') {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                            builder: (context) {
+                              return DashboardScreen();
+                            },
+                          ));
+                        } else {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                            builder: (context) {
+                              return A_dashbordnew();
+                            },
+                          ));
+                        }
+
+      } else if(index==2){
+          Navigator.of(context)
+          .push(MaterialPageRoute(
+        builder: (context) {
+          return addpage();
+        },
+      ));
+    
+    
+ } else if(index==3){
+    Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+   return A_Chatscreen();
+ },));
+ } else if(index==4){
+              Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+              return A_profile();
+            },));
+ }
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,108 +161,37 @@ class _A_BottomNavBarState extends State<A_BottomNavBar> {
                             unselectedItemColor: Colors.white,
                             elevation: 0,
                             currentIndex: widget.selectedIndex2,
-                            onTap: _onItemTapped,
+                            onTap:(value) {
+                              _onItemTapped(value, userdataperson['email']);
+                            },
                             items: [
                               BottomNavigationBarItem(
-                                icon: GestureDetector(
-                                    onTap: () async {
-                                      if (widget.check == 'already') {
-                                        Position position =
-                                            await Geolocator.getCurrentPosition(
-                                                desiredAccuracy:
-                                                    LocationAccuracy.high);
-                                        double latitude = position.latitude;
-                                        double longitude = position.longitude;
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) {
-                                            return showsigninresult(
-                                                userLatitude: latitude,
-                                                userLongitude: longitude,
-                                                useremail:
-                                                    userdataperson['email']);
-                                          },
-                                        ));
-                                      } else {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) {
-                                            return A_homepage();
-                                          },
-                                        ));
-                                      }
-                                    },
-                                    child: Icon(Icons.home)),
+                                icon: Icon(Icons.home),
                                 label: 'Home',
                               ),
                               BottomNavigationBarItem(
-                                icon: GestureDetector(
-                                    onTap: () {
-                                      if (widget.check == 'already') {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) {
-                                            return DashboardScreen();
-                                          },
-                                        ));
-                                      } else {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) {
-                                            return A_dashbordnew();
-                                          },
-                                        ));
-                                      }
-                                    },
-                                    child: Icon(Icons.bar_chart_sharp)),
+                                icon: Icon(Icons.bar_chart_sharp),
                                 label: 'Explore',
                               ),
                               BottomNavigationBarItem(
-                                icon: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) {
-                                          return addpage();
-                                        },
-                                      ));
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: widget.selectedIndex2 == 2
-                                                ? Color(0xff7905F5)
-                                                : Colors.white),
-                                        child: Icon(Icons.add,
-                                            color: widget.selectedIndex2 == 2
-                                                ? Colors.white
-                                                : Color(0xff7905F5)))),
+                                icon: Container(
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: widget.selectedIndex2 == 2
+                                            ? Color(0xff7905F5)
+                                            : Colors.white),
+                                    child: Icon(Icons.add,
+                                        color: widget.selectedIndex2 == 2
+                                            ? Colors.white
+                                            : Color(0xff7905F5))),
                                 label: 'Add',
                               ),
                               BottomNavigationBarItem(
-                                icon: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) {
-                                          return A_Chatscreen();
-                                        },
-                                      ));
-                                    },
-                                    child: Icon(Icons.chat_bubble_outline)),
+                                icon: Icon(Icons.chat_bubble_outline),
                                 label: 'Messages',
                               ),
                               BottomNavigationBarItem(
-                                icon: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) {
-                                          return A_profile();
-                                        },
-                                      ));
-                                    },
-                                    child: Icon(Icons.person_outline)),
+                                icon: Icon(Icons.person_outline),
                                 label: 'Profile',
                               ),
                             ],

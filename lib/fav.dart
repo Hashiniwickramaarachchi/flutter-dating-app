@@ -89,11 +89,22 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
           if (snapshot.hasData) {
             final userdataperson =
                 snapshot.data!.data() as Map<String, dynamic>;
-            return SafeArea(
+            return WillPopScope(
+                    onWillPop: () async => false,
+            
               child: Scaffold(
+                    appBar: AppBar(
+      toolbarHeight: height / 400,
+      foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+      automaticallyImplyLeading: false,
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+  
+    ),
                 backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                 body: Padding(
-                  padding: EdgeInsets.only(top: height / 30),
+                  padding: EdgeInsets.only(   right: width / 20,
+   left: width / 20,),
                   child: Stack(
                     children: [
                       Column(
@@ -103,7 +114,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                             style: TextStyle(
                                 color: const Color.fromARGB(255, 0, 0, 0),
                                 fontFamily: "defaultfontsbold",
-                                fontSize: height / 32),
+                                fontSize: 20),
                           ),
                           Expanded(
                             child: Column(
@@ -150,7 +161,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                               "All",
                                               style: TextStyle(
                                                   fontFamily: "defaultfonts",
-                                                  fontSize: height / 50),
+                                                  fontSize: 16),
                                             ),
                                           ),
                                         ),
@@ -171,7 +182,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                               "Online",
                                               style: TextStyle(
                                                   fontFamily: "defaultfonts",
-                                                  fontSize: height / 50),
+                                                  fontSize: 16),
                                             ),
                                           ),
                                         ),
@@ -192,7 +203,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                               "Nearest",
                                               style: TextStyle(
                                                   fontFamily: "defaultfonts",
-                                                  fontSize: height / 50),
+                                                  fontSize: 16),
                                             ),
                                           ),
                                         ),
@@ -213,7 +224,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                               "Newest",
                                               style: TextStyle(
                                                   fontFamily: "defaultfonts",
-                                                  fontSize: height / 50),
+                                                  fontSize: 16),
                                             ),
                                           ),
                                         ),
@@ -400,7 +411,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                 return userDistance >= 0 &&
                                                     userDistance <= 100;
                                               }).toList();
-
+              
                                               return GridView.builder(
                                                 physics: ScrollPhysics(),
                                                 shrinkWrap: true,
@@ -652,10 +663,10 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                            top: height / 1.25,
-                            left: width / 20,
-                            right: width / 20),
+                  
+                        padding: EdgeInsets.only(top: height / 1.25),
+                          
+                        
                         child: BottomNavBar(
                           selectedIndex2: 2,
                         ),

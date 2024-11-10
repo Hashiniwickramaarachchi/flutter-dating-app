@@ -22,10 +22,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return Center(child: Text('No user is logged in.'));
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
+    return Scaffold(
+                                                   appBar: AppBar(
+               toolbarHeight:screenHeight/400,
+               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+               automaticallyImplyLeading: false,
+             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+             surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+             ),
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      body: Padding(
+ padding: EdgeInsets.only(
+   right: screenWidth / 20,
+   left: screenWidth / 20,
+ ),        child: Stack(
           children: [
             Container(
               height: screenHeight,
@@ -41,18 +51,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     int addcount = userdataperson['addedusers'].length;
                     int addmatch = userdataperson['match_count'];
                     return SingleChildScrollView(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 50),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: screenHeight * 0.02),
-                            _buildProgressSection(screenWidth, addcount, addmatch),
-                            SizedBox(height: screenHeight * 0.04),
-                            _buildSummarySection(screenWidth, addcount, addmatch),
-                            SizedBox(height: screenHeight * 0.04),
-                          ],
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: screenHeight * 0.02),
+                          _buildProgressSection(screenWidth, addcount, addmatch),
+                          SizedBox(height: screenHeight * 0.04),
+                          _buildSummarySection(screenWidth, addcount, addmatch),
+                          SizedBox(height: screenHeight * 0.04),
+                        ],
                       ),
                     );
                   } else if (snapshot.hasError) {
@@ -66,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: screenHeight / 1.25, left: screenWidth / 20, right: screenWidth / 20),
+              padding: EdgeInsets.only(top: screenHeight / 1.25),
               child: A_BottomNavBar(
                 selectedIndex2: 1,
                 check: 'already',

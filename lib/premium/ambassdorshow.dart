@@ -256,126 +256,132 @@ class _ambassdorshowState extends State<ambassdorshow> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.only(
-            top: height / 20,
-            left: width / 20,
-            right: width / 20,
-          ),
-          child: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: height / 18, // Set height as needed
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: TextField(
-                            controller: _searchController,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: width / 20,
-                                    vertical:
-                                        height / 60 // Adjust padding as needed
-                                    ),
-                                hintText: "Search",
-                                border: InputBorder.none,
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xff8F9DA6)),
+    return Scaffold(
+                           backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+
+                                                             appBar: AppBar(
+           toolbarHeight:height/400,
+           foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+           automaticallyImplyLeading: false,
+                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                     surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+                     ),
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: width / 20,
+          right: width / 20,
+        ),
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: height / 18, // Set height as needed
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: TextField(
+                          controller: _searchController,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: width / 20,
+                                  vertical:
+                                      height / 60 // Adjust padding as needed
+                                  ),
+                              hintText: "Search",
+                              border: InputBorder.none,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xff8F9DA6)),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide:
-                                        BorderSide(color: Color(0xff8F9DA6)))),
-                          ),
+                                  borderSide:
+                                      BorderSide(color: Color(0xff8F9DA6)))),
                         ),
                       ),
-                      SizedBox(
-                        width: width / 30,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: height / 30,
-                  ),
-                  Expanded(
-                      child: ListView.builder(
-                    itemCount: filteredUsers.length,
-                    itemBuilder: (context, index) {
-                      final user = filteredUsers[index];
-                      final String userEmail = user['email'];
-                      final ratings = user?['rating'] as List<dynamic>? ?? [];
-                     double averageRating = ratings.isEmpty ? 0 : ratings.reduce((a, b) => a + b) / ratings.length;
-                      bool isOnline = false;
-                      String lastSeen = "Last seen: N/A";
-                      lastSeenhistory = "Last seen: N/A";
-                      if (usersStatusDetails.containsKey(userEmail)) {
-                        final userStatus = usersStatusDetails[userEmail];
-                        isOnline = userStatus['status'] == 'online';
-                        if (isOnline) {
-                          lastSeen = "Online";
-                          lastSeenhistory = "Online";
-                          statecolour = const Color.fromARGB(255, 49, 255, 56);
-                        } else {
-                          var lastSeenDate =
-                              DateTime.fromMillisecondsSinceEpoch(
-                                      userStatus['lastSeen'])
-                                  .toLocal();
-                          lastSeen =
-                              "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-                          lastSeenhistory = lastSeen;
-                          statecolour = Colors.white;
-                        }
-                      }
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: height / 50),
-                        child: Container(
-                          height: height / 1.8,
-                          width: double.infinity,
-                          child: ambbasdorview(
-                            onlinecheck: lastSeen,
-                            statecolour: statecolour,
-                            profileimage: user['profile_pic'] ??
-                                "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                            name: user['name'].toString().toUpperCase(),
-                            location: user['Address'],
-                            startLatitude: user["X"],
-                            startLongitude: user["Y"],
-                      
-                      
-                            age: user['Age'],
-                            height: user['height'],
-                            labels: user['Interest'],
-                            iconss: user["Icon"],
-                            imagecollection: user['images'],
-                            ID: user['email'],
-                            useremail: widget.useremail, gender: user['Gender'], averageRating: averageRating,
-                          ),
-                        ),
-                      );
-                    },
-                  )),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: height / 1.3),
-                child: BottomNavBar(
-                  selectedIndex2: 1,
+                    ),
+                    SizedBox(
+                      width: width / 30,
+                    ),
+                  ],
                 ),
-              )
-            ],
-          ),
+                SizedBox(
+                  height: height / 30,
+                ),
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: filteredUsers.length,
+                  itemBuilder: (context, index) {
+                    final user = filteredUsers[index];
+                    final String userEmail = user['email'];
+                    final ratings = user?['rating'] as List<dynamic>? ?? [];
+                   double averageRating = ratings.isEmpty ? 0 : ratings.reduce((a, b) => a + b) / ratings.length;
+                    bool isOnline = false;
+                    String lastSeen = "Last seen: N/A";
+                    lastSeenhistory = "Last seen: N/A";
+                    if (usersStatusDetails.containsKey(userEmail)) {
+                      final userStatus = usersStatusDetails[userEmail];
+                      isOnline = userStatus['status'] == 'online';
+                      if (isOnline) {
+                        lastSeen = "Online";
+                        lastSeenhistory = "Online";
+                        statecolour = const Color.fromARGB(255, 49, 255, 56);
+                      } else {
+                        var lastSeenDate =
+                            DateTime.fromMillisecondsSinceEpoch(
+                                    userStatus['lastSeen'])
+                                .toLocal();
+                        lastSeen =
+                            "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                        lastSeenhistory = lastSeen;
+                        statecolour = Colors.white;
+                      }
+                    }
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: height / 50),
+                      child: Container(
+                        height: height / 1.8,
+                        width: double.infinity,
+                        child: ambbasdorview(
+                          onlinecheck: lastSeen,
+                          statecolour: statecolour,
+                          profileimage: user['profile_pic'] ??
+                              "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+                          name: user['name'].toString().toUpperCase(),
+                          location: user['Address'],
+                          startLatitude: user["X"],
+                          startLongitude: user["Y"],
+                    
+                    
+                          age: user['Age'],
+                          height: user['height'],
+                          labels: user['Interest'],
+                          iconss: user["Icon"],
+                          imagecollection: user['images'],
+                          ID: user['email'],
+                          useremail: widget.useremail, gender: user['Gender'], averageRating: averageRating,
+                        ),
+                      ),
+                    );
+                  },
+                )),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: height / 1.25),
+              child: BottomNavBar(
+                selectedIndex2: 1,
+              ),
+            )
+          ],
         ),
       ),
     );

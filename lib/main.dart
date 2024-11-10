@@ -9,7 +9,9 @@ import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/splashscreen.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 void main()async{
 
@@ -22,6 +24,9 @@ await Firebase.initializeApp(options:DefaultFirebaseOptions.currentPlatform);
     otpLength: 4,
     emailTheme: EmailTheme.v3,
   );
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
+  }
 runApp(MyApp());
 
 
@@ -48,8 +53,8 @@ final width=MediaQuery.of(context).size.width;
  theme: ThemeData(
   fontFamily: "defaultfonts",
   textTheme:  TextTheme(
-  headlineSmall: TextStyle(fontFamily: "fieldfonts", fontSize: height / 55,color: Color(0xff464646)),
-  bodySmall:TextStyle(fontFamily: "button",  color: Color(0xffFFFFFF),fontSize: height / 42,), 
+  headlineSmall: TextStyle(fontFamily: "fieldfonts", fontSize: 14,color: Color(0xff464646)),
+  bodySmall:TextStyle(fontFamily: "button",  color: Color(0xffFFFFFF),fontSize: 20), 
     
     
     

@@ -29,13 +29,19 @@ class premiumperson extends StatefulWidget {
   String height;
   List<dynamic> iconss;
   List<dynamic> labels;
+    List<dynamic> languages;
+
   List<dynamic> imagecollection;
+      String education;
+
   String useremail;
 
   premiumperson(
       {required this.ID,
+      required this.education,
       required this.gender,
       required this.onlinecheck,
+      required this.languages,
       required this.statecolour,
       required this.profileimage,
       required this.name,
@@ -147,21 +153,26 @@ class _premiumpersonState extends State<premiumperson> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: const Color(0xff565656),
-                        fontFamily: "defaultfontsbold",
-                        fontWeight: FontWeight.w900,
-                        fontSize: height / 60),
+                  Flexible(
+                    child: Text(
+                      widget.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: const Color(0xff565656),
+                          fontFamily: "defaultfontsbold",
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16),
+                            softWrap: true,
+  overflow: TextOverflow
+      .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+                    ),
                   ),
                   Text(
                     widget.location,
                     style: TextStyle(
                         color: const Color.fromARGB(255, 0, 0, 0),
                         fontFamily: "defaultfonts",
-                        fontSize: height / 75),
+                        fontSize: 11),
                   ),
                 ],
               ),
@@ -201,7 +212,7 @@ class _premiumpersonState extends State<premiumperson> {
                               ID: widget.ID,
                               useremail: widget.useremail,
                               onlinecheck: widget.onlinecheck,
-                              statecolour: widget.statecolour,
+                              statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
                             );
                           },
                         ));

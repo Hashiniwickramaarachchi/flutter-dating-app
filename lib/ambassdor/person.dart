@@ -19,18 +19,24 @@ class A_person extends StatefulWidget {
   double startLongitude;
   double endLatitude;
   double endLongitude;
+    String education;
+
   int age;
   final String onlinecheck;
   final Color statecolour;
 
   String height;
   List<dynamic> iconss;
+    List<dynamic> languages;
+
   List<dynamic> labels;
   List<dynamic> imagecollection;
   String useremail;
 
   A_person(
       {required this.ID,
+      required this.education,
+      required this.languages,
       required this.onlinecheck,
       required this.statecolour,
       required this.profileimage,
@@ -66,8 +72,8 @@ class _A_personState extends State<A_person> {
           color: Color.fromARGB(255, 245, 236, 255)),
       child: Padding(
         padding: EdgeInsets.only(
-            left: width / 25,
-            right: width / 25,
+            left: width / 30,
+            right: width / 30,
             top: height / 60,
             bottom: height / 60),
         child: Column(
@@ -98,7 +104,7 @@ class _A_personState extends State<A_person> {
                           imagecollection: widget.imagecollection,
                           fav: fav,
                           ID: widget.ID,
-                          useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour,
+                          useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, languaes: widget.languages, education: widget.education
                         );
                       },
                     ));
@@ -161,14 +167,19 @@ class _A_personState extends State<A_person> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        widget.name,
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontFamily: "defaultfontsbold",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: height / 35),
+                                      Flexible(
+                                        child: Text(
+                                          widget.name,
+                                          style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontFamily: "defaultfontsbold",
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 24),
+                                         softWrap: true,
+ overflow: TextOverflow
+     .visible, // You can
+                                        ),
                                       ),
                                       Text(
                                         widget.location,
@@ -176,7 +187,7 @@ class _A_personState extends State<A_person> {
                                             color: const Color.fromARGB(
                                                 255, 255, 255, 255),
                                             fontFamily: "defaultfonts",
-                                            fontSize: height / 45),
+                                            fontSize: 20),
                                       ),
                                     ],
                                   ),
@@ -221,7 +232,7 @@ Navigator.of(context).push(MaterialPageRoute(builder:(context) {
          imagecollection: widget.imagecollection,
          fav: fav,
          ID: widget.ID,
-         useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour,
+         useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
        );
   
    

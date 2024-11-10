@@ -147,6 +147,8 @@ class _interesteditState extends State<interestedit> {
    runSpacing: 8.0,
    children: List<Widget>.generate(_interests.length, (int index) {
    return ChoiceChip(
+    showCheckmark: false,
+
    shape: RoundedRectangleBorder(
     side: BorderSide(color: Colors.transparent),
     borderRadius: BorderRadius.circular(50)),

@@ -14,6 +14,8 @@ class A_users extends StatefulWidget {
   String profileimage;
   String name;
   String location;
+      String education;
+
   double distance;
   double startLatitude;
   double startLongitude;
@@ -25,12 +27,16 @@ class A_users extends StatefulWidget {
 
   String height;
   List<dynamic> iconss;
+    List<dynamic> languages;
+
   List<dynamic> labels;
   List<dynamic> imagecollection;
   String useremail;
 
   A_users(
       {required this.ID,
+      required this.languages,
+      required this.education,
       required this.onlinecheck,
       required this.statecolour,
       required this.profileimage,
@@ -100,7 +106,7 @@ class _A_usersState extends State<A_users> {
                           ID: widget.ID,
                           useremail: widget.useremail,
                           onlinecheck: widget.onlinecheck,
-                          statecolour: widget.statecolour,
+                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
                         );
                       },
                     ));
@@ -151,7 +157,7 @@ class _A_usersState extends State<A_users> {
                                     ID: widget.ID,
                                     useremail: widget.useremail,
                                     onlinecheck: widget.onlinecheck,
-                                    statecolour: widget.statecolour,
+                                    statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
                                   );
                                 },
                               ));

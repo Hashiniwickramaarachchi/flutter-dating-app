@@ -84,174 +84,178 @@ Future<void> _submitQuestion() async {
             final userdataperson =
                 snapshot.data!.data() as Map<String, dynamic>;
 
-            return SafeArea(
-              child: Scaffold(
-                backgroundColor: Colors.white,
-                body: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: height / 30,
-                              right: width / 30,
-                              left: width / 30),
-                          child: Row(
+            return Scaffold(
+                                                           appBar: AppBar(
+               toolbarHeight:height/400,
+               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+               automaticallyImplyLeading: false,
+             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+             surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+             ),
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              body: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            right: width / 20,
+                            left: width / 20),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: height / 10,
+                              width: width / 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color:
+                                      const Color.fromARGB(255, 121, 5, 245),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: width / 20),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  "FAQs & Help Center",
+                                  style: TextStyle(
+                                      color: const Color(0xff26150F),
+                                      fontFamily: "defaultfontsbold",
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: width / 10),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: width / 15, right: width / 15),
+                      child: Container(
+                        height: height / 22,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        child: TextField(
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(
+                                left: width / 20,
+                                top: height / 5,
+                                bottom: height / 100),
+                            hintText: "Search for help...",
+                            border: InputBorder.none,
+                            suffixIcon: Icon(
+                              Icons.search,
+                              color: Color(0xff565656),
+                              size: height / 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: height / 40),
+                    Padding(
+                        padding: EdgeInsets.only(
+                            left: width / 20,
+                            right: width / 20,
+                            top: height / 60),
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(
+                                widget.mainname,
+                                style: TextStyle(
+                                    color: const Color(0xff4D4D4D),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
+                              SizedBox(
+                                height: height / 60,
+                              ),
+                              Text(
+                                "Your Question?",
+                                style: TextStyle(
+                                    color: const Color(0xff4D4D4D),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
+                              SizedBox(
+                                height: height / 60,
+                              ),
                               Container(
-                                height: height / 10,
-                                width: width / 10,
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 1,
-                                    color: Colors.black,
+                                    color: Color(0xffF9F9F9),
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: height / 5,
+                                child: TextField(
+                                  maxLines: null,
+                                  controller:_questionController ,
+                                  decoration: InputDecoration(
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    fillColor: Color(0xffF9F9F9),
                                   ),
                                 ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
+                              ),
+                              SizedBox(
+                                height: height / 60,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: width / 1.7),
+                                child: GestureDetector(
+                                  onTap: () {
+                                   _submitQuestion();
                                   },
-                                  icon: Icon(
-                                    Icons.arrow_back,
-                                    color:
-                                        const Color.fromARGB(255, 121, 5, 245),
+                                  child: Container(
+                                    height: height / 26,
+                                    width: width / 3,
+                                    child: Center(
+                                        child: Text(
+                                      "Send",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff7905F5),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                   ),
                                 ),
                               ),
-                              SizedBox(width: width / 20),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    "FAQs & Help Center",
-                                    style: TextStyle(
-                                        color: const Color(0xff26150F),
-                                        fontFamily: "defaultfontsbold",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: height / 35),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: width / 10),
                             ],
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: width / 15, right: width / 15),
-                        child: Container(
-                          height: height / 22,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          child: TextField(
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.only(
-                                  left: width / 20,
-                                  top: height / 5,
-                                  bottom: height / 100),
-                              hintText: "Search for help...",
-                              border: InputBorder.none,
-                              suffixIcon: Icon(
-                                Icons.search,
-                                color: Color(0xff565656),
-                                size: height / 40,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: height / 40),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: width / 20,
-                              right: width / 20,
-                              top: height / 60),
-                          child: Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.mainname,
-                                  style: TextStyle(
-                                      color: const Color(0xff4D4D4D),
-                                      fontFamily: "defaultfontsbold",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: height / 45),
-                                ),
-                                SizedBox(
-                                  height: height / 60,
-                                ),
-                                Text(
-                                  "Your Question?",
-                                  style: TextStyle(
-                                      color: const Color(0xff4D4D4D),
-                                      fontFamily: "defaultfontsbold",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: height / 45),
-                                ),
-                                SizedBox(
-                                  height: height / 60,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffF9F9F9),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  height: height / 5,
-                                  child: TextField(
-                                    maxLines: null,
-                                    controller:_questionController ,
-                                    decoration: InputDecoration(
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.transparent),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.transparent),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      fillColor: Color(0xffF9F9F9),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: height / 60,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: width / 1.7),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                     _submitQuestion();
-                                    },
-                                    child: Container(
-                                      height: height / 26,
-                                      width: width / 3,
-                                      child: Center(
-                                          child: Text(
-                                        "Send",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: height / 50,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                      decoration: BoxDecoration(
-                                          color: Color(0xff7905F5),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ))
-                    ],
-                  ),
+                        ))
+                  ],
                 ),
               ),
             );

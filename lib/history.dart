@@ -240,7 +240,7 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
                                 style: TextStyle(
                                     color: const Color(0xff565656),
                                     fontFamily: "defaultfontsbold",
-                                    fontSize: height / 45),
+                                    fontSize: 16),
                               ),
                               Text(
                                 lastMessage['timestamp'] != null
@@ -252,7 +252,7 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
                                 style: TextStyle(
                                     color: const Color(0xff979292),
                                     fontFamily: "defaultfontsbold",
-                                    fontSize: height / 60),
+                                    fontSize: 14),
                               ),
                             ],
                           ),
@@ -263,7 +263,7 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
                             style: TextStyle(
                                 color: const Color(0xff979292),
                                 fontFamily: "defaultfontsbold",
-                                fontSize: height / 55),
+                                fontSize:14),
                           ),
                           onTap: () {
                             // Open the chat page with this chat partner

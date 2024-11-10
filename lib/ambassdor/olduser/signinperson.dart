@@ -17,6 +17,8 @@ class signinperson extends StatefulWidget {
   String profileimage;
   String name;
   String location;
+      String education;
+
   double distance;
   double startLatitude;
   double startLongitude;
@@ -25,15 +27,20 @@ class signinperson extends StatefulWidget {
   int age;
   final String onlinecheck;
   final Color statecolour;
+  
 
   String height;
   List<dynamic> iconss;
   List<dynamic> labels;
+    List<dynamic> languages;
+
   List<dynamic> imagecollection;
   String useremail;
 
   signinperson(
       {required this.ID,
+      required this.education,
+      required this.languages,
       required this.gender,
       required this.onlinecheck,
       required this.statecolour,
@@ -71,8 +78,8 @@ class _signinpersonState extends State<signinperson> {
           color: Color.fromARGB(255, 245, 236, 255)),
       child: Padding(
         padding: EdgeInsets.only(
-            left: width / 25,
-            right: width / 25,
+            left: width / 30,
+            right: width / 30,
             top: height / 60,
             bottom: height / 60),
         child: Column(
@@ -105,7 +112,7 @@ class _signinpersonState extends State<signinperson> {
                           ID: widget.ID,
                           useremail: widget.useremail,
                           onlinecheck: widget.onlinecheck,
-                          statecolour: widget.statecolour,
+                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
                         );
                       },
                     ));
@@ -167,15 +174,20 @@ class _signinpersonState extends State<signinperson> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        widget.name,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontFamily: "defaultfontsbold",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: height / 35),
+                                      Flexible(
+                                        child: Text(
+                                          widget.name,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontFamily: "defaultfontsbold",
+                                              fontWeight: FontWeight.w900,
+                                              fontSize:24),
+                                          softWrap: true,
+  overflow: TextOverflow.visible, //
+                                        ),
+
                                       ),
                                       Text(
                                         widget.location,
@@ -183,7 +195,7 @@ class _signinpersonState extends State<signinperson> {
                                             color: const Color.fromARGB(
                                                 255, 255, 255, 255),
                                             fontFamily: "defaultfonts",
-                                            fontSize: height / 42),
+                                            fontSize: 20),
                                       ),
                                     ],
                                   ),
@@ -235,7 +247,7 @@ class _signinpersonState extends State<signinperson> {
                           ID: widget.ID,
                           useremail: widget.useremail,
                           onlinecheck: widget.onlinecheck,
-                          statecolour: widget.statecolour,
+                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
                         );
                       },
                                                       
@@ -319,7 +331,7 @@ class _signinpersonState extends State<signinperson> {
                               color: Colors.white,
                               fontFamily: "defaultfonts",
                               fontWeight: FontWeight.w500,
-                              fontSize: height / 45),
+                              fontSize:16),
                         )),
                   ],
                 ))

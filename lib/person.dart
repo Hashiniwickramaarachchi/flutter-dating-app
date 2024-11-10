@@ -69,8 +69,8 @@ class _personState extends State<person> {
           color: Color.fromARGB(255, 245, 236, 255)),
       child: Padding(
         padding: EdgeInsets.only(
-            left: width / 25,
-            right: width / 25,
+            left: width / 30,
+            right: width / 30,
             top: height / 60,
             bottom: height / 60),
         child: Column(
@@ -172,7 +172,7 @@ class _personState extends State<person> {
                                                 255, 255, 255, 255),
                                             fontFamily: "defaultfontsbold",
                                             fontWeight: FontWeight.w900,
-                                            fontSize: height / 35),
+                                            fontSize: 24),
                                       ),
                                       Text(
                                         textAlign: TextAlign.center,
@@ -181,7 +181,7 @@ class _personState extends State<person> {
                                             color: const Color.fromARGB(
                                                 255, 255, 255, 255),
                                             fontFamily: "defaultfonts",
-                                            fontSize: height / 45),
+                                            fontSize: 20),
                                       ),
                                     ],
                                   ),
@@ -265,7 +265,21 @@ class _personState extends State<person> {
                                 print(
                                     "Failed to retrieve document from Sell collection: $error");
                               });
-                            } else {}
+                            } else {
+                               try {
+      DocumentReference favDocRef = FirebaseFirestore.instance
+          .collection('Favourite')
+          .doc(widget.useremail)
+          .collection("fav1")
+          .doc(widget.ID);
+
+      await favDocRef.delete();
+      print("Favorite removed with document ID: ${widget.ID}");
+    } catch (error) {
+      print("Error removing from Favourite: $error");
+    }
+  
+                            }
                           },
                           icon: Icon(
                             fav

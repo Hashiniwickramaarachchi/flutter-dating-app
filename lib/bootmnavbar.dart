@@ -23,9 +23,37 @@ int selectedIndex2;
 
 class _BottomNavBarState extends State<BottomNavBar> {
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index,double x,double y ,String email) {
     setState(() {
       widget.selectedIndex2 = index;
+
+      if (index==0) {
+
+             Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+       return homepage();
+     },));
+        
+      }
+      else if(index==1){
+                    Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+    return allusermap
+    (userLatitude: 
+    x, 
+    userLongitude: y, useremail:email,);
+  },));
+      } else if(index==2){
+              Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+        return fav();
+      },));
+ } else if(index==3){
+    Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+   return Chatscreen();
+ },));
+ } else if(index==4){
+              Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+              return profile();
+            },));
+ }
     });
   }
 
@@ -73,7 +101,9 @@ if (curentuser == null) {
                 unselectedItemColor: Colors.white,
                 elevation: 0,
                 currentIndex: widget.selectedIndex2,
-                onTap: _onItemTapped,
+                onTap:(value) {
+                  _onItemTapped(value,userdataperson['X'],userdataperson["Y"],userdataperson["email"]);
+                } ,
                 items: [
                   BottomNavigationBarItem(
                     icon:
@@ -87,47 +117,19 @@ if (curentuser == null) {
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    icon: GestureDetector(
-                      
-                      onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-            return allusermap(userLatitude: userdataperson["X"], userLongitude: userdataperson["Y"], useremail:userdataperson["email"],);
-          },));
-                      },
-                      child: Icon(Icons.explore)),
+                    icon: Icon(Icons.explore),
                     label: 'Explore',
                   ),
                   BottomNavigationBarItem(
-                    icon: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-                          return fav();
-                        },));
-                      },
-                      child: Icon(Icons.favorite_border)),
+                    icon: Icon(Icons.favorite_border),
                     label: 'Favorites',
                   ),
                   BottomNavigationBarItem(
-                    icon: GestureDetector(
-                      onTap: () {
-                        
-                          Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-            return Chatscreen();
-          },));
-            },
-                      
-                      
-                      child: Icon(Icons.chat_bubble_outline)),
+                    icon: Icon(Icons.chat_bubble_outline),
                     label: 'Messages',
                   ),
                   BottomNavigationBarItem(
-                    icon: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-                          return profile();
-                        },));
-                      },
-                      child: Icon(Icons.person_outline)),
+                    icon: Icon(Icons.person_outline),
                     label: 'Profile',
                   ),
                 ],

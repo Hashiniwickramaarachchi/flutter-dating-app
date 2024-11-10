@@ -70,8 +70,8 @@ class _ambbasdorviewState extends State<ambbasdorview> {
           color: Color.fromARGB(255, 245, 236, 255)),
       child: Padding(
         padding: EdgeInsets.only(
-            left: width / 25,
-            right: width / 25,
+            left: width / 30,
+            right: width / 30,
             top: height / 60,
             bottom: height / 60),
         child: Column(
@@ -84,7 +84,6 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) {
                         return ambassdorshowchat(useremail: widget.ID);
-                        
                       },
                     ));
                   },
@@ -98,38 +97,36 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        
-  Padding(
-    padding: const EdgeInsets.all(14.0),
-    child: Container(
-      decoration: BoxDecoration(
-        color: Color(0xff7905F5),
-        borderRadius: BorderRadius.circular(30)
-      ),
-      child: Padding(
-        padding:  EdgeInsets.only(left: width/15,right: width/15,top: height/80,bottom: height/80),
-        child: 
-        RatingBarIndicator(
-          
-                rating: widget.averageRating,
-                itemBuilder: (context, index) => 
-                
-                Icon(
-                  
-                   index < widget.averageRating ? Icons.star : Icons.star_border,
-                  
-          color: index < widget.averageRating ? Colors.amber : Colors.white, 
-                ),
-                itemCount: 5,
-                itemSize: height/28,
-                unratedColor: Colors.white,
-              ),
-      ),
-    ),
-  ),
-
-
-                       Container(
+                        Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xff7905F5),
+                                borderRadius: BorderRadius.circular(30)),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: width / 15,
+                                  right: width / 15,
+                                  top: height / 80,
+                                  bottom: height / 80),
+                              child: RatingBarIndicator(
+                                rating: widget.averageRating,
+                                itemBuilder: (context, index) => Icon(
+                                  index < widget.averageRating
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: index < widget.averageRating
+                                      ? Colors.amber
+                                      : Colors.white,
+                                ),
+                                itemCount: 5,
+                                itemSize: height / 28,
+                                unratedColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
                           height: height / 8,
                           width: width,
                           decoration: BoxDecoration(
@@ -157,24 +154,22 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        widget.name,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontFamily: "defaultfontsbold",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: height / 35),
+                                      Flexible(
+                                        child: Text(
+                                          widget.name,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontFamily: "defaultfontsbold",
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 24),
+                                                 softWrap: true,
+   overflow: TextOverflow
+       .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+                                        ),
+                                        
                                       ),
-                               
-                               
-                               
-                               
-                               
-                               
-                               
-                               
                                     ],
                                   ),
                                 ),
@@ -202,12 +197,11 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                           ),
                           child: IconButton(
                               onPressed: () async {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) {
-                        return ambassdorshowchat(useremail: widget.ID);
-                        
-                                  }                     
-                                ));
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return ambassdorshowchat(
+                                      useremail: widget.ID);
+                                }));
                               },
                               icon: Icon(
                                 Icons.person_2_outlined,
@@ -223,11 +217,13 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) {
                                 return ChatPage(
-                                    chatPartnerEmail: widget.ID,
-                                    chatPartnername: widget.name,
-                                    chatPartnerimage: widget.profileimage,
-                                    onlinecheck: widget.onlinecheck,
-                                    statecolour: widget.statecolour, who: 'ambassdor',);
+                                  chatPartnerEmail: widget.ID,
+                                  chatPartnername: widget.name,
+                                  chatPartnerimage: widget.profileimage,
+                                  onlinecheck: widget.onlinecheck,
+                                  statecolour: widget.statecolour,
+                                  who: 'ambassdor',
+                                );
                               },
                             ));
                           },
@@ -249,46 +245,46 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                       ],
                     ),
                     // ElevatedButton(
-                        // style: ElevatedButton.styleFrom(
-                          // shape: RoundedRectangleBorder(
-                              // borderRadius: BorderRadius.circular(10)),
-                          // backgroundColor: Color(0xff7905F5),
-                        // ),
-                        // onPressed: () {
-                          // if (widget.gender == "Male") {
-                            // _selectedgender = 0;
-                          // } else if (widget.gender == "Female") {
-                            // _selectedgender = 1;
-                          // } else if (widget.gender == "Other") {
-                            // _selectedgender = 3;
-                          // }
-                          // Navigator.of(context).push(MaterialPageRoute(
-                            // builder: (context) {
-                              // return matchingfilter(
-                                // selectedGender: _selectedgender,
-                                // selectedInterests:
-                                    // widget.labels.cast<String>().toSet(),
-                                // ageRange: RangeValues(
-                                    // double.tryParse(widget.age.toString()) ??
-                                        // 0.0,
-                                    // double.tryParse(widget.age.toString()) ??
-                                        // 0.0),
-                                // distanceRange: RangeValues(0, 100),
-                                // userLatitude: widget.startLatitude,
-                                // userLongitude: widget.startLongitude,
-                                // useremail: widget.ID, Gender:widget.gender,
-                              // );
-                            // },
-                          // ));
-                        // },
-                        // child: Text(
-                          // "Find Match",
-                          // style: TextStyle(
-                              // color: Colors.white,
-                              // fontFamily: "defaultfonts",
-                              // fontWeight: FontWeight.w500,
-                              // fontSize: height / 45),
-                        // )),
+                    // style: ElevatedButton.styleFrom(
+                    // shape: RoundedRectangleBorder(
+                    // borderRadius: BorderRadius.circular(10)),
+                    // backgroundColor: Color(0xff7905F5),
+                    // ),
+                    // onPressed: () {
+                    // if (widget.gender == "Male") {
+                    // _selectedgender = 0;
+                    // } else if (widget.gender == "Female") {
+                    // _selectedgender = 1;
+                    // } else if (widget.gender == "Other") {
+                    // _selectedgender = 3;
+                    // }
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    // builder: (context) {
+                    // return matchingfilter(
+                    // selectedGender: _selectedgender,
+                    // selectedInterests:
+                    // widget.labels.cast<String>().toSet(),
+                    // ageRange: RangeValues(
+                    // double.tryParse(widget.age.toString()) ??
+                    // 0.0,
+                    // double.tryParse(widget.age.toString()) ??
+                    // 0.0),
+                    // distanceRange: RangeValues(0, 100),
+                    // userLatitude: widget.startLatitude,
+                    // userLongitude: widget.startLongitude,
+                    // useremail: widget.ID, Gender:widget.gender,
+                    // );
+                    // },
+                    // ));
+                    // },
+                    // child: Text(
+                    // "Find Match",
+                    // style: TextStyle(
+                    // color: Colors.white,
+                    // fontFamily: "defaultfonts",
+                    // fontWeight: FontWeight.w500,
+                    // fontSize: height / 45),
+                    // )),
                   ],
                 ))
           ],
