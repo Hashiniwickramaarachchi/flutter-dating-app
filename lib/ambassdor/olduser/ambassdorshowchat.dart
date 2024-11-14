@@ -205,7 +205,7 @@ if (userdataperson['rating'] is List && userdataperson['rating'].isNotEmpty) {
                                           image: DecorationImage(
                                               image: NetworkImage(
                                                   userdataperson[
-                                                      "profile_pic"])),
+                                                      "profile_pic"]),fit: BoxFit.cover),
                                           shape: BoxShape.circle,
                                         ),
                                       ),
@@ -298,7 +298,7 @@ if (userdataperson['rating'] is List && userdataperson['rating'].isNotEmpty) {
             iconss: user["Icon"],
             imagecollection: user['images'],
             ID: user['email'],
-            useremail: userdataperson['email'], languages:user['languages'], education: user['education'],
+            useremail: userdataperson['email'], languages:user['languages'], education: user['education'], description: user['description'],
                         );
                               },
                             ),

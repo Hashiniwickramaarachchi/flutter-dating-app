@@ -64,6 +64,8 @@ class _completeprofileState extends State<completeprofile> {
         TaskSnapshot snapshot = await uploadTask;
         String downloadUrl = await snapshot.ref.getDownloadURL();
 
+   if (phonenumber.text.length==10) {
+     
         // Save the image URL in Firestore
         await FirebaseFirestore.instance
             .collection('users')
@@ -77,11 +79,19 @@ class _completeprofileState extends State<completeprofile> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Profile picture uploaded successfully!')),
         );
-        Navigator.of(context).push(MaterialPageRoute(
+
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) {
             return homepage();
           },
         ));
+   }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+
+       SnackBar(content: Text('Check your Phonenumber again!!',style: TextStyle(color: Colors.red),)));
+
+   }
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Fill the lines')),

@@ -154,7 +154,7 @@ class _OnlineUsersPageState extends State<OnlineUsersPage> {
           name: onlineUsersDetails[index]['name'],distance: 300,location: onlineUsersDetails[index]['Address'],startLatitude: onlineUsersDetails[index]["X"],
           startLongitude: onlineUsersDetails[index]["Y"],endLatitude:userdataperson["X"] ,endLongitude: userdataperson["Y"],
           age: onlineUsersDetails[index]['Age'],height:onlineUsersDetails[index]['height']??"",labels: onlineUsersDetails[index]['Interest'],
-          iconss:onlineUsersDetails[index]["Icon"],imagecollection:onlineUsersDetails[index]['images'],ID: onlineUsersDetails[index]['email'],useremail:userdataperson['email'], onlinecheck:lastSeen , statecolour: statecolour, education: onlineUsersDetails[index]['education'], languages: onlineUsersDetails[index]["languages"],),
+          iconss:onlineUsersDetails[index]["Icon"],imagecollection:onlineUsersDetails[index]['images'],ID: onlineUsersDetails[index]['email'],useremail:userdataperson['email'], onlinecheck:lastSeen , statecolour: statecolour, education: onlineUsersDetails[index]['education'], languages: onlineUsersDetails[index]["languages"], description:onlineUsersDetails[index]['description'] ,),
             
             
             );

@@ -3,6 +3,7 @@ import 'package:datingapp/Usermanegement/gender.dart';
 import 'package:datingapp/Usermanegement/signup.dart';
 import 'package:datingapp/ambassdor/newuser/signup.dart';
 import 'package:datingapp/homepage.dart';
+import 'package:datingapp/mainscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -412,7 +413,7 @@ class _signinState extends State<signin> {
             'height': '0cm',
             'created': FieldValue.serverTimestamp(),
             "languages": ['English'],
-            'education': 'enter your education',
+            'education': '',
             'profile': "standard",
             "description":''
           });

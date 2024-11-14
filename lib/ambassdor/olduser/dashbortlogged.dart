@@ -72,9 +72,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 },
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight / 1.25),
-              child: A_BottomNavBar(
+            Positioned(
+              
+         left: 0,
+         right: 0,
+         bottom: screenHeight / 60,             
+    child: A_BottomNavBar(
                 selectedIndex2: 1,
                 check: 'already',
               ),

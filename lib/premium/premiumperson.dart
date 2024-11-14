@@ -25,6 +25,7 @@ class premiumperson extends StatefulWidget {
   int age;
   final String onlinecheck;
   final Color statecolour;
+String description;
 
   String height;
   List<dynamic> iconss;
@@ -46,6 +47,7 @@ class premiumperson extends StatefulWidget {
       required this.profileimage,
       required this.name,
       required this.location,
+      required this.description,
       required this.distance,
       required this.startLongitude,
       required this.startLatitude,
@@ -212,7 +214,7 @@ class _premiumpersonState extends State<premiumperson> {
                               ID: widget.ID,
                               useremail: widget.useremail,
                               onlinecheck: widget.onlinecheck,
-                              statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
+                              statecolour: widget.statecolour, languaes: widget.languages, education: widget.education, description: widget.description,
                             );
                           },
                         ));

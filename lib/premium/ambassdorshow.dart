@@ -375,8 +375,10 @@ class _ambassdorshowState extends State<ambassdorshow> {
                 )),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(top: height / 1.25),
+            Positioned(
+   bottom: height/60,
+   left: 0,
+   right: 0,
               child: BottomNavBar(
                 selectedIndex2: 1,
               ),

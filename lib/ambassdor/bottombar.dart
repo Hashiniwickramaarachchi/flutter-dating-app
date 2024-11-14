@@ -42,7 +42,7 @@ class _A_BottomNavBarState extends State<A_BottomNavBar> {
 
            if (widget.check == 'already') {
              Navigator.of(context)
-                 .push(MaterialPageRoute(
+                 .pushReplacement(MaterialPageRoute(
                builder: (context) {
                  return showsigninresult(
                      userLatitude: latitude,
@@ -53,7 +53,7 @@ class _A_BottomNavBarState extends State<A_BottomNavBar> {
              ));
            } else {
              Navigator.of(context)
-                 .push(MaterialPageRoute(
+                 .pushReplacement(MaterialPageRoute(
                builder: (context) {
                  return A_homepage();
                },
@@ -64,14 +64,14 @@ class _A_BottomNavBarState extends State<A_BottomNavBar> {
       else if(index==1){
                         if (widget.check == 'already') {
                           Navigator.of(context)
-                              .push(MaterialPageRoute(
+                              .pushReplacement(MaterialPageRoute(
                             builder: (context) {
                               return DashboardScreen();
                             },
                           ));
                         } else {
                           Navigator.of(context)
-                              .push(MaterialPageRoute(
+                              .pushReplacement(MaterialPageRoute(
                             builder: (context) {
                               return A_dashbordnew();
                             },
@@ -80,7 +80,7 @@ class _A_BottomNavBarState extends State<A_BottomNavBar> {
 
       } else if(index==2){
           Navigator.of(context)
-          .push(MaterialPageRoute(
+          .pushReplacement(MaterialPageRoute(
         builder: (context) {
           return addpage();
         },
@@ -88,11 +88,11 @@ class _A_BottomNavBarState extends State<A_BottomNavBar> {
     
     
  } else if(index==3){
-    Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
    return A_Chatscreen();
  },));
  } else if(index==4){
-              Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
               return A_profile();
             },));
  }

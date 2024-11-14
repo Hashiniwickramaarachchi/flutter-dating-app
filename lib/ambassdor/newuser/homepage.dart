@@ -86,287 +86,284 @@ class _A_homepageState extends State<A_homepage> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return WillPopScope(
-              onWillPop: () async => false,
-              child: Scaffold(
-                  appBar: AppBar(
-    toolbarHeight: height / 400,
-    foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-    automaticallyImplyLeading: false,
-    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-    
-  ),
-                body: Container(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  height: height,
-                  width: width,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-
-   right: width / 20,
-   left: width / 20,                    ),
-                    child: Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                             children: [
-                               Expanded(
-                                 child: Container(
-                                   height: height /
-                                       18, // Set height as needed
-                                   decoration: BoxDecoration(
-                                     color: Colors.transparent,
-                                     borderRadius:
-                                         BorderRadius.circular(10.0),
-                                   ),
-                                   child: TextField(
-                                     controller: _searchController,
-                                     style: Theme.of(context)
-                                         .textTheme
-                                         .headlineSmall,
-                                     decoration: InputDecoration(
-                                         contentPadding:
-                                             EdgeInsets.symmetric(
-                                                 horizontal: width / 20,
-                                                 vertical: height /
-                                                     60 // Adjust padding as needed
-                                                 ),
-                                         hintText: "Search",
-                                         border: InputBorder.none,
-                                         focusedBorder:
-                                             OutlineInputBorder(
-                                           borderSide: BorderSide(
-                                               color: Color(0xff8F9DA6)),
-                                           borderRadius:
-                                               BorderRadius.circular(
-                                                   10.0),
-                                         ),
-                                         enabledBorder:
-                                             OutlineInputBorder(
-                                                 borderRadius:
-                                                     BorderRadius
-                                                         .circular(10.0),
-                                                 borderSide: BorderSide(
-                                                     color: Color(
-                                                         0xff8F9DA6)))),
-                                   ),
+            return Scaffold(
+                appBar: AppBar(
+                toolbarHeight: height / 400,
+                foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                automaticallyImplyLeading: false,
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+                
+              ),
+              body: Container(
+                color: Color.fromARGB(255, 255, 255, 255),
+                height: height,
+                width: width,
+                child: Padding(
+                  padding: EdgeInsets.only(
+            
+               right: width / 20,
+               left: width / 20,                    ),
+                  child: Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                           children: [
+                             Expanded(
+                               child: Container(
+                                 height: height /
+                                     18, // Set height as needed
+                                 decoration: BoxDecoration(
+                                   color: Colors.transparent,
+                                   borderRadius:
+                                       BorderRadius.circular(10.0),
+                                 ),
+                                 child: TextField(
+                                   controller: _searchController,
+                                   style: Theme.of(context)
+                                       .textTheme
+                                       .headlineSmall,
+                                   decoration: InputDecoration(
+                                       contentPadding:
+                                           EdgeInsets.symmetric(
+                                               horizontal: width / 20,
+                                               vertical: height /
+                                                   60 // Adjust padding as needed
+                                               ),
+                                       hintText: "Search",
+                                       border: InputBorder.none,
+                                       focusedBorder:
+                                           OutlineInputBorder(
+                                         borderSide: BorderSide(
+                                             color: Color(0xff8F9DA6)),
+                                         borderRadius:
+                                             BorderRadius.circular(
+                                                 10.0),
+                                       ),
+                                       enabledBorder:
+                                           OutlineInputBorder(
+                                               borderRadius:
+                                                   BorderRadius
+                                                       .circular(10.0),
+                                               borderSide: BorderSide(
+                                                   color: Color(
+                                                       0xff8F9DA6)))),
                                  ),
                                ),
-                               SizedBox(
-                                 width: width / 30,
-                               ),
-                               GestureDetector(
-                                 onTap: () {
-                             
-                             
-                                       showModalBottomSheet(
-                                                    isScrollControlled: true,
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.only(
-                                                        topLeft: Radius.circular(50),
-                                                        topRight: Radius.circular(50),
-                                                      ),
+                             ),
+                             SizedBox(
+                               width: width / 30,
+                             ),
+                             GestureDetector(
+                               onTap: () {
+                           
+                           
+                                     showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(50),
+                                                      topRight: Radius.circular(50),
                                                     ),
-                                                    backgroundColor: Colors.amber,
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return A_filterpage();
-                                                    },
-                                                  );
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                             
-                                 },
-                                 child: Container(
-                                   decoration: BoxDecoration(
-                                     borderRadius:
-                                         BorderRadius.circular(10),
-                                     color: const Color(0xffEDEDED),
-                                   ),
-                                   child: Padding(
-                                     padding: const EdgeInsets.all(8.0),
-                                     child: Icon(
-                                       Icons.tune,
-                                       color: Color.fromARGB(
-                                           255, 121, 5, 245),
-                                       size: height / 30,
-                                     ),
+                                                  ),
+                                                  backgroundColor: Colors.amber,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return A_filterpage();
+                                                  },
+                                                );
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                               },
+                               child: Container(
+                                 decoration: BoxDecoration(
+                                   borderRadius:
+                                       BorderRadius.circular(10),
+                                   color: const Color(0xffEDEDED),
+                                 ),
+                                 child: Padding(
+                                   padding: const EdgeInsets.all(8.0),
+                                   child: Icon(
+                                     Icons.tune,
+                                     color: Color.fromARGB(
+                                         255, 121, 5, 245),
+                                     size: height / 30,
                                    ),
                                  ),
                                ),
-                             ],
-                                                          ),
-                            SizedBox(
-                              height: height / 30,
-                            ),
-                            Container(
-                              height: height / 1.5,
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        "Ready to start making\nconnections?",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 121, 5, 245),
-                                            fontSize: height / 32,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "defaultfontsbold"),
-                                        textAlign: TextAlign.center,
+                             ),
+                           ],
+                                                        ),
+                          SizedBox(
+                            height: height / 30,
+                          ),
+                          Container(
+                            height: height / 1.5,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      "Ready to start making\nconnections?",
+                                      style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 121, 5, 245),
+                                          fontSize: height / 32,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: "defaultfontsbold"),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height / 60,
+                                  ),
+                                  Center(
+                                    child: Image.asset(
+                                      "assetss/Mask group.png",
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height / 60,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      right: width / 20,
+                                      left: width / 20,
+                                    ),
+                                    child: Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Introduce a Couple to the Platform",
+                                            style: TextStyle(
+                                                color:
+                                                    const Color.fromARGB(
+                                                        255, 0, 0, 0),
+                                                fontFamily:
+                                                    "defaultfontsbold",
+                                                fontWeight:
+                                                    FontWeight.bold,
+                                                fontSize: height / 50),
+                                          ),
+                                          SizedBox(
+                                            height: height / 60,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child:
+                                                    LinearProgressIndicator(
+                                                  value:
+                                                      0.0, // Shows progress from 0.0 to 1.0
+                                                  minHeight:
+                                                      8.0, // Adjust height of progress bar
+                                                  color: const Color
+                                                      .fromARGB(
+                                                      255, 121, 5, 245),
+                                                  borderRadius:
+                                                      BorderRadius
+                                                          .circular(10),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: width / 20,
+                                              ),
+                                              Text(
+                                                "0%",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize:
+                                                        height / 50),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: height / 60,
+                                          ),
+                                          Text(
+                                            "Track Your First Match",
+                                            style: TextStyle(
+                                                color:
+                                                    const Color.fromARGB(
+                                                        255, 0, 0, 0),
+                                                fontFamily:
+                                                    "defaultfontsbold",
+                                                fontWeight:
+                                                    FontWeight.bold,
+                                                fontSize: height / 50),
+                                          ),
+                                          SizedBox(
+                                            height: height / 60,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child:
+                                                    LinearProgressIndicator(
+                                                  value:
+                                                      0.0, // Shows progress from 0.0 to 1.0
+                                                  minHeight:
+                                                      8.0, // Adjust height of progress bar
+                                                  color: const Color
+                                                      .fromARGB(
+                                                      255, 121, 5, 245),
+                                                  borderRadius:
+                                                      BorderRadius
+                                                          .circular(10),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: width / 20,
+                                              ),
+                                              Text(
+                                                "0%",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize:
+                                                        height / 50),
+                                              )
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: height / 60,
-                                    ),
-                                    Center(
-                                      child: Image.asset(
-                                        "assetss/Mask group.png",
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: height / 60,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        right: width / 20,
-                                        left: width / 20,
-                                      ),
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Introduce a Couple to the Platform",
-                                              style: TextStyle(
-                                                  color:
-                                                      const Color.fromARGB(
-                                                          255, 0, 0, 0),
-                                                  fontFamily:
-                                                      "defaultfontsbold",
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                  fontSize: height / 50),
-                                            ),
-                                            SizedBox(
-                                              height: height / 60,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child:
-                                                      LinearProgressIndicator(
-                                                    value:
-                                                        0.0, // Shows progress from 0.0 to 1.0
-                                                    minHeight:
-                                                        8.0, // Adjust height of progress bar
-                                                    color: const Color
-                                                        .fromARGB(
-                                                        255, 121, 5, 245),
-                                                    borderRadius:
-                                                        BorderRadius
-                                                            .circular(10),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: width / 20,
-                                                ),
-                                                Text(
-                                                  "0%",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize:
-                                                          height / 50),
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: height / 60,
-                                            ),
-                                            Text(
-                                              "Track Your First Match",
-                                              style: TextStyle(
-                                                  color:
-                                                      const Color.fromARGB(
-                                                          255, 0, 0, 0),
-                                                  fontFamily:
-                                                      "defaultfontsbold",
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                  fontSize: height / 50),
-                                            ),
-                                            SizedBox(
-                                              height: height / 60,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child:
-                                                      LinearProgressIndicator(
-                                                    value:
-                                                        0.0, // Shows progress from 0.0 to 1.0
-                                                    minHeight:
-                                                        8.0, // Adjust height of progress bar
-                                                    color: const Color
-                                                        .fromARGB(
-                                                        255, 121, 5, 245),
-                                                    borderRadius:
-                                                        BorderRadius
-                                                            .circular(10),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: width / 20,
-                                                ),
-                                                Text(
-                                                  "0%",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize:
-                                                          height / 50),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: height / 10,
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(
+                                    height: height / 10,
+                                  )
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: height / 1.25,
-                            right: width / 20,
-                            left: width / 20,
                           ),
-                          child: A_BottomNavBar(
-                            selectedIndex2: 0, check: 'new',
-                          ),
+                        ],
+                      ),
+                      Positioned(
+                      
+                          bottom: height / 60,
+                          right: width / 20,
+                          left: width / 20,
+                        
+                        child: A_BottomNavBar(
+                          selectedIndex2: 0, check: 'new',
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

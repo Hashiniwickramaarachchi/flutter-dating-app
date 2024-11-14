@@ -97,32 +97,29 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Color(0xff7905F5),
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: width / 15,
-                                  right: width / 15,
-                                  top: height / 80,
-                                  bottom: height / 80),
-                              child: RatingBarIndicator(
-                                rating: widget.averageRating,
-                                itemBuilder: (context, index) => Icon(
-                                  index < widget.averageRating
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                  color: index < widget.averageRating
-                                      ? Colors.amber
-                                      : Colors.white,
-                                ),
-                                itemCount: 5,
-                                itemSize: height / 28,
-                                unratedColor: Colors.white,
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Color(0xff7905F5),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: width / 15,
+                                right: width / 15,
+                                top: height / 80,
+                                bottom: height / 80),
+                            child: RatingBarIndicator(
+                              rating: widget.averageRating,
+                              itemBuilder: (context, index) => Icon(
+                                index < widget.averageRating
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                color: index < widget.averageRating
+                                    ? Colors.amber
+                                    : Colors.white,
                               ),
+                              itemCount: 5,
+                              itemSize: height / 36,
+                              unratedColor: Colors.white,
                             ),
                           ),
                         ),
@@ -154,21 +151,23 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Flexible(
-                                        child: Text(
-                                          widget.name,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontFamily: "defaultfontsbold",
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 24),
-                                                 softWrap: true,
-   overflow: TextOverflow
-       .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+                                      Container(
+                                        width: width,
+                                        child: Expanded(
+                                          child: Text(
+                                            widget.name,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontFamily: "defaultfontsbold",
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 24),
+                                            softWrap: true,
+                                            overflow: TextOverflow
+                                                .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+                                          ),
                                         ),
-                                        
                                       ),
                                     ],
                                   ),

@@ -40,8 +40,6 @@ class _ChatPageState extends State<ChatPage> {
   void _sendMessage() async {
     final currentUser = _auth.currentUser!;
     if (_messageController.text.isNotEmpty) {
-
-
       final messageData = {
         'sender': currentUser.email,
         'receiver': widget.chatPartnerEmail,
@@ -49,6 +47,21 @@ class _ChatPageState extends State<ChatPage> {
         'isImage': false,
         'timestamp': FieldValue.serverTimestamp(),
       };
+
+   await FirebaseFirestore.instance
+       .collection("chats")
+       .doc(currentUser.email)
+       .set({
+     "name": "",
+   });
+
+        await FirebaseFirestore.instance
+         .collection("chats")
+         .doc(widget.chatPartnerEmail)
+         .set({
+       "name": "",
+     });
+
       await FirebaseFirestore.instance
           .collection("chats")
           .doc(currentUser.email)
@@ -104,7 +117,7 @@ class _ChatPageState extends State<ChatPage> {
 
       // Get the download URL
       String downloadUrl = await snapshot.ref.getDownloadURL();
-  final userSnapshot = await _firestore
+      final userSnapshot = await _firestore
           .collection('users')
           .doc(widget.chatPartnerEmail)
           .get();
@@ -153,14 +166,14 @@ class _ChatPageState extends State<ChatPage> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-                                                     appBar: AppBar(
-         toolbarHeight:height/400,
-         foregroundColor: Color.fromARGB(255, 121, 5, 245),
-         automaticallyImplyLeading: false,
-       backgroundColor: Color.fromARGB(255, 121, 5, 245),
-       surfaceTintColor:Color.fromARGB(255, 121, 5, 245),
-       ),
-                backgroundColor: Color.fromARGB(255, 121, 5, 245),
+      appBar: AppBar(
+        toolbarHeight: height / 400,
+        foregroundColor: Color.fromARGB(255, 121, 5, 245),
+        automaticallyImplyLeading: false,
+        backgroundColor: Color.fromARGB(255, 121, 5, 245),
+        surfaceTintColor: Color.fromARGB(255, 121, 5, 245),
+      ),
+      backgroundColor: Color.fromARGB(255, 121, 5, 245),
       body: Stack(
         children: [
           // Purple Top Section (Header)
@@ -171,8 +184,7 @@ class _ChatPageState extends State<ChatPage> {
               color: Color.fromARGB(255, 121, 5, 245),
             ),
             child: Padding(
-              padding: EdgeInsets.only(
-                  left: width / 20, right: width / 20),
+              padding: EdgeInsets.only(left: width / 20, right: width / 20),
               child: Column(
                 children: [
                   // Row with Back button and Chat title
@@ -180,21 +192,21 @@ class _ChatPageState extends State<ChatPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Container(
-                        // height: height / 10,
-                        // width: width / 10,
-                        // decoration: BoxDecoration(
-                          // color: Colors.white,
-                          // shape: BoxShape.circle,
-                        // ),
-                        // child: IconButton(
-                            // onPressed: () {
-                              // Navigator.of(context).pop();
-                            // },
-                            // icon: Icon(
-                              // size: 20,
-                              // Icons.arrow_back,
-                              // color: Color.fromARGB(255, 121, 5, 245),
-                            // )),
+                      // height: height / 10,
+                      // width: width / 10,
+                      // decoration: BoxDecoration(
+                      // color: Colors.white,
+                      // shape: BoxShape.circle,
+                      // ),
+                      // child: IconButton(
+                      // onPressed: () {
+                      // Navigator.of(context).pop();
+                      // },
+                      // icon: Icon(
+                      // size: 20,
+                      // Icons.arrow_back,
+                      // color: Color.fromARGB(255, 121, 5, 245),
+                      // )),
                       // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -242,47 +254,162 @@ class _ChatPageState extends State<ChatPage> {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: IconButton(
-                            onPressed: () async{
-                     
-        final userSnapshot = await _firestore
-       .collection('users')
-       .doc(widget.chatPartnerEmail)
-       .get();
-         // Check if the chat partner is in the 'ambassador' collection
-         final ambassadorSnapshot = await _firestore
-       .collection('Ambassdor')
-       .doc(widget.chatPartnerEmail)
-       .get();
-         if (userSnapshot.exists) {
-     // Print message if the chat partner is in the 'user' collection
-     Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-       return userprofile(email: widget.chatPartnerEmail);
-     },));
-         }
-                     
-                     
-    
-               if (ambassadorSnapshot.exists) {
-         // Print message if the chat partner is in the 'user' collection
-         Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-     return ambassdorshowchat(useremail:widget.chatPartnerEmail);
-         },));
-       }         
-                     
-                     
-                     
-                     
-                     
-                     
-                     
-                     
-                            },
-                            icon: Icon(
-                              size: 20,
-                              Icons.more_vert,
-                              color: Color(0xff7905F5),
-                            )),
+
+                        child: PopupMenuButton<int>(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          icon: Icon(
+                            Icons.more_vert,
+                            size: 20,
+                            color: Color(0xff7905F5),
+                          ),
+                          onSelected: (value) async {
+                            // Handle actions based on the selected value
+                            switch (value) {
+                              case 1:
+                                final userSnapshot = await _firestore
+                                    .collection('users')
+                                    .doc(widget.chatPartnerEmail)
+                                    .get();
+                                final ambassadorSnapshot = await _firestore
+                                    .collection('Ambassdor')
+                                    .doc(widget.chatPartnerEmail)
+                                    .get();
+                                if (userSnapshot.exists) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return userprofile(
+                                          email: widget.chatPartnerEmail);
+                                    },
+                                  ));
+                                }
+                                if (ambassadorSnapshot.exists) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return ambassdorshowchat(
+                                          useremail: widget.chatPartnerEmail);
+                                    },
+                                  ));
+                                }
+                                break;
+                              case 2:
+                                print("Option 2 selected");
+                                break;
+                              case 3:
+                                print("Option 3 selected");
+                                break;
+                            }
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<int>>[
+                            PopupMenuItem<int>(
+                                value: 1,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.person_2_outlined,
+                                      color: Color(0xff565656),
+                                      size: 25,
+                                    ),
+                                    SizedBox(
+                                      width: width / 30,
+                                    ),
+                                    Text(
+                                      "View Profile",
+                                      style: TextStyle(
+                                        color: Color(0xff565656),
+                                        fontSize: 18,
+                                        fontFamily: "defaultfontsbold",
+                                      ),
+                                    )
+                                  ],
+                                )),
+                            PopupMenuItem<int>(
+                              value: 2,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.call_outlined,
+                                    color: Color(0xff565656),
+                                    size: 25,
+                                  ),
+                                  SizedBox(
+                                    width: width / 30,
+                                  ),
+                                  Text(
+                                    "Voice Call",
+                                    style: TextStyle(
+                                      color: Color(0xff565656),
+                                      fontSize: 18,
+                                      fontFamily: "defaultfontsbold",
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<int>(
+                              value: 3,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.video_call_outlined,
+                                    color: Color(0xff565656),
+                                    size: 25,
+                                  ),
+                                  SizedBox(
+                                    width: width / 30,
+                                  ),
+                                  Text(
+                                    "Video Call",
+                                    style: TextStyle(
+                                      color: Color(0xff565656),
+                                      fontSize: 18,
+                                      fontFamily: "defaultfontsbold",
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // child: IconButton(
+                        // onPressed: () async {
+                        // final userSnapshot = await _firestore
+                        // .collection('users')
+                        // .doc(widget.chatPartnerEmail)
+                        // .get();
+                        // final ambassadorSnapshot = await _firestore
+                        // .collection('Ambassdor')
+                        // .doc(widget.chatPartnerEmail)
+                        // .get();
+                        // if (userSnapshot.exists) {
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        // builder: (context) {
+                        // return userprofile(
+                        // email: widget.chatPartnerEmail);
+                        // },
+                        // ));
+                        // }
+
+                        // if (ambassadorSnapshot.exists) {
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        // builder: (context) {
+                        // return ambassdorshowchat(
+                        // useremail: widget.chatPartnerEmail);
+                        // },
+                        // ));
+                        // }
+                        // },
+                        // icon: Icon(
+                        // size: 20,
+                        // Icons.more_vert,
+                        // color: Color(0xff7905F5),
+                        // )),
                       ),
                     ],
                   ),
@@ -290,7 +417,7 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
           ),
-    
+
           // White Container for Chat Messages
           Padding(
             padding: EdgeInsets.only(top: height / 7),
@@ -309,7 +436,7 @@ class _ChatPageState extends State<ChatPage> {
                     height: height / 40,
                   ),
                   // Messages List
-    
+
                   Expanded(
                     child: StreamBuilder<QuerySnapshot>(
                       stream: _firestore
@@ -329,9 +456,9 @@ class _ChatPageState extends State<ChatPage> {
                             ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         }
-    
+
                         final messages = snapshot.data!.docs;
-    
+
                         return ListView.builder(
                           reverse:
                               true, // Ensures the newest messages appear at the bottom
@@ -342,12 +469,12 @@ class _ChatPageState extends State<ChatPage> {
                                 message['sender'] == _auth.currentUser!.email;
                             bool isChatPartner =
                                 message['sender'] == widget.chatPartnerEmail;
-    
+
                             // Highlight the last message from the chat partner
                             Color messageBackgroundColor;
                             if (isSender) {
-                              messageBackgroundColor = const Color(
-                                  0xffEAEAEA); // Your own messages
+                              messageBackgroundColor =
+                                  const Color(0xffEAEAEA); // Your own messages
                             } else if (isChatPartner && index == 0) {
                               messageBackgroundColor = Color(0xffFFFFFF);
                               // Highlight chat partner's last message
@@ -355,7 +482,7 @@ class _ChatPageState extends State<ChatPage> {
                               messageBackgroundColor = Color(0xffFFFFFF);
                               // Other messages from the chat partner
                             }
-    
+
                             return Align(
                               alignment: isSender
                                   ? Alignment.centerRight
@@ -388,23 +515,26 @@ class _ChatPageState extends State<ChatPage> {
                                   children: [
                                     message['isImage'] == true
                                         ? GestureDetector(
-                                          onTap: () {
-                                               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => FullScreenImagePage(imageUrl: message['message']),
-                ));
-                                          },
-                                          child: Image.network(
+                                            onTap: () {
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    FullScreenImagePage(
+                                                        imageUrl:
+                                                            message['message']),
+                                              ));
+                                            },
+                                            child: Image.network(
                                               message['message'],
                                               fit: BoxFit.contain,
                                               width: width / 2,
                                               height: height / 5,
                                             ),
-                                        )
+                                          )
                                         : Text(
                                             message['message'],
                                             style: TextStyle(
-                                                color:
-                                                    const Color(0xff565656),
+                                                color: const Color(0xff565656),
                                                 fontFamily: "defaultfonts",
                                                 fontSize: 12),
                                           ),
@@ -431,7 +561,7 @@ class _ChatPageState extends State<ChatPage> {
                       },
                     ),
                   ),
-    
+
                   // Message Input Section
                   Padding(
                     padding: EdgeInsets.only(
@@ -503,6 +633,7 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
+
 class FullScreenImagePage extends StatelessWidget {
   final String imageUrl;
 

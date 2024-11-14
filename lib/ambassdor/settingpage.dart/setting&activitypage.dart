@@ -7,6 +7,7 @@ import 'package:datingapp/ambassdor/settingpage.dart/feedback.dart';
 import 'package:datingapp/ambassdor/settingpage.dart/privacy.dart';
 import 'package:datingapp/ambassdor/settingpage.dart/profileupdate.dart';
 import 'package:datingapp/ambassdor/settingpage.dart/settings.dart';
+import 'package:datingapp/invite.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/settingpage.dart/f&q.dart';
 import 'package:datingapp/settingpage.dart/feedback.dart';
@@ -96,35 +97,38 @@ class _A_settingactivityState extends State<A_settingactivity> {
                   },
                   child: Padding(
                     padding:  EdgeInsets.only(left: width/40,right: width/40),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.person_2_outlined,
-                              color: Color(0xff565656),
-                              size: height / 30,
-                            ),
-                            SizedBox(
-                              width: width / 25,
-                            ),
-                            Text(
-                              'Your Profile',
-                              style: TextStyle(
-                                  color: const Color(0xff565656),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Color(0xff565656),
-                          size: height / 40,
-                        ),
-                      ],
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.person_2_outlined,
+                                color: Color(0xff565656),
+                                size: height / 30,
+                              ),
+                              SizedBox(
+                                width: width / 25,
+                              ),
+                              Text(
+                                'Your Profile',
+                                style: TextStyle(
+                                    color: const Color(0xff565656),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                            ],
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Color(0xff565656),
+                            size: height / 40,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -152,35 +156,39 @@ class _A_settingactivityState extends State<A_settingactivity> {
                   },
                   child: Padding(
                     padding:  EdgeInsets.only(left: width/40,right: width/40),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.settings,
-                          color: Color(0xff565656),
-                              size: height / 30,
-                            ),
-                            SizedBox(
-                              width: width / 25,
-                            ),
-                            Text(
-                              'Settings',
-                              style: TextStyle(
-                                  color: const Color(0xff565656),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Color(0xff565656),
-                          size: height / 40,
-                        ),
-                      ],
+                    child: Container(
+                                            color: Colors.transparent,
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.settings,
+                            color: Color(0xff565656),
+                                size: height / 30,
+                              ),
+                              SizedBox(
+                                width: width / 25,
+                              ),
+                              Text(
+                                'Settings',
+                                style: TextStyle(
+                                    color: const Color(0xff565656),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                            ],
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Color(0xff565656),
+                            size: height / 40,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -208,35 +216,39 @@ class _A_settingactivityState extends State<A_settingactivity> {
                   },
                   child: Padding(
                     padding:  EdgeInsets.only(left: width/40,right: width/40),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.local_hospital,
-                            color: Color(0xff565656),
-                              size: height / 30,
-                            ),
-                            SizedBox(
-                              width: width / 25,
-                            ),
-                            Text(
-                              'Help Center',
-                              style: TextStyle(
-                                  color: const Color(0xff565656),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                            color: Color(0xff565656),
-                          size: height / 40,
-                        ),
-                      ],
+                    child: Container(
+                                            color: Colors.transparent,
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.local_hospital,
+                              color: Color(0xff565656),
+                                size: height / 30,
+                              ),
+                              SizedBox(
+                                width: width / 25,
+                              ),
+                              Text(
+                                'Help Center',
+                                style: TextStyle(
+                                    color: const Color(0xff565656),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                            ],
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                              color: Color(0xff565656),
+                            size: height / 40,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -254,37 +266,48 @@ class _A_settingactivityState extends State<A_settingactivity> {
                 SizedBox(
                   height: height / 30,
                 ),
-                Padding(
-                    padding:  EdgeInsets.only(left: width/40,right: width/40),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                GestureDetector(
+                  onTap: () {
+                       Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+     return invite();
+   },));
+                  },
+                  child: Padding(
+                      padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    child: Container(
+                                            color: Colors.transparent,
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.group_add,
+                              color: Color(0xff565656),
+                                size: height / 30,
+                              ),
+                              SizedBox(
+                                width: width / 25,
+                              ),
+                              Text(
+                                'Invite Friends',
+                                style: TextStyle(
+                                    color: const Color(0xff565656),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                            ],
+                          ),
                           Icon(
-                            Icons.group_add,
-                          color: Color(0xff565656),
-                            size: height / 30,
-                          ),
-                          SizedBox(
-                            width: width / 25,
-                          ),
-                          Text(
-                            'Invite Friends',
-                            style: TextStyle(
-                                color: const Color(0xff565656),
-                                fontFamily: "defaultfontsbold",
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                            Icons.arrow_forward_ios,
+                              color: Color(0xff565656),
+                            size: height / 40,
                           ),
                         ],
                       ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                          color: Color(0xff565656),
-                        size: height / 40,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -301,44 +324,48 @@ class _A_settingactivityState extends State<A_settingactivity> {
                 SizedBox(
                   height: height / 30,
                 ),
-                Padding(
-                    padding:  EdgeInsets.only(left: width/40,right: width/40),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                GestureDetector(
+                  onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+      return A_privacy();
+    },));
+                  },
+                  child: Padding(
+                      padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    child: Container(
+                                            color: Colors.transparent,
+                  
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.help,
+                              color: Color(0xff565656),
+                                size: height / 30,
+                              ),
+                              SizedBox(
+                                width: width / 25,
+                              ),
+                              Text(
+                                'Privacy policy',
+                                style: TextStyle(
+                                    color: const Color(0xff565656),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                            ],
+                          ),
                           Icon(
-                            Icons.help,
-                          color: Color(0xff565656),
-                            size: height / 30,
-                          ),
-                          SizedBox(
-                            width: width / 25,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-                                return A_privacy();
-                              },));
-                            },
-                            child: Text(
-                              'Privacy policy',
-                              style: TextStyle(
-                                  color: const Color(0xff565656),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
+                            Icons.arrow_forward_ios,
+                              color: Color(0xff565656),
+                            size: height / 40,
                           ),
                         ],
                       ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                          color: Color(0xff565656),
-                        size: height / 40,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -356,44 +383,47 @@ class _A_settingactivityState extends State<A_settingactivity> {
                                   SizedBox(
                   height: height / 30,
                 ),
-                Padding(
-                    padding:  EdgeInsets.only(left: width/40,right: width/40),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                GestureDetector(
+                  onTap: () {
+                           Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+         return A_FeedbackPage();
+       },));
+                  },
+                  child: Padding(
+                      padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.help,
+                              color: Color(0xff565656),
+                                size: height / 30,
+                              ),
+                              SizedBox(
+                                width: width / 25,
+                              ),
+                              Text(
+                                'Feedback & Review',
+                                style: TextStyle(
+                                    color: const Color(0xff565656),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:18),
+                              ),
+                            ],
+                          ),
                           Icon(
-                            Icons.help,
-                          color: Color(0xff565656),
-                            size: height / 30,
-                          ),
-                          SizedBox(
-                            width: width / 25,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-                                return A_FeedbackPage();
-                              },));
-                            },
-                            child: Text(
-                              'Feedback & Review',
-                              style: TextStyle(
-                                  color: const Color(0xff565656),
-                                  fontFamily: "defaultfontsbold",
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:18),
-                            ),
+                            Icons.arrow_forward_ios,
+                              color: Color(0xff565656),
+                            size: height / 40,
                           ),
                         ],
                       ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                          color: Color(0xff565656),
-                        size: height / 40,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -411,26 +441,58 @@ class _A_settingactivityState extends State<A_settingactivity> {
             ),
             GestureDetector(
               onTap: () async {
-                try {
-                  // Mark the user offline in Firestore and Realtime
-                  await _onlineStatusService.setUserOffline();
-    
-                  // Perform Firebase sign-out
-                  await FirebaseAuth.instance.signOut();
-                  // Show logout success message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Logout Successful'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                  // Wait for a brief moment to ensure the SnackBar i                    // Navigate to the sign-in page
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => A_signin()));
-                } catch (e) {
-                  // Handle logout errors if needed
-                  print('Error logging out: $e');
-                }
+                // try {
+                  // await _onlineStatusService.setUserOffline();
+    // 
+                  // await FirebaseAuth.instance.signOut();
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                    // SnackBar(
+                      // content: Text('Logout Successful'),
+                      // duration: Duration(seconds: 2),
+                    // ),
+                  // );
+                  // Navigator.of(context).pushReplacement(
+                      // MaterialPageRoute(builder: (context) => A_signin()));
+                // } catch (e) {
+                  // print('Error logging out: $e');
+                // }
+                    Future<void> _logout() async {
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Prevents the dialog from closing when tapped outside
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
+      try {
+        await FirebaseAuth.instance.signOut();
+        // Show logout success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Logout Successful'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        // Wait for a brief moment to ensure the SnackBar is visible
+        await Future.delayed(Duration(seconds: 2));
+        // Close the loading dialog
+        Navigator.of(context).pop();
+        // Navigate to splash screen
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => A_signin()),  // Replace with your splash scre
+        );
+      } catch (e) {
+        // Close the loading dialog
+        Navigator.of(context).pop();
+        // Handle logout errors if needed
+        print('Error logging out: $e');
+      }
+    }
+
               },
               child: Padding(
                     padding:  EdgeInsets.only(left: width/40,right: width/40),

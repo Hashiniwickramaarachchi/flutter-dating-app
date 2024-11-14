@@ -20,6 +20,7 @@ class A_person extends StatefulWidget {
   double endLatitude;
   double endLongitude;
     String education;
+String description;
 
   int age;
   final String onlinecheck;
@@ -41,6 +42,7 @@ class A_person extends StatefulWidget {
       required this.statecolour,
       required this.profileimage,
       required this.name,
+      required this.description,
       required this.location,
       required this.distance,
       required this.startLongitude,
@@ -104,7 +106,7 @@ class _A_personState extends State<A_person> {
                           imagecollection: widget.imagecollection,
                           fav: fav,
                           ID: widget.ID,
-                          useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, languaes: widget.languages, education: widget.education
+                          useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, languaes: widget.languages, education: widget.education, description: widget.description,
                         );
                       },
                     ));
@@ -232,7 +234,7 @@ Navigator.of(context).push(MaterialPageRoute(builder:(context) {
          imagecollection: widget.imagecollection,
          fav: fav,
          ID: widget.ID,
-         useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
+         useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, languaes: widget.languages, education: widget.education, description: widget.description,
        );
   
    

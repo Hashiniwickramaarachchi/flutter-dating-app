@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/bootmnavbar.dart';
 import 'package:datingapp/filterpage.dart';
+import 'package:datingapp/mainscreen.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/person.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -96,14 +97,13 @@ class _homepageState extends State<homepage> {
                 color: Color.fromARGB(255, 255, 255, 255),
                 height: height,
                 width: width,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: width / 20,
-                    left: width / 20,
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
+                child: Stack(
+                  children: [
+                    Padding(
+    padding: EdgeInsets.only(
+      right: width / 20,
+      left: width / 20,
+    ),                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
@@ -202,19 +202,19 @@ class _homepageState extends State<homepage> {
                                   return Center(
                                       child: CircularProgressIndicator());
                                 }
-                
+                                  
                                 final data =
                                     snapshot.data!.docs.where((doc) {
                                   return doc['email'] != curentuser.email;
                                 }).toList();
-                
+                                  
                                 return ListView.builder(
                                   itemCount: data.length,
                                   itemBuilder: (context, index) {
                                     final user = data[index];
                                     final String userEmail =
                                         user['email'];
-                
+                                  
                                     bool isOnline = false;
                                     String lastSeen = "Last seen: N/A";
                                     lastSeenhistory = "Last seen: N/A";
@@ -274,7 +274,7 @@ class _homepageState extends State<homepage> {
                                           useremail:
                                               userdataperson['email'],
                                           languages: user['languages'],
-                                          education: user['education'],
+                                          education: user['education'], description: user['description'],
                                         ),
                                       ),
                                     );
@@ -285,14 +285,14 @@ class _homepageState extends State<homepage> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: height / 1.25),
-                        child: BottomNavBar(
-                          selectedIndex2: 0,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                Positioned(
+                  left: width/20,
+                  right: width/20,
+                  bottom: height/60,
+                  
+                  child: BottomNavBar(selectedIndex2: 0))
+                  ],
                 ),
               ),
             );

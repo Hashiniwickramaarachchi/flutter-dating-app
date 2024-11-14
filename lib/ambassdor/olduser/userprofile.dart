@@ -141,7 +141,7 @@ class _userprofileState extends State<userprofile> {
                                           image: DecorationImage(
                                               image: NetworkImage(
                                                   userdataperson[
-                                                      "profile_pic"])),
+                                                      "profile_pic"]),fit: BoxFit.cover),
                                           shape: BoxShape.circle,
                                         ),
                                       ),
@@ -163,6 +163,7 @@ class _userprofileState extends State<userprofile> {
    height: height / 60,
  ),
                              Wrap(
+                              alignment: WrapAlignment.center,
        spacing: 3,
        children: List<Widget>.generate(
           userdataperson['Interest'].length,

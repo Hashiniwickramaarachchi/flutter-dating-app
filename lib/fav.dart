@@ -367,7 +367,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                         education: data[index]
                                                             ['education'],
                                                         languages: data[index]
-                                                            ['languages'],
+                                                            ['languages'], description: data[index]['description'],
                                                       ),
                                                     );
                                                   },
@@ -500,7 +500,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                       education:
                                                           user['education'],
                                                       languages:
-                                                          user['languages'],
+                                                          user['languages'], description: user['description'],
                                                     ),
                                                   );
                                                 },
@@ -638,7 +638,7 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                 education: data[index]
                                                     ['education'],
                                                 languages: data[index]
-                                                    ['languages'],
+                                                    ['languages'], description: data[index]['description'],
                                               ),
                                             );
                                           },
@@ -662,15 +662,21 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                           ),
                         ],
                       ),
-                      Padding(
-                  
-                        padding: EdgeInsets.only(top: height / 1.25),
-                          
-                        
-                        child: BottomNavBar(
-                          selectedIndex2: 2,
-                        ),
-                      )
+               
+               
+               Align(
+  alignment: Alignment.bottomCenter,
+  child: Padding(
+    padding: EdgeInsets.only(bottom: height / 60),
+    child: BottomNavBar(
+      selectedIndex2: 2,
+    ),
+  ),
+)
+
+               
+               
+               
                     ],
                   ),
                 ),

@@ -159,7 +159,8 @@ class _showsigninresultState extends State<showsigninresult> {
               'images': data['images'],
               'height': data['height'],
               "languages": data['languages'],
-              'education': data['education']
+              'education': data['education'],
+              'description':data['description']
             };
             allUsers.add(userInfo); // Add user to the full list
 
@@ -405,7 +406,7 @@ print(widget.useremail);
                            iconss: user["Icon"],
                            imagecollection: user['images'],
                            ID: user['email'],
-                           useremail: widget.useremail, gender: user['Gender'], languages: user['languages'], education: user['education'],
+                           useremail: widget.useremail, gender: user['Gender'], languages: user['languages'], education: user['education'], description: user['description'],
                          ),
                        ),
                      );
@@ -413,8 +414,10 @@ print(widget.useremail);
                  )),
                ],
              ),
-             Padding(
-               padding: EdgeInsets.only(top: height / 1.25),
+             Positioned(
+              left: 0,
+              right: 0,
+               bottom: height / 60,
                child: A_BottomNavBar(
                  selectedIndex2: 0, check: 'already',
                ),

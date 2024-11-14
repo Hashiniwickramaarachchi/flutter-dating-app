@@ -272,9 +272,14 @@ class _CoupleAddingPageState extends State<CoupleAddingPage> {
            bottom: height / 47,
          ),
          child: TextField(
+
           keyboardType: TextInputType.number,
            style: Theme.of(context).textTheme.headlineSmall,
            controller: _height,
+                            maxLength: 3,
+                  buildCounter: (BuildContext context, {int? currentLength, bool? isFocused, int? maxLength}) {
+   return null; // Hides the counter
+ },
            decoration: InputDecoration(
              border: UnderlineInputBorder(),
              hintText: 'Height (cm)',

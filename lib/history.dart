@@ -20,14 +20,14 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref();
-  List<Map<String, dynamic>> usersStatusDetails = [];
-
+  Map<String, dynamic> usersStatusDetails = {}; // Change from List to Map
+String lastSeenhistory = "Last seen: N/A";
+Color statecolour = Colors.white;
   @override
   void initState() {
     super.initState();
     fetchUsersStatus(); // Call the function in initState
   }
-
   Future<void> fetchUsersStatus() async {
     DatabaseReference usersStatusRef = _databaseRef.child('status');
 
@@ -36,52 +36,66 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
           event.snapshot.value as Map<dynamic, dynamic>?;
 
       if (usersStatus != null) {
-        List<String> userEmails = [];
-
-        // Iterate over users to collect their status
+        Map<String, dynamic> statusMap = {};
         usersStatus.forEach((key, value) {
-          // Revert the sanitized email (replace ',' back with '.')
+          // Revert sanitized email (replace ',' back with '.')
           String email = key.replaceAll(',', '.');
-          userEmails.add(email);
+          statusMap[email] = value;
         });
 
-        // Fetch user details from Firestore using these emails
-        fetchUserDetailsFromFirestore(userEmails, usersStatus);
+        setState(() {
+          usersStatusDetails = statusMap; // Store status based on email
+        });
       }
     });
   }
-
-  // Fetch user details from Firestore based on the email addresses and user status
-  Future<void> fetchUserDetailsFromFirestore(
-      List<String> userEmails, Map<dynamic, dynamic> usersStatus) async {
-    List<Map<String, dynamic>> userDetails = [];
-
-    for (String email in userEmails) {
-      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
-          await _firestore.collection('users').doc(email).get();
-
-      if (!userSnapshot.exists) {
-      // If not found, check "ambassadors" collection
-      userSnapshot = await _firestore.collection('Ambassdor').doc(email).get();
-    }    
-
-      if (userSnapshot.exists) {
-        Map<String, dynamic> userData = userSnapshot.data()!;
-        // Add online/offline status and last seen time to the user details
-        userData['status'] = usersStatus[email.replaceAll('.', ',')]['status'];
-        userData['lastSeen'] =
-            usersStatus[email.replaceAll('.', ',')]['lastSeen'];
-        userDetails.add(userData);
-      }
-    }
-
-    // Update state with the user details
-    if (mounted) {
-      setState(() {
-        usersStatusDetails = userDetails;
-      });
-    }
-  }
+  // Future<void> fetchUsersStatus() async {
+    // DatabaseReference usersStatusRef = _databaseRef.child('status');
+// 
+    // usersStatusRef.once().then((DatabaseEvent event) {
+      // Map<dynamic, dynamic>? usersStatus =
+          // event.snapshot.value as Map<dynamic, dynamic>?;
+// 
+      // if (usersStatus != null) {
+        // List<String> userEmails = [];
+// 
+        // usersStatus.forEach((key, value) {
+          // String email = key.replaceAll(',', '.');
+          // userEmails.add(email);
+        // });
+// 
+        // fetchUserDetailsFromFirestore(userEmails, usersStatus);
+      // }
+    // });
+  // }
+// 
+  // Future<void> fetchUserDetailsFromFirestore(
+      // List<String> userEmails, Map<dynamic, dynamic> usersStatus) async {
+    // List<Map<String, dynamic>> userDetails = [];
+// 
+    // for (String email in userEmails) {
+      // DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          // await _firestore.collection('users').doc(email).get();
+// 
+      // if (!userSnapshot.exists) {
+      // userSnapshot = await _firestore.collection('Ambassdor').doc(email).get();
+    // }    
+// 
+      // if (userSnapshot.exists) {
+        // Map<String, dynamic> userData = userSnapshot.data()!;
+        // userData['status'] = usersStatus[email.replaceAll('.', ',')]['status'];
+        // userData['lastSeen'] =
+            // usersStatus[email.replaceAll('.', ',')]['lastSeen'];
+        // userDetails.add(userData);
+      // }
+    // }
+// 
+    // if (mounted) {
+      // setState(() {
+        // usersStatusDetails = userDetails;
+      // });
+    // }
+  // }
 
   String capitalizeFirstLetter(String name) {
     if (name.isEmpty) return name;
@@ -120,31 +134,57 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
           itemBuilder: (context, index) {
             final history = histories[index];
             final chatPartnerEmail = history.id;
-
+                               bool isOnline = false;
+                               String lastSeen = "Last seen: N/A";
+                               lastSeenhistory = "Last seen: N/A";
+       
+                               if (usersStatusDetails
+                                   .containsKey(chatPartnerEmail)) {
+                                 final userStatus =
+                                     usersStatusDetails[chatPartnerEmail];
+                                 isOnline =
+                                     userStatus['status'] == 'online';
+       
+                                 if (isOnline) {
+                                   lastSeen = "Online";
+                                   lastSeenhistory = "Online";
+                                   statecolour = const Color.fromARGB(
+                                       255, 49, 255, 56);
+                                 } else {
+                                   var lastSeenDate = DateTime
+                                           .fromMillisecondsSinceEpoch(
+                                               userStatus['lastSeen'])
+                                       .toLocal();
+                                   lastSeen =
+                                       "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                                   lastSeenhistory = lastSeen;
+                                   statecolour = Colors.white;
+                                 }
+                               }
             // Check if the user's status exists in the usersStatusDetails list
-            Map<String, dynamic>? userStatus = usersStatusDetails.firstWhere(
-              (element) =>
-                  element.containsKey('email') &&
-                  element['email'] == chatPartnerEmail,
-              orElse: () => {},
-            );
+            // Map<String, dynamic>? userStatus = usersStatusDetails.firstWhere(
+            //   (element) =>
+            //       element.containsKey('email') &&
+            //       element['email'] == chatPartnerEmail,
+            //   orElse: () => {},
+            // );
 
-            bool isOnline = false;
-            String lastSeen = "Last seen: N/A";
+            // bool isOnline = false;
+            // String lastSeen = "Last seen: N/A";
 
-            if (userStatus.isNotEmpty) {
-              isOnline = userStatus['status'] == 'online';
+            // if (userStatus.isNotEmpty) {
+            //   isOnline = userStatus['status'] == 'online';
 
-              if (isOnline) {
-                lastSeen = "Online";
-              } else if (userStatus['lastSeen'] != null) {
-                var lastSeenDate =
-                    DateTime.fromMillisecondsSinceEpoch(userStatus['lastSeen'])
-                        .toLocal();
-                lastSeen =
-                    "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-              }
-            }
+            //   if (isOnline) {
+            //     lastSeen = "Online";
+            //   } else if (userStatus['lastSeen'] != null) {
+            //     var lastSeenDate =
+            //         DateTime.fromMillisecondsSinceEpoch(userStatus['lastSeen'])
+            //             .toLocal();
+            //     lastSeen =
+            //         "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+            //   }
+            // }
 
             return FutureBuilder<DocumentSnapshot>(
         
@@ -219,7 +259,7 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
                                       height: 12,
                                       width: 12,
                                       decoration: BoxDecoration(
-                                        color: Color(0xff7905F5),
+                                        color: Color(0xff00D215),
                                         shape: BoxShape.circle,
                                         border: Border.all(
                                           color: Colors

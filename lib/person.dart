@@ -24,7 +24,7 @@ class person extends StatefulWidget {
 
   final String onlinecheck;
   final Color statecolour;
-
+String description;
   List<dynamic> iconss;
   List<dynamic> labels;
   List<dynamic> imagecollection;
@@ -34,6 +34,7 @@ class person extends StatefulWidget {
       {required this.ID,
       required this.languages,
       required this.education,
+      required this.description,
       required this.onlinecheck,
       required this.statecolour,
       required this.profileimage,
@@ -102,7 +103,7 @@ class _personState extends State<person> {
                           ID: widget.ID,
                           useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, languages: widget.languages
                             
-                          , education: widget.education,
+                          , education: widget.education, description: widget.description,
                         );
                       },
                     ));
@@ -164,15 +165,20 @@ class _personState extends State<person> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        textAlign: TextAlign.center,
-                                        widget.name,
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontFamily: "defaultfontsbold",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 24),
+                                      Container(
+                                        width: width,
+                                        child: Expanded(
+                                          child: Text(
+                                            textAlign: TextAlign.center,
+                                            widget.name,
+                                            style: TextStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontFamily: "defaultfontsbold",
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 24),
+                                          ),
+                                        ),
                                       ),
                                       Text(
                                         textAlign: TextAlign.center,

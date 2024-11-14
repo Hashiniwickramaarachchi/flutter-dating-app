@@ -145,6 +145,7 @@ class _FilterResultsMapPageState extends State<FilterResultsMapPage> {
               "height": data['height'],
               "iconss": data["Icon"],
               "labels": data['Interest'],
+              'description':data['description'],
               "imagecollection": data['images'],
             });
             favStatus[data['email']] = false;
@@ -202,7 +203,7 @@ class _FilterResultsMapPageState extends State<FilterResultsMapPage> {
              fav: favStatus[data['email']]!,
              onlinecheck: lastSeen,
              statecolour: statecolour,
-             useremail: widget.useremail)),
+             useremail: widget.useremail, description: data['description'],)),
    ); 
                 },
                 // infoWindow: InfoWindow(
@@ -408,7 +409,7 @@ class _FilterResultsMapPageState extends State<FilterResultsMapPage> {
                                     fav: favStatus[user['email']]!,
                                     onlinecheck: lastSeen,
                                     statecolour: statecolour,
-                                    useremail: widget.useremail);
+                                    useremail: widget.useremail, description: user['description'],);
                               },
                             ));
                           },
@@ -568,9 +569,10 @@ class _FilterResultsMapPageState extends State<FilterResultsMapPage> {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: height / 1.136, left: width / 20, right: width / 20),
+          Positioned(
+            left: width/20,
+            right: width/20,
+            bottom: height/60,
             child: BottomNavBar(
               selectedIndex2: 1,
             ),

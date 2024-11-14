@@ -265,7 +265,7 @@ print(addedUsersEmails.length);
               iconss: user["Icon"],
               imagecollection: user['images'],
               ID: user['email'],
-              useremail: userdataperson['email'], languages: user['languages'], education: user['education'],
+              useremail: userdataperson['email'], languages: user['languages'], education: user['education'], description: user['description'],
             );
                                 },
                               ),
@@ -273,11 +273,10 @@ print(addedUsersEmails.length);
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: height / 1.23,
+                      Positioned(
+                            bottom: height/60,
                             left: width / 20,
-                            right: width / 20),
+                            right: width / 20,
                         child: A_BottomNavBar(
                           selectedIndex2: 4, check: 'already',
                         ),

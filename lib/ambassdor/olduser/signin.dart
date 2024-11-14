@@ -364,7 +364,7 @@ class _A_signinState extends State<A_signin> {
             double latitude = position.latitude;
             double longitude = position.longitude;
 
-            Navigator.of(context).push(MaterialPageRoute(
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) {
                 return 
                 showsigninresult(
@@ -455,7 +455,7 @@ class _A_signinState extends State<A_signin> {
             "rating": [],
             'description':''
           });
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
               return A_homepage();
             },
@@ -474,7 +474,7 @@ class _A_signinState extends State<A_signin> {
               desiredAccuracy: LocationAccuracy.high);
           double latitude = position.latitude;
           double longitude = position.longitude;
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
               return DashboardScreen();
             },

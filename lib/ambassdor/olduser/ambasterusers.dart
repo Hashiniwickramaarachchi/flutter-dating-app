@@ -15,6 +15,7 @@ class A_users extends StatefulWidget {
   String name;
   String location;
       String education;
+String description;
 
   double distance;
   double startLatitude;
@@ -36,6 +37,7 @@ class A_users extends StatefulWidget {
   A_users(
       {required this.ID,
       required this.languages,
+      required this.description,
       required this.education,
       required this.onlinecheck,
       required this.statecolour,
@@ -106,7 +108,7 @@ class _A_usersState extends State<A_users> {
                           ID: widget.ID,
                           useremail: widget.useremail,
                           onlinecheck: widget.onlinecheck,
-                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
+                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education, description: widget.description,
                         );
                       },
                     ));
@@ -157,7 +159,7 @@ class _A_usersState extends State<A_users> {
                                     ID: widget.ID,
                                     useremail: widget.useremail,
                                     onlinecheck: widget.onlinecheck,
-                                    statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
+                                    statecolour: widget.statecolour, languaes: widget.languages, education: widget.education, description: widget.description,
                                   );
                                 },
                               ));

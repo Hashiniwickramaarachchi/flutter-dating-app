@@ -6,6 +6,7 @@ import 'package:datingapp/Usermanegement/signin.dart';
 import 'package:datingapp/ambassdor/newuser/homepage.dart';
 import 'package:datingapp/ambassdor/olduser/showresultsignin.dart';
 import 'package:datingapp/homepage.dart';
+import 'package:datingapp/mainscreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -37,7 +38,7 @@ class _splashscreenState extends State<splashscreen> {
        .get();
          if (userSnapshot.exists) {
      // Print message if the chat partner is in the 'user' collection
-     Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
        return homepage();
      },));
          }
@@ -50,7 +51,7 @@ class _splashscreenState extends State<splashscreen> {
     double latitude = position.latitude;
     double longitude = position.longitude;
 
-         Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+         Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
      return        showsigninresult(
            userLatitude: latitude,
            userLongitude: longitude,

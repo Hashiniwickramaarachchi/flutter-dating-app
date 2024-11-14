@@ -56,6 +56,7 @@ class _A_ProfileUpdatePageState extends State<A_ProfileUpdatePage> {
         // Upload the image to Firebase Storage and get the download URL
         imageUrl = await _uploadImage(File(_image!.path));
       }
+if (phoneController.text.length==10) {
 
       // Update Firestore with new data
       await FirebaseFirestore.instance
@@ -70,6 +71,12 @@ class _A_ProfileUpdatePageState extends State<A_ProfileUpdatePage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Profile updated successfully!')));
+}else{
+
+   ScaffoldMessenger.of(context).showSnackBar(
+       SnackBar(content: Text('Check your Phonenumber again!!',style: TextStyle(color: Colors.red),)));
+
+}
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Error updating profile: $e')));

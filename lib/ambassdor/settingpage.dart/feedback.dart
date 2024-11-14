@@ -167,24 +167,24 @@ setState(() {
                 ),
               ),
               SizedBox(height: height / 80),
-              // RatingBar.builder(
-                // initialRating: rating,
-                // itemSize: height / 30,
-                // glowColor: Colors.black,
-                // minRating: 1,
-                // direction: Axis.horizontal,
-                // allowHalfRating: false,
-                // itemCount: 5,
-                // itemBuilder: (context, _) => Icon(
-                  // Icons.star,
-                  // color: Colors.amber,
-                // ),
-                // onRatingUpdate: (ratingValue) {
-                  // setState(() {
-                    // rating = ratingValue;
-                  // });
-                // },
-              // ),
+              RatingBar.builder(
+                initialRating: rating,
+                itemSize: height / 30,
+                glowColor: Colors.black,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: false,
+                itemCount: 5,
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (ratingValue) {
+                  setState(() {
+                    rating = ratingValue;
+                  });
+                },
+              ),
               SizedBox(height: 20),
               Container(
                 height: height / 3,

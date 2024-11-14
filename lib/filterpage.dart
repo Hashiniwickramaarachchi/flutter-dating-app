@@ -338,7 +338,7 @@ class _filterpageState extends State<filterpage> {
                                           print(_currentRangeValuesage);
                                           print(_currentRangeValues);
 
-                                          Navigator.push(
+                                          Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>

@@ -357,7 +357,7 @@ class _signupState extends State<signup> {
                     'created':FieldValue.serverTimestamp(),
 
           "languages": ['English'],
-          'education': 'enter your education',
+          'education': '',
           'profile': "standard",
           "description":''
         });
@@ -435,7 +435,7 @@ class _signupState extends State<signup> {
           'status': 'Online',
           'height': '0cm',
           "languages": ['English'],
-          'education': 'enter your education',
+          'education': '',
                     'profile': "standard",
                     "description":''
 

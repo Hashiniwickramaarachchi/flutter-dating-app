@@ -29,28 +29,28 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
       if (index==0) {
 
-             Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+             Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
        return homepage();
      },));
         
       }
       else if(index==1){
-                    Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
     return allusermap
     (userLatitude: 
     x, 
     userLongitude: y, useremail:email,);
   },));
       } else if(index==2){
-              Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
         return fav();
       },));
  } else if(index==3){
-    Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
    return Chatscreen();
  },));
  } else if(index==4){
-              Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
               return profile();
             },));
  }

@@ -189,7 +189,8 @@ class _matchingfilterState extends State<matchingfilter> {
               'images': data['images'],
               'height': data['height'],
               "languages": data['languages'],
-              'education': data['education']
+              'education': data['education'],
+              'description':data['description']
             };
         allUsers.add(userInfo); // Add user to the full list
 
@@ -516,7 +517,7 @@ Future<void> _updateMatchCountInFirebase() async {
                           iconss: user["Icon"],
                           imagecollection: user['images'],
                           ID: user['email'],
-                          useremail: widget.useremail, languages: user['languages'], education: user['education'],
+                          useremail: widget.useremail, languages: user['languages'], education: user['education'], description:user['description'],
                         ),
                       ),
                     );
@@ -526,9 +527,10 @@ Future<void> _updateMatchCountInFirebase() async {
                     ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(top: height / 1.25),
-              child: A_BottomNavBar(
+            Positioned(
+  left: 0,
+  right: 0,
+   bottom: height / 60,              child: A_BottomNavBar(
                 selectedIndex2: 2, check: 'new',
               ),
             )

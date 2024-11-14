@@ -164,7 +164,7 @@ class _allusermapState extends State<allusermap> {
                         fav: favStatus[data['email']]!,
                         onlinecheck: lastSeen,
                         statecolour: statecolour,
-                        useremail: widget.useremail)),
+                        useremail: widget.useremail, description: data['description'],)),
               );
             },
           ),
@@ -184,6 +184,7 @@ class _allusermapState extends State<allusermap> {
           "height": data['height'],
           "iconss": data["Icon"],
           "labels": data['Interest'],
+          'description':data['description'],
           "imagecollection": data['images'],
         });
 
@@ -411,7 +412,7 @@ class _allusermapState extends State<allusermap> {
                                             fav: favStatus[user['email']]!,
                                             onlinecheck: lastSeen,
                                             statecolour: statecolour,
-                                            useremail: widget.useremail);
+                                            useremail: widget.useremail, description: user['description'],);
                                       },
                                     ));
                                   },
@@ -444,20 +445,27 @@ class _allusermapState extends State<allusermap> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Flexible(
-                                              child: Text(
-                                                user['name'],
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.bold,
-                                                    color: Colors.black),
-            
-                                                softWrap: true,
-                                                overflow: TextOverflow
-                                                    .visible, // You can also use TextOverflow.ellipsis if you want to truncate
-                                              ),
-                                            ),
+                     Container(
+                      color: Colors.transparent,
+           width: width/3,
+           child: Expanded(
+             child: Center(
+               child: Text(
+                textAlign: TextAlign.center,
+                  user['name'],
+                 style: TextStyle(
+                   color: const Color(0xff26150F),
+                   fontFamily: "defaultfontsbold",
+                   fontWeight: FontWeight.w500,
+                   fontSize: 18,
+                 ),
+                 softWrap: true,
+                 overflow: TextOverflow
+                     .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+               ),
+             ),
+           ),
+         ),
                                             Text(
                                               user['location'],
                                               style: TextStyle(
@@ -576,7 +584,7 @@ class _allusermapState extends State<allusermap> {
                   ),
                   if (userdataperson['profile'] == 'premium') ...[
                     Padding(
-                      padding: EdgeInsets.only(left: 10, top: 50),
+                      padding: EdgeInsets.only(left: 20, top: 80),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -585,7 +593,7 @@ class _allusermapState extends State<allusermap> {
                             backgroundColor: Color(0xff7905F5),
                           ),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(
                               builder: (context) {
                                 return ambassdorshow(
                                     useremail: widget.useremail);
@@ -593,10 +601,10 @@ class _allusermapState extends State<allusermap> {
                             ));
                           },
                           child: Padding(
-                            padding: EdgeInsets.only(top: 12, bottom: 12),
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
                             child: Text(
                               "Request Ambassador",
-                              style: Theme.of(context).textTheme.bodySmall,
+                              style: TextStyle(color: Colors.white,fontSize:15,fontFamily: "button" )
                             ),
                           )),
                     )
@@ -605,13 +613,14 @@ class _allusermapState extends State<allusermap> {
            
            
            
-                  Padding(
-         padding: EdgeInsets.only(
-             top: height / 1.136, left: width / 20, right: width / 20),
-         child: BottomNavBar(
-           selectedIndex2: 1,
-         ),
-       )
+                  Positioned(
+                  left: width/20,
+                  right: width/20,
+                  bottom: height/60,
+                    child: BottomNavBar(
+                      selectedIndex2: 1,
+                    ),
+                  )
            
            
            

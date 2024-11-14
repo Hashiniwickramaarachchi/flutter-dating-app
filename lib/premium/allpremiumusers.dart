@@ -424,7 +424,7 @@ print(widget.useremail);
                           iconss: user["Icon"],
                           imagecollection: user['images'],
                           ID: user['email'],
-                          useremail: widget.useremail, gender: user['Gender'], languages: user['languages'], education: user['education'],
+                          useremail: widget.useremail, gender: user['Gender'], languages: user['languages'], education: user['education'], description: user['description'],
                         ),
                       ),
                     );

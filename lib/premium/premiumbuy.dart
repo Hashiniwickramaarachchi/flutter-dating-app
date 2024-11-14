@@ -38,7 +38,7 @@ class _premiumbuyState extends State<premiumbuy> {
               appBar: AppBar(
                 backgroundColor: const Color(0xffDFC1FF),
                 leading: Padding(
-                  padding:  EdgeInsets.all(8.0),
+                  padding:  EdgeInsets.only(left: width/20),
                   child: Container(
                       decoration: BoxDecoration(
                           shape: BoxShape.circle, color: Colors.white),
@@ -221,77 +221,75 @@ class _premiumbuyState extends State<premiumbuy> {
                                 ),
                               ],
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  top: height/40,
-                                    bottom: height / 40,
-                                    left: width / 22,
-                                    right: width / 22),
-                                child: GestureDetector(
-                                  onTap: () async {
-            if (userdataperson['profile']=='standard') {
-              
-            
-            
-                                    if (ismonthly == true ||
-                                        isyearly == true) {
-                                      try {
-                                        // Perform the async operation outside of setState
-                                        await FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(userdataperson['email'])
-                                            .update({'profile': 'premium'});
-            
-                                        // Once the async operation is complete, update the state and navigate
-                                        setState(() {});
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    'User upgraded to premium')));
-            
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return wlcomepremium();
-                                        }));
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    'Error updating profile: $e')));
-                                      }
-                                    } else {
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: height/40,
+                                  bottom: height / 40,
+                                  left: width / 22,
+                                  right: width / 22),
+                              child: GestureDetector(
+                                onTap: () async {
+                                        if (userdataperson['profile']=='standard') {
+                                          
+                                        
+                                        
+                                  if (ismonthly == true ||
+                                      isyearly == true) {
+                                    try {
+                                      // Perform the async operation outside of setState
+                                      await FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(userdataperson['email'])
+                                          .update({'profile': 'premium'});
+                                        
+                                      // Once the async operation is complete, update the state and navigate
+                                      setState(() {});
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
-                                              content:
-                                                  Text('Select a Plan')));
+                                              content: Text(
+                                                  'User upgraded to premium')));
+                                        
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) {
+                                        return wlcomepremium();
+                                      }));
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Error updating profile: $e')));
                                     }
-            }else{
-            
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(
-                      content:
-            Text('You already a premium member!!')));
-            
-            
-            }
-                                  },
-                                  child: Container(
-                                    height: height / 18,
-                                    width: width,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xff7905F5),
-                                      borderRadius:
-                                          BorderRadius.circular(height / 10),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Continue",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                      ),
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                            content:
+                                                Text('Select a Plan')));
+                                  }
+                                        }else{
+                                        
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content:
+                                        Text('You already a premium member!!')));
+                                        
+                                        
+                                        }
+                                },
+                                child: Container(
+                                  height: height / 15,
+                                  width: width,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff7905F5),
+                                    borderRadius:
+                                        BorderRadius.circular(height / 10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Continue",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall,
                                     ),
                                   ),
                                 ),

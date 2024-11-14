@@ -1,3 +1,4 @@
+import 'package:datingapp/accoundelete.dart';
 import 'package:datingapp/ambassdor/settingpage.dart/password.dart';
 import 'package:datingapp/ambassdor/settingpage.dart/personalinfo.dart';
 import 'package:datingapp/settingpage.dart/password.dart';
@@ -178,6 +179,69 @@ class _A_settingsState extends State<A_settings> {
                 SizedBox(
                   height: height / 30,
                 ),
+                               GestureDetector(
+                 onTap: () {
+                   // Navigator.of(context).push(MaterialPageRoute(
+                   // builder: (context) {
+                   // return passwordsequrity();
+                   // },
+                   // ));
+                   showModalBottomSheet(
+                     //  isScrollControlled: true,
+                     shape: RoundedRectangleBorder(
+                       borderRadius: BorderRadius.only(
+                         topLeft: Radius.circular(30),
+                         topRight: Radius.circular(30),
+                       ),
+                     ),
+                     context: context,
+                     builder: (context) {
+                       return accountdelete(who: 'Ambassdor',);
+                     },
+                   );
+                 },
+                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     Row(
+                       children: [
+                         Icon(
+                           Icons.delete_outline,
+                           color: Color(0xffBF1506),
+                           size: height / 30,
+                         ),
+                         SizedBox(
+                           width: width / 25,
+                         ),
+                         Text(
+                           'Delete Account',
+                           style: TextStyle(
+                               color: const Color(0xffBF1506),
+                               fontFamily: "defaultfontsbold",
+                               fontWeight: FontWeight.bold,
+                               fontSize: 18),
+                         ),
+                       ],
+                     ),
+                     Icon(
+                       Icons.arrow_forward_ios,
+                       color: Color(0xffBF1506),
+                       size: height / 40,
+                     ),
+                   ],
+                 ),
+               ),
+                       Padding(
+          padding: EdgeInsets.only(
+              left: width / 90, right: width / 90, top: height / 30),
+          child: Container(
+            width: width,
+            child: Divider(
+              height: 1,
+              color: Colors.grey,
+            ),
+          ),
+        ),
               ],
             ),
           ],

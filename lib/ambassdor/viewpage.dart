@@ -10,7 +10,7 @@ class A_viewpage extends StatefulWidget {
   String address;
 
   int distance;
-
+String description;
   int age;
   String ID;
   final String onlinecheck;
@@ -30,6 +30,7 @@ class A_viewpage extends StatefulWidget {
       {required this.address,
       required this.languaes,
       required this.age,
+      required this.description,
       required this.distance,
       required this.education,
       required this.height,
@@ -129,157 +130,162 @@ class _A_viewpageState extends State<A_viewpage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                           
-                           
-                           Flexible(
-      child: Text(
-        widget.name,
-        style: TextStyle(
-    color: const Color(0xff26150F),
-    fontFamily: "defaultfontsbold",
-    fontWeight: FontWeight.w500,
-    fontSize: height / 35,
-        ),
-        softWrap: true,
-        overflow: TextOverflow.visible, // You can also use TextOverflow.ellipsis if you want to truncate
-      ),
-    )
-    ,
-                           
-                           
-                           
-                           
-                           
-                              Text(
-                                widget.address,
-                                style: TextStyle(
-                                    color: const Color(0xff565656),
-                                    fontFamily: "defaultfontsbold",
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16),
-                              ),
-                            ],
+                          Expanded(
+                            flex: 4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                             
+                             
+                             Text(
+                               widget.name,
+                               style: TextStyle(
+                                 color: const Color(0xff26150F),
+                                 fontFamily: "defaultfontsbold",
+                                 fontWeight: FontWeight.w500,
+                                 fontSize: height / 35,
+                               ),
+                               softWrap: true,
+                               overflow: TextOverflow.visible, // You can also use TextOverflow.ellipsis if you want to truncate
+                             )
+                                ,
+                             
+                             
+                             
+                             
+                             
+                                Text(
+                                  widget.address,
+                                  style: TextStyle(
+                                      color: const Color(0xff565656),
+                                      fontFamily: "defaultfontsbold",
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
-                          Row(
-                            children: [
-                              // Container(
-                              // decoration: BoxDecoration(
-                              // shape: BoxShape.circle,
-                              // color: Color(0xff7905F5),
-                              // ),
-                              // child: IconButton(
-                              // onPressed: () async {
-                              // setState(() {
-                              // widget.fav =
-                              // !widget.fav; // Toggle the state
-                              // });
-                              // if (widget.fav) {
-                              // FirebaseFirestore.instance
-                              // .collection('users')
-                              // .doc(widget.ID)
-                              // .get()
-                              // .then((DocumentSnapshot
-                              // documentSnapshot) async {
-                              // if (documentSnapshot.exists) {
-                              // Map<String, dynamic> data =
-                              // documentSnapshot.data()
-                              // as Map<String, dynamic>;
-                              // try {
-                              // DocumentReference favDocRef =
-                              // await FirebaseFirestore
-                              // .instance
-                              // .collection('Favourite')
-                              // .doc(widget
-                              // .useremail); // Add the data to the main document in Favourite
-                              // print(
-                              // "Favourite document created with ID: ${favDocRef.id}");
-                              // await favDocRef
-                              // .collection(
-                              // "fav1") // Subcollection name
-                              // .doc(widget
-                              // .ID) // Use the same ID as in the "Sell" collection
-                              // .set(
-                              // data); // Add the data from the "Sell" collection
-                              // print(
-                              // "Subcollection 'fav1' created with document ID: ${widget.ID}");
-                              // FirebaseFirestore.instance
-                              // .collection(
-                              // 'Favourite') // Replace with your collection name
-                              // .doc(widget.useremail)
-                              // .collection("fav1")
-                              // .doc(widget
-                              // .ID) // Replace with the document ID you want to update
-                              // .update({'fav1': true})
-                              // .then((_) => print(
-                              // "Favorite updated to true"))
-                              // .catchError((error) => print(
-                              // "Failed to update favorite: $error"));
-                              // } catch (error) {
-                              // print(
-                              // "Error during creation of Favourite document or subcollection: $error");
-                              // }
-                              // } else {
-                              // print(
-                              // "Document does not exist in Sell collection");
-                              // }
-                              // }).catchError((error) {
-                              // print(
-                              // "Failed to retrieve document from Sell collection: $error");
-                              // });
-                              // } else {}
-                              // },
-                              // icon: Icon(
-                              // widget.fav
-                              // ? Icons.favorite_rounded
-                              // : Icons.favorite_border_outlined,
-                              // color: Colors.white,
-                              // size: height / 30,
-                              // )),
-                              // ),
-                              SizedBox(
-                                width: width / 40,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .push(MaterialPageRoute(
-                                    builder: (context) {
-                                      return ChatPage(
-                                        chatPartnerEmail: widget.ID,
-                                        chatPartnername: widget.name,
-                                        chatPartnerimage: widget.image,
-                                        onlinecheck: widget.onlinecheck,
-                                        statecolour: widget.statecolour,
-                                        who: 'ambassdor',
-                                      );
-                                    },
-                                  ));
-                                },
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xff7905F5),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: ClipRRect(
-                                        child: Image.asset(
-                                          "images/Vector.png",
-                                          height: height / 30,
-                                        ),
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                // Container(
+                                // decoration: BoxDecoration(
+                                // shape: BoxShape.circle,
+                                // color: Color(0xff7905F5),
+                                // ),
+                                // child: IconButton(
+                                // onPressed: () async {
+                                // setState(() {
+                                // widget.fav =
+                                // !widget.fav; // Toggle the state
+                                // });
+                                // if (widget.fav) {
+                                // FirebaseFirestore.instance
+                                // .collection('users')
+                                // .doc(widget.ID)
+                                // .get()
+                                // .then((DocumentSnapshot
+                                // documentSnapshot) async {
+                                // if (documentSnapshot.exists) {
+                                // Map<String, dynamic> data =
+                                // documentSnapshot.data()
+                                // as Map<String, dynamic>;
+                                // try {
+                                // DocumentReference favDocRef =
+                                // await FirebaseFirestore
+                                // .instance
+                                // .collection('Favourite')
+                                // .doc(widget
+                                // .useremail); // Add the data to the main document in Favourite
+                                // print(
+                                // "Favourite document created with ID: ${favDocRef.id}");
+                                // await favDocRef
+                                // .collection(
+                                // "fav1") // Subcollection name
+                                // .doc(widget
+                                // .ID) // Use the same ID as in the "Sell" collection
+                                // .set(
+                                // data); // Add the data from the "Sell" collection
+                                // print(
+                                // "Subcollection 'fav1' created with document ID: ${widget.ID}");
+                                // FirebaseFirestore.instance
+                                // .collection(
+                                // 'Favourite') // Replace with your collection name
+                                // .doc(widget.useremail)
+                                // .collection("fav1")
+                                // .doc(widget
+                                // .ID) // Replace with the document ID you want to update
+                                // .update({'fav1': true})
+                                // .then((_) => print(
+                                // "Favorite updated to true"))
+                                // .catchError((error) => print(
+                                // "Failed to update favorite: $error"));
+                                // } catch (error) {
+                                // print(
+                                // "Error during creation of Favourite document or subcollection: $error");
+                                // }
+                                // } else {
+                                // print(
+                                // "Document does not exist in Sell collection");
+                                // }
+                                // }).catchError((error) {
+                                // print(
+                                // "Failed to retrieve document from Sell collection: $error");
+                                // });
+                                // } else {}
+                                // },
+                                // icon: Icon(
+                                // widget.fav
+                                // ? Icons.favorite_rounded
+                                // : Icons.favorite_border_outlined,
+                                // color: Colors.white,
+                                // size: height / 30,
+                                // )),
+                                // ),
+                                SizedBox(
+                                  width: width / 40,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) {
+                                        return ChatPage(
+                                          chatPartnerEmail: widget.ID,
+                                          chatPartnername: widget.name,
+                                          chatPartnerimage: widget.image,
+                                          onlinecheck: widget.onlinecheck,
+                                          statecolour: widget.statecolour,
+                                          who: 'ambassdor',
+                                        );
+                                      },
+                                    ));
+                                  },
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xff7905F5),
                                       ),
-                                    )),
-                              )
-                            ],
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: ClipRRect(
+                                          child: Image.asset(
+                                            "images/Vector.png",
+                                            height: height / 30,
+                                          ),
+                                        ),
+                                      )),
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),
                       SizedBox(height: height / 25),
                       // Description
+                    if(widget.description.isNotEmpty)...[  
                       Text(
                         'Description',
                         style: TextStyle(
@@ -291,14 +297,14 @@ class _A_viewpageState extends State<A_viewpage> {
                       SizedBox(height: height / 150),
     
                       Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut diam orci, rutrum id arcu in, cursus commodo ex',
+                        widget.description,
                         style: TextStyle(
                             color: const Color(0xff565656),
                             fontFamily: "defaultfonts",
                             fontSize: 16),
                       ),
                       SizedBox(height: height / 50),
-                      // Interests
+                      ],  // Interests
                       Text(
                         'Interest',
                         style: TextStyle(
@@ -337,6 +343,8 @@ class _A_viewpageState extends State<A_viewpage> {
                       _buildInfoRow(context, 'Height', '${widget.height}'),
  _buildInfoRowlanugaes(
      context, 'Languages', widget.languaes),                      SizedBox(height: height / 90),
+                         if(widget.education.isNotEmpty)...[  
+
                       Text(
                         'Education',
                         style: TextStyle(
@@ -355,6 +363,7 @@ class _A_viewpageState extends State<A_viewpage> {
     
                       SizedBox(height: height / 50),
                       // Gallery
+                         ],
                       Text(
                         'Gallery',
                         style: TextStyle(

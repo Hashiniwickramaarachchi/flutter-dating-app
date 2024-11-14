@@ -76,169 +76,165 @@ class _A_dashbordnewState extends State<A_dashbordnew> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-        child: Container(
+    return Container(
+          height: height,
+          width: width,
+          color: const Color.fromARGB(255, 255, 255, 255),
+          child: Scaffold(
+                              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                                                  appBar: AppBar(
+              toolbarHeight:height/400,
+              foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+              automaticallyImplyLeading: false,
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+            ),
+    body: Container(
+      color: Color.fromARGB(255, 255, 255, 255),
       height: height,
       width: width,
-      color: const Color.fromARGB(255, 255, 255, 255),
-      child: WillPopScope(
-        onWillPop: () async => false,
-        child: SafeArea(
-          child: Scaffold(
-            body: Container(
-              color: Color.fromARGB(255, 255, 255, 255),
-              height: height,
-              width: width,
-              child: Padding(
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(
+                    right: width / 20,
+                    left: width / 20,
+                  ),
+                  child: Container(
+                    child: Image.asset(
+                      "assetss/logo.png",
+                      height: height / 15,
+                      fit: BoxFit.fill,
+                    ),
+                  )),
+              SizedBox(
+                height: height / 30,
+              ),
+              Padding(
                 padding: EdgeInsets.only(
-                  top: height / 20,
-                  bottom: height / 60,
+                  right: width / 20,
+                  left: width / 20,
                 ),
-                child: Stack(
-                  children: [
-                    Column(
+                child: Container(
+                  height: height / 1.5,
+                  child: SingleChildScrollView(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                            padding: EdgeInsets.only(
-                              right: width / 20,
-                              left: width / 20,
-                            ),
-                            child: Container(
-                              child: Image.asset(
-                                "assetss/logo.png",
-                                height: height / 15,
-                                fit: BoxFit.fill,
-                              ),
-                            )),
+                        Center(
+                          child: Text(
+                            "Your first couple match is just a step away!",
+                            style: TextStyle(
+                                color: const Color.fromARGB(
+                                    255, 0, 0, 0),
+                                fontSize: height / 32,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "defaultfontsbold"),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         SizedBox(
-                          height: height / 30,
+                          height: height / 60,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right: width / 20,
-                            left: width / 20,
+                        Center(
+                          child: Image.asset(
+                            "assetss/Group 911.png",
+                            fit: BoxFit.fill,
                           ),
-                          child: Container(
-                            height: height / 1.5,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      "Your first couple match is just a step away!",
-                                      style: TextStyle(
-                                          color: const Color.fromARGB(
-                                              255, 0, 0, 0),
-                                          fontSize: height / 32,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: "defaultfontsbold"),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height / 60,
-                                  ),
-                                  Center(
-                                    child: Image.asset(
-                                      "assetss/Group 911.png",
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height / 15,
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              height / 10)),
-                                                  backgroundColor:
-                                                      Color(0xffF5ECFF),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .push(MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return CoupleAddingPage();
-                                                    },
-                                                  ));
-                                                },
-                                                child: Text(
-                                                  "Add New",
-                                                  style: TextStyle(
-                                                      color: Color(0xff7905F5),
-                                                      fontFamily:
-                                                          "defaultfonts",
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: height / 45),
-                                                ))),
-                                        SizedBox(
-                                          width: width / 70,
-                                        ),
-                                        Expanded(
-                                          child:
-                                           ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    Color(0xff7905F5),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .push(MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return CoupleMatchingPage();
-                                                  },
-                                                ));
-                                              },
-                                              child: Text(
-                                                "Match Couple",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: "defaultfonts",
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: height / 45),
-                                              )),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height / 10,
-                                  )
-                                ],
+                        ),
+                        SizedBox(
+                          height: height / 15,
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(
+                                                    height / 10)),
+                                        backgroundColor:
+                                            Color(0xffF5ECFF),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) {
+                                            return CoupleAddingPage();
+                                          },
+                                        ));
+                                      },
+                                      child: Text(
+                                        "Add New",
+                                        style: TextStyle(
+                                            color: Color(0xff7905F5),
+                                            fontFamily:
+                                                "defaultfonts",
+                                            fontWeight:
+                                                FontWeight.w500,
+                                            fontSize: height / 45),
+                                      ))),
+                              SizedBox(
+                                width: width / 70,
                               ),
-                            ),
+                              Expanded(
+                                child:
+                                 ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Color(0xff7905F5),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (context) {
+                                          return CoupleMatchingPage();
+                                        },
+                                      ));
+                                    },
+                                    child: Text(
+                                      "Match Couple",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "defaultfonts",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: height / 45),
+                                    )),
+                              )
+                            ],
                           ),
                         ),
+                        SizedBox(
+                          height: height / 10,
+                        )
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: height / 1.33,
-                        right: width / 20,
-                        left: width / 20,
-                      ),
-                      child: A_BottomNavBar(
-                        selectedIndex2: 1, check: 'already',
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
+            ],
+          ),
+          Positioned(
+            
+              bottom: height / 60,
+              right: width / 20,
+              left: width / 20,
+            
+            child: A_BottomNavBar(
+              selectedIndex2: 1, check: 'already',
             ),
           ),
-        ),
+        ],
       ),
-    ));
+    ),
+          ),
+        );
   }
 }

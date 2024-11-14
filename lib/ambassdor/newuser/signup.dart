@@ -377,7 +377,7 @@ class _A_signupState extends State<A_signup> {
             style: TextStyle(color: Colors.white),
           ),
         ));
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) {
             return A_landingpage();
           },
@@ -461,7 +461,7 @@ class _A_signupState extends State<A_signup> {
           content:
               Text("Account Created!!", style: TextStyle(color: Colors.white)),
         ));
-Navigator.of(context).push(MaterialPageRoute(builder:(context) {
+Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
   return A_landingpage();
 },));
       }

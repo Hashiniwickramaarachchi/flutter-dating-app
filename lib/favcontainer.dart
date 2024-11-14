@@ -15,6 +15,7 @@ class favcontainer extends StatefulWidget {
   double endLatitude;
   double endLongitude;
   String education;
+  String description;
   final String onlinecheck;
   final Color statecolour;
   List<dynamic> languages;
@@ -30,6 +31,7 @@ class favcontainer extends StatefulWidget {
     required this.education,
     required this.languages,
     required this.ID,
+    required this.description,
     required this.onlinecheck,
     required this.statecolour,
     required this.profileimage,
@@ -91,7 +93,7 @@ class _favcontainerState extends State<favcontainer> {
                     onlinecheck: widget.onlinecheck,
                     statecolour: widget.statecolour,
                     languages: widget.languages,
-                    education: widget.education,
+                    education: widget.education, description: widget.description,
                   );
                 },
               ));
@@ -182,20 +184,20 @@ class _favcontainerState extends State<favcontainer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    
-                                    widget.name.toUpperCase(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                Container(
+                                  width: width,
+                                  child: Expanded(
+                                    child: Text(
                                       
-                                        color: const Color.fromARGB(
-                                            255, 255, 255, 255),
-                                        fontFamily: "defaultfontsbold",
-                                        fontSize: 20),
-                                            softWrap: true,
-    overflow: TextOverflow
-        .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+                                      widget.name.toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontFamily: "defaultfontsbold",
+                                          fontSize: 20),
+                                    ),
                                   ),
                                 ),
                                 Text(

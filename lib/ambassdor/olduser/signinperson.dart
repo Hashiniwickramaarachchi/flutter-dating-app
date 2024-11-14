@@ -33,6 +33,7 @@ class signinperson extends StatefulWidget {
   List<dynamic> iconss;
   List<dynamic> labels;
     List<dynamic> languages;
+String description;
 
   List<dynamic> imagecollection;
   String useremail;
@@ -46,6 +47,7 @@ class signinperson extends StatefulWidget {
       required this.statecolour,
       required this.profileimage,
       required this.name,
+      required this.description,
       required this.location,
       required this.distance,
       required this.startLongitude,
@@ -112,7 +114,7 @@ class _signinpersonState extends State<signinperson> {
                           ID: widget.ID,
                           useremail: widget.useremail,
                           onlinecheck: widget.onlinecheck,
-                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
+                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education, description: widget.description,
                         );
                       },
                     ));
@@ -174,20 +176,22 @@ class _signinpersonState extends State<signinperson> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Flexible(
-                                        child: Text(
-                                          widget.name,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontFamily: "defaultfontsbold",
-                                              fontWeight: FontWeight.w900,
-                                              fontSize:24),
-                                          softWrap: true,
-  overflow: TextOverflow.visible, //
+                                      Container(
+                                        width: width,
+                                        child: Expanded(
+                                          child: Text(
+                                            widget.name,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontFamily: "defaultfontsbold",
+                                                fontWeight: FontWeight.w900,
+                                                fontSize:24),
+                                            softWrap: true,
+                                            overflow: TextOverflow.visible, //
+                                          ),
                                         ),
-
                                       ),
                                       Text(
                                         widget.location,
@@ -247,7 +251,7 @@ class _signinpersonState extends State<signinperson> {
                           ID: widget.ID,
                           useremail: widget.useremail,
                           onlinecheck: widget.onlinecheck,
-                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education,
+                          statecolour: widget.statecolour, languaes: widget.languages, education: widget.education, description: widget.description,
                         );
                       },
                                                       

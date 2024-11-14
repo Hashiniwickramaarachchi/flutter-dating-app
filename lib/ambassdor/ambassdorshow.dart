@@ -404,7 +404,7 @@ backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                           iconss: user["Icon"],
                           imagecollection: user['images'],
                           ID: user['email'],
-                          useremail: widget.useremail, languages: user['languages'], education: user['education'],
+                          useremail: widget.useremail, languages: user['languages'], education: user['education'], description: user['description'],
                         ),
                       ),
                     );
@@ -412,11 +412,16 @@ backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                 )),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(top: height / 1.25),
+            Positioned(
+                
+  left: 0,
+  right: 0,
+   bottom: height / 60,                
+                
               child: A_BottomNavBar(
                 selectedIndex2: 0, check: 'new',
               ),
+            
             )
           ],
         ),
