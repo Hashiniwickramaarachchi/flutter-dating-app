@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:datingapp/bootmnavbar.dart';
+import 'package:datingapp/mainscreen.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/viewpage.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -570,11 +571,41 @@ class _FilterResultsMapPageState extends State<FilterResultsMapPage> {
             ),
           ),
           Positioned(
-            left: width/20,
-            right: width/20,
-            bottom: height/60,
+            left: 30,
+            right: 30,
+            bottom: 30,
             child: BottomNavBar(
-              selectedIndex2: 1,
+              selectedIndex2: 1, onItemTapped: (int index) { 
+                if (index == 1) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 1,)),
+           );
+         }          else if (index == 0) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 0,)),
+           );
+         } 
+        else if (index == 2) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 2,)),
+           );
+         } 
+        else if (index == 3) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 3,)),
+           );
+         } 
+       else  if (index == 4) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 4,)),
+           );
+         } 
+               },
             ),
           )
         ],

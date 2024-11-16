@@ -72,16 +72,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 },
               ),
             ),
-            Positioned(
-              
-         left: 0,
-         right: 0,
-         bottom: screenHeight / 60,             
-    child: A_BottomNavBar(
-                selectedIndex2: 1,
-                check: 'already',
-              ),
-            ),
+            // Positioned(
+              // 
+        //  left: 0,
+        //  right: 0,
+        //  bottom: screenHeight / 60,             
+    // child: A_BottomNavBar(
+                // selectedIndex2: 1,
+                // check: 'already',
+              // ),
+            // ),
           ],
         ),
       ),

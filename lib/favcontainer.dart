@@ -184,21 +184,18 @@ class _favcontainerState extends State<favcontainer> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  width: width,
-                                  child: Expanded(
-                                    child: Text(
-                                      
-                                      widget.name.toUpperCase(),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          fontFamily: "defaultfontsbold",
-                                          fontSize: 20),
-                                    ),
-                                  ),
+                                Text(
+                                  
+                                  widget.name.toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    
+                                      color: const Color.fromARGB(
+                                          255, 255, 255, 255),
+                                      fontFamily: "defaultfontsbold",
+                                      fontSize: 20),
+                                             maxLines: 1, // Limit to one line
+   overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
                                 ),
                                 Text(
                                   widget.location,

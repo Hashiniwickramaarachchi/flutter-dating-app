@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/Usermanegement/signin.dart';
+import 'package:datingapp/accountdelectionpage.dart';
 import 'package:datingapp/ambassdor/olduser/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,67 +17,81 @@ class accountdelete extends StatefulWidget {
 class _accountdeleteState extends State<accountdelete> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _isDeleting = false; // Loading state
-
-  Future<void> _deleteAccount() async {
-    setState(() {
-      _isDeleting = true;
-    });
-
-    final currentUser = _auth.currentUser;
-    final userEmail = currentUser?.email; // Store the email before deleting the user
-
-    if (userEmail == null) {
-      print("Error: currentUser email is null");
-      return;
-    }
-
-    try {
-      // Delete the main user document
-      await _firestore.collection(widget.who).doc(userEmail).delete();
-
-      // Delete the main chat document
-      // final chatDocRef = _firestore.collection('chats').doc(userEmail);
-      // final chatDocSnapshot = await chatDocRef.get();
-
-      // if (chatDocSnapshot.exists) {
-        // await chatDocRef.delete();
-        // print("Deleted chat document for $userEmail in 'chats' collection.");
-      // } else {
-        // print("No chat document found for $userEmail in 'chats' collection.");
+  // bool _isDeleting = false; // Loading state
+// 
+  // Future<void> _deleteAccount() async {
+    // setState(() {
+      // _isDeleting = true;
+    // });
+// 
+    // final currentUser = _auth.currentUser;
+    // final userEmail = currentUser?.email;
+// 
+    // if (userEmail == null) {
+      // print("Error: currentUser email is null");
+      // setState(() {
+        // _isDeleting = false;
+      // });
+      // return;
+    // }
+// 
+    // try {
+      // await _firestore.collection(widget.who).doc(userEmail).delete();
+      // print("Deleted main user document for $userEmail in '${widget.who}' collection.");
+// 
+      // final favouriteSnapshots = await _firestore.collection("Favourite").get();
+// 
+      // for (var favDoc in favouriteSnapshots.docs) {
+        // final fav1Collection = _firestore.collection("Favourite").doc(favDoc.id).collection('fav1');
+// 
+        // try {
+          // final fav1DocSnapshot = await fav1Collection.doc(userEmail).get();
+// 
+          // if (fav1DocSnapshot.exists) {
+            // await fav1Collection.doc(userEmail).delete();
+            // print("Deleted $userEmail from ${favDoc.id}'s 'fav1' subcollection in Favourite.");
+          // } else {
+            // print("Document for $userEmail not found in ${favDoc.id}'s 'fav1' subcollection.");
+          // }
+        // } catch (e) {
+          // print("Error deleting $userEmail from ${favDoc.id}'s 'fav1' subcollection: $e");
+        // }
       // }
-
-      await currentUser!.delete();
-      print("Deleted Firebase Authentication user for $userEmail.");
-
-      await _auth.signOut();
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) {
-          return widget.who == "Ambassador" ? A_signin() : signin();
-        }),
-      );
-    } catch (e) {
-      print("Error deleting account: $e");
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Error"),
-          content: Text("Failed to delete account: ${e.toString()}"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("OK"),
-            ),
-          ],
-        ),
-      );
-    } finally {
-      setState(() {
-        _isDeleting = false;
-      });
-    }
-  }
-
+// 
+      // await currentUser!.delete();
+      // print("Deleted Firebase Authentication user for $userEmail.");
+// 
+      // await _auth.signOut();
+// 
+      // await Future.delayed(Duration(milliseconds: 300));
+// 
+      // Navigator.of(context).pushReplacement(
+        // MaterialPageRoute(builder: (context) {
+          // return widget.who == "Ambassador" ? A_signin() : signin();
+        // }),
+      // );
+    // } catch (e) {
+      // print("Error deleting account: $e");
+      // showDialog(
+        // context: context,
+        // builder: (context) => AlertDialog(
+          // title: Text("Error"),
+          // content: Text("Failed to delete account: ${e.toString()}"),
+          // actions: [
+            // TextButton(
+              // onPressed: () => Navigator.of(context).pop(),
+              // child: Text("OK"),
+            // ),
+          // ],
+        // ),
+      // );
+    // } finally {
+      // setState(() {
+        // _isDeleting = false;
+      // });
+    // }
+  // }
+// 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -101,7 +116,7 @@ class _accountdeleteState extends State<accountdelete> {
             children: [
               Container(
                 width: width,
-                height: height / 2.5,
+                height: height / 1.5,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -133,20 +148,17 @@ class _accountdeleteState extends State<accountdelete> {
                           backgroundColor: Color(0xffE51C0B),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         ),
-                        onPressed: _deleteAccount,
+                        onPressed:() {
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
+                            return DeleteAccountPage(initiateDelete: true,who: widget.who,);
+                          },));
+                        },
                         child: Text("Delete Account", style: TextStyle(color: Colors.white, fontSize: 20)),
                       ),
                     ],
                   ),
                 ),
               ),
-              if (_isDeleting)
-                Container(
-                  color: Colors.black54,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
             ],
           );
         } else if (snapshot.hasError) {

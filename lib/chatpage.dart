@@ -332,14 +332,14 @@ class _ChatscreenState extends State<Chatscreen> {
                       ),
                     ),
                   ),
-                  Positioned(
-                       left: width/20,
-               right: width/20,
-               bottom: height/60,
-                    child: BottomNavBar(
-                      selectedIndex2: 3,
-                    ),
-                  )
+                  // Positioned(
+                      //  left: width/20,
+              //  right: width/20,
+              //  bottom: height/60,
+                    // child: BottomNavBar(
+                      // selectedIndex2: 3,
+                    // ),
+                  // )
                 ],
               ),
             );

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:datingapp/homepage.dart';
+import 'package:datingapp/mainscreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -79,12 +80,12 @@ class _completeprofileState extends State<completeprofile> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Profile picture uploaded successfully!')),
         );
+Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => MainScreen()), 
+  (Route<dynamic> route) => false,
+);
 
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) {
-            return homepage();
-          },
-        ));
+        
    }else{
         ScaffoldMessenger.of(context).showSnackBar(
 

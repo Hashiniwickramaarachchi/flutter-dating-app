@@ -176,23 +176,20 @@ class _signinpersonState extends State<signinperson> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        width: width,
-                                        child: Expanded(
-                                          child: Text(
-                                            widget.name,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                fontFamily: "defaultfontsbold",
-                                                fontWeight: FontWeight.w900,
-                                                fontSize:24),
-                                            softWrap: true,
-                                            overflow: TextOverflow.visible, //
-                                          ),
-                                        ),
+                                      Text(
+                                        widget.name,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontFamily: "defaultfontsbold",
+                                            fontWeight: FontWeight.w900,
+                                            fontSize:24),
+                                       maxLines: 1, // Limit to one line
+ overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
                                       ),
+                                      
+                                      
                                       Text(
                                         widget.location,
                                         style: TextStyle(

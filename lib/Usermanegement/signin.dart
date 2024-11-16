@@ -341,7 +341,7 @@ class _signinState extends State<signin> {
             content: Text("Signin", style: TextStyle(color: Colors.white)),
           ));
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-            return homepage();
+            return MainScreen();
           }));
         } on FirebaseAuthException catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -417,7 +417,7 @@ class _signinState extends State<signin> {
             'profile': "standard",
             "description":''
           });
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
               return gender();
             },
@@ -436,9 +436,9 @@ if (userSnapshot.exists) {
 
           final data = updatedUserDoc.data() as Map<String, dynamic>?;
 
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
-              return homepage();
+              return MainScreen();
             },
           ));
         }else{

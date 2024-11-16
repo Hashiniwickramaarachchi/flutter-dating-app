@@ -183,16 +183,16 @@ class _addpageState extends State<addpage> {
                           ),
                         ],
                       ),
-                      Positioned(
-                      
-                          bottom: height / 60,
-                          right: width / 20,
-                          left: width / 20,
-                        
-                        child: A_BottomNavBar(
-                          selectedIndex2: 2, check: 'already',
-                        ),
-                      ),
+                      // Positioned(
+                      // 
+                          // bottom: height / 60,
+                          // right: width / 20,
+                          // left: width / 20,
+                        // 
+                        // child: A_BottomNavBar(
+                          // selectedIndex2: 2, check: 'already',
+                        // ),
+                      // ),
                     ],
                   ),
                 ),

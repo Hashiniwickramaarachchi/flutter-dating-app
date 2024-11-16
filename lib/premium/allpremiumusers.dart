@@ -116,13 +116,13 @@ class _allpremiumState extends State<allpremium> {
         var data = doc.data() as Map<String, dynamic>;
 
         // Check if all necessary fields exist
-        if (data.containsKey('Age') &&
-            data.containsKey('Interest') &&
-            data.containsKey('X') &&
-            data.containsKey('Y') &&
-            data.containsKey('profile_pic')) {
-          double userDistance = _calculateDistance(
-              widget.userLatitude, widget.userLongitude, data['X'], data['Y']);
+      
+      
+      
+      
+      
+        
+        
 
         
             // Add filtered user to the list
@@ -147,7 +147,8 @@ class _allpremiumState extends State<allpremium> {
 
 if (data['profile']=='premium' && data['email']!=widget.useremail) {
   
-
+  double userDistance = _calculateDistance(
+      widget.userLatitude, widget.userLongitude, data['X'], data['Y']);
 
             Map<String, dynamic> userInfo = {
               'name': data['name'],
@@ -165,7 +166,8 @@ if (data['profile']=='premium' && data['email']!=widget.useremail) {
               'images': data['images'],
               'height': data['height'],
               "languages": data['languages'],
-              'education': data['education']
+              'education': data['education'],
+              'description':data['description']
             };
             allUsers.add(userInfo); // Add user to the full list
 
@@ -184,9 +186,9 @@ if (data['profile']=='premium' && data['email']!=widget.useremail) {
 }
 
 
-        } else {
-          print('Document missing required fields: ${doc.id}');
-        }
+       
+       
+       
       }
 
       setState(() {

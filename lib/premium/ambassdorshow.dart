@@ -7,6 +7,7 @@ import 'package:datingapp/ambassdor/olduser/signinperson.dart';
 import 'package:datingapp/ambassdor/onlinecheck.dart';
 import 'package:datingapp/ambassdor/person.dart';
 import 'package:datingapp/bootmnavbar.dart';
+import 'package:datingapp/mainscreen.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/person.dart';
 import 'package:datingapp/premium/ambassdorview.dart';
@@ -376,11 +377,45 @@ class _ambassdorshowState extends State<ambassdorshow> {
               ],
             ),
             Positioned(
-   bottom: height/60,
-   left: 0,
-   right: 0,
+   bottom: 30,
+   left: 30,
+   right: 30,
               child: BottomNavBar(
-                selectedIndex2: 1,
+                selectedIndex2: 1, onItemTapped: (int index) {
+
+ if (index == 1) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 1,)),
+            );
+          } 
+         else if (index == 0) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 0,)),
+           );
+         } 
+        else if (index == 2) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 2,)),
+           );
+         } 
+        else if (index == 3) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 3,)),
+           );
+         } 
+       else  if (index == 4) {
+           Navigator.pushReplacement(
+             context,
+             MaterialPageRoute(builder: (context) => MainScreen(initialIndex: 4,)),
+           );
+         } 
+
+
+                  },
               ),
             )
           ],

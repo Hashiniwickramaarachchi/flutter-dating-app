@@ -259,14 +259,14 @@ class _profileState extends State<profile> {
                         ],
                       ),
                     ),
-                    Positioned(
-                      left: width/20,
-                      right: width/20,
-                      bottom: height/60,
-                      child: BottomNavBar(
-                        selectedIndex2: 4,
-                      ),
-                    )
+                    // Positioned(
+                      // left: width/20,
+                      // right: width/20,
+                      // bottom: height/60,
+                      // child: BottomNavBar(
+                        // selectedIndex2: 4,
+                      // ),
+                    // )
                   ],
                 ),
               ),

@@ -273,14 +273,14 @@ print(addedUsersEmails.length);
                           ],
                         ),
                       ),
-                      Positioned(
-                            bottom: height/60,
-                            left: width / 20,
-                            right: width / 20,
-                        child: A_BottomNavBar(
-                          selectedIndex2: 4, check: 'already',
-                        ),
-                      )
+                      // Positioned(
+                            // bottom: height/60,
+                            // left: width / 20,
+                            // right: width / 20,
+                        // child: A_BottomNavBar(
+                          // selectedIndex2: 4, check: 'already',
+                        // ),
+                      // )
                     ],
                   ),
                 ),

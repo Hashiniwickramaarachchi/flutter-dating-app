@@ -257,6 +257,7 @@ class _ChatPageState extends State<ChatPage> {
 
                         child: PopupMenuButton<int>(
                           color: const Color.fromARGB(255, 255, 255, 255),
+                        offset: Offset(0, 100),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           icon: Icon(
@@ -284,13 +285,20 @@ class _ChatPageState extends State<ChatPage> {
                                     },
                                   ));
                                 }
-                                if (ambassadorSnapshot.exists) {
+                               else if (ambassadorSnapshot.exists) {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) {
                                       return ambassdorshowchat(
                                           useremail: widget.chatPartnerEmail);
                                     },
                                   ));
+                                }
+                                else{
+
+    ScaffoldMessenger.of(context).showSnackBar(
+   SnackBar(content: Text('This User not Available',style: TextStyle(color: Colors.red),)));
+
+
                                 }
                                 break;
                               case 2:

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/Usermanegement/signin.dart';
+import 'package:datingapp/dynamic.dart';
 import 'package:datingapp/invite.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/premium/premiumbuy.dart';
@@ -11,6 +12,8 @@ import 'package:datingapp/settingpage.dart/profileupdate.dart';
 import 'package:datingapp/settingpage.dart/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+
 
 class settingactivity extends StatefulWidget {
   const settingactivity({super.key});
@@ -321,10 +324,12 @@ class _settingactivityState extends State<settingactivity> {
                     height: height / 30,
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-                        return invite();
-                      },));
+                    onTap: () async{
+                   
+            _createAndShareDynamicLink();
+
+  
+  
                     },
                     child: Padding(
                         padding:  EdgeInsets.only(left: width/40,right: width/40),
@@ -538,9 +543,12 @@ class _settingactivityState extends State<settingactivity> {
         // Close the loading dialog
         Navigator.of(context).pop();
         // Navigate to splash screen
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => signin()),  // Replace with your splash scre
-        );
+Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => signin()), 
+  (Route<dynamic> route) => false,
+);
+
+
       } catch (e) {
         // Close the loading dialog
         Navigator.of(context).pop();
@@ -590,4 +598,15 @@ class _settingactivityState extends State<settingactivity> {
       ),
     );
   }
+    Future<void> _createAndShareDynamicLink() async {
+  final link = await DynamicLinkService.instance.createDynamicLink();
+  _shareDynamicLink(link);
+}
+
+Future<void> _shareDynamicLink(String link) async {
+  Share.share(
+    'Here is a dynamic link for you: $link',
+    subject: 'Check this out!', // Use subject as the title (optional) use share etends for thuis 
+  );
+}
 }

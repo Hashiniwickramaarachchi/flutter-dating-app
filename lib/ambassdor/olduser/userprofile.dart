@@ -8,10 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 class userprofile extends StatefulWidget {
   String email;
-   userprofile({
-    required this.email,
-    
-    super.key});
+  userprofile({required this.email, super.key});
 
   @override
   State<userprofile> createState() => _userprofileState();
@@ -41,17 +38,23 @@ class _userprofileState extends State<userprofile> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            // Check if data exists before casting to Map<String, dynamic>
             final userdataperson =
-                snapshot.data!.data() as Map<String, dynamic>;
+                snapshot.data!.data() as Map<String, dynamic>?;
+            if (userdataperson == null) {
+              return Center(
+                child: Text("User data not found."),
+              );
+            }
 
             return Scaffold(
-                                                                        appBar: AppBar(
-              toolbarHeight:height/400,
-              foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-              automaticallyImplyLeading: false,
-                        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                        surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-                        ),
+              appBar: AppBar(
+                toolbarHeight: height / 400,
+                foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                automaticallyImplyLeading: false,
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+              ),
               backgroundColor: Color.fromARGB(255, 255, 255, 255),
               body: Container(
                 height: height,
@@ -91,26 +94,27 @@ class _userprofileState extends State<userprofile> {
                                     child: Text(
                                   "Profile",
                                   style: TextStyle(
-                                      color:
-                                          const Color.fromARGB(255, 0, 0, 0),
+                                      color: const Color.fromARGB(255, 0, 0, 0),
                                       fontFamily: "defaultfontsbold",
                                       fontSize: 20),
                                 )),
                               ),
                               // GestureDetector(
-                                  // onTap: () {
-                                    // Navigator.of(context)
-                                        // .push(MaterialPageRoute(
-                                      // builder: (context) {
-                                        // return settingactivity();
-                                      // },
-                                    // ));
-                                  // },
-                                  // child: Image(
-                                      // image: AssetImage(
-                                          // "images/heroicons-outline_menu-alt-2.png")))
-            
-                                          SizedBox(width: width/15,)
+                              // onTap: () {
+                              // Navigator.of(context)
+                              // .push(MaterialPageRoute(
+                              // builder: (context) {
+                              // return settingactivity();
+                              // },
+                              // ));
+                              // },
+                              // child: Image(
+                              // image: AssetImage(
+                              // "images/heroicons-outline_menu-alt-2.png")))
+
+                              SizedBox(
+                                width: width / 15,
+                              )
                             ],
                           ),
                           Center(
@@ -121,11 +125,10 @@ class _userprofileState extends State<userprofile> {
                                 width: width / 2.5,
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      color:
-                                          Color.fromARGB(255, 121, 5, 245)),
+                                      color: Color.fromARGB(255, 121, 5, 245)),
                                   shape: BoxShape.circle,
-                                  color: const Color.fromARGB(
-                                      255, 206, 206, 206),
+                                  color:
+                                      const Color.fromARGB(255, 206, 206, 206),
                                 ),
                                 child: _image == userdataperson['profile_pic']
                                     ? Icon(
@@ -141,7 +144,8 @@ class _userprofileState extends State<userprofile> {
                                           image: DecorationImage(
                                               image: NetworkImage(
                                                   userdataperson[
-                                                      "profile_pic"]),fit: BoxFit.cover),
+                                                      "profile_pic"]),
+                                              fit: BoxFit.cover),
                                           shape: BoxShape.circle,
                                         ),
                                       ),
@@ -159,24 +163,26 @@ class _userprofileState extends State<userprofile> {
                                 fontFamily: "defaultfontsbold",
                                 fontSize: 20),
                           )),
- SizedBox(
-   height: height / 60,
- ),
-                             Wrap(
+                          SizedBox(
+                            height: height / 60,
+                          ),
+                          Wrap(
                               alignment: WrapAlignment.center,
-       spacing: 3,
-       children: List<Widget>.generate(
-          userdataperson['Interest'].length,
-         (int index) {
-           return _buildInterestChip(
-               widget.email,
-               context,
-               userdataperson['Interest'][index],
-               userdataperson['Icon'][index],
-               height);
-         },
-       )),  
-                          SizedBox(height: height/30,),
+                              spacing: 3,
+                              children: List<Widget>.generate(
+                                userdataperson['Interest'].length,
+                                (int index) {
+                                  return _buildInterestChip(
+                                      widget.email,
+                                      context,
+                                      userdataperson['Interest'][index],
+                                      userdataperson['Icon'][index],
+                                      height);
+                                },
+                              )),
+                          SizedBox(
+                            height: height / 30,
+                          ),
                           Expanded(
                             child: GridView.builder(
                               physics: ScrollPhysics(),
@@ -195,8 +201,7 @@ class _userprofileState extends State<userprofile> {
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
                                           image: NetworkImage(
-                                              userdataperson['images']
-                                                  [index]),
+                                              userdataperson['images'][index]),
                                           fit: BoxFit.cover)),
                                 );
                               },
@@ -206,13 +211,13 @@ class _userprofileState extends State<userprofile> {
                       ),
                     ),
                     // Padding(
-                      // padding: EdgeInsets.only(
-                          // top: height / 1.23,
-                          // left: width / 20,
-                          // right: width / 20),
-                      // child: BottomNavBar(
-                        // selectedIndex2: 4,
-                      // ),
+                    // padding: EdgeInsets.only(
+                    // top: height / 1.23,
+                    // left: width / 20,
+                    // right: width / 20),
+                    // child: BottomNavBar(
+                    // selectedIndex2: 4,
+                    // ),
                     // )
                   ],
                 ),
@@ -227,25 +232,25 @@ class _userprofileState extends State<userprofile> {
           }
         });
   }
-    Widget _buildInterestChip(String email, BuildContext context, String label,
-    int iconname, final height) {
-  return Chip(
-    
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.transparent),
-        borderRadius: BorderRadius.circular(30)),
-      avatar: Icon(
-        size: 18,
-        IconData(iconname, fontFamily: 'MaterialIcons'),
-        color: Color(0xff565656),
-      ), // Ensure the correct font family
-      label: Text(
-        label,
-        style: TextStyle(
-            color: const Color(0xff565656),
-            fontFamily: "defaultfontsbold",
-            fontSize: 10),
-      ),
-      backgroundColor: Color(0xffD9D9D9));
-}
+
+  Widget _buildInterestChip(String email, BuildContext context, String label,
+      int iconname, final height) {
+    return Chip(
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(30)),
+        avatar: Icon(
+          size: 18,
+          IconData(iconname, fontFamily: 'MaterialIcons'),
+          color: Color(0xff565656),
+        ), // Ensure the correct font family
+        label: Text(
+          label,
+          style: TextStyle(
+              color: const Color(0xff565656),
+              fontFamily: "defaultfontsbold",
+              fontSize: 10),
+        ),
+        backgroundColor: Color(0xffD9D9D9));
+  }
 }

@@ -286,12 +286,12 @@ class _homepageState extends State<homepage> {
                         ],
                       ),
                     ),
-                Positioned(
-                  left: width/20,
-                  right: width/20,
-                  bottom: height/60,
-                  
-                  child: BottomNavBar(selectedIndex2: 0))
+                // Positioned(
+                  // left: width/20,
+                  // right: width/20,
+                  // bottom: height/60,
+                  // 
+                  // child: BottomNavBar(selectedIndex2: 0))
                   ],
                 ),
               ),

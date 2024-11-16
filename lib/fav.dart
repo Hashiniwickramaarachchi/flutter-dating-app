@@ -87,300 +87,166 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final userdataperson =
-                snapshot.data!.data() as Map<String, dynamic>;
-            return WillPopScope(
-                    onWillPop: () async => false,
+                     final userdataperson = snapshot.data!.data() as Map<String, dynamic>?;
+         if (userdataperson == null) {
+           return Center(
+             child: Text("User data not found."),
+           );
+         }
+       
             
-              child: Scaffold(
-                    appBar: AppBar(
-      toolbarHeight: height / 400,
-      foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-      automaticallyImplyLeading: false,
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-  
-    ),
-                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                body: Padding(
-                  padding: EdgeInsets.only(   right: width / 20,
-   left: width / 20,),
-                  child: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            "Favourites",
-                            style: TextStyle(
-                                color: const Color.fromARGB(255, 0, 0, 0),
-                                fontFamily: "defaultfontsbold",
-                                fontSize: 20),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(top: height / 30),
-                                  child: Container(
-                                    height: height / 20,
-                                    color: Colors.transparent,
-                                    child: TabBar(
-                                      dividerColor: Colors.transparent,
-                                      controller: _tabController,
-                                      labelColor: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      unselectedLabelColor:
-                                          const Color.fromARGB(255, 0, 0, 0),
-                                      labelStyle: TextStyle(
-                                        fontSize: height / 50,
-                                      ),
-                                      indicator: BoxDecoration(
-                                        color: Color(
-                                            0xff7905F5), // Selected tab background color
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      indicatorSize: TabBarIndicatorSize.label,
-                                      indicatorPadding: EdgeInsets.zero,
-                                      labelPadding:
-                                          EdgeInsets.only(left: 5, right: 5),
-                                      tabs: [
-                                        Tab(
-                                          child: Container(
-                                            width: double.infinity,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: _tabController.index == 0
-                                                  ? Color(0xff7905F5)
-                                                  : Color(
-                                                      0xffCAC7C7), // Unselected background
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            child: Text(
-                                              "All",
-                                              style: TextStyle(
-                                                  fontFamily: "defaultfonts",
-                                                  fontSize: 16),
-                                            ),
-                                          ),
-                                        ),
-                                        Tab(
-                                          child: Container(
-                                            width: double.infinity,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: _tabController.index == 1
-                                                  ? Color(
-                                                      0xff7905F5) // Selected background
-                                                  : Colors
-                                                      .grey, // Unselected background
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            child: Text(
-                                              "Online",
-                                              style: TextStyle(
-                                                  fontFamily: "defaultfonts",
-                                                  fontSize: 16),
-                                            ),
-                                          ),
-                                        ),
-                                        Tab(
-                                          child: Container(
-                                            width: double.infinity,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: _tabController.index == 2
-                                                  ? Color(
-                                                      0xff7905F5) // Selected background
-                                                  : Colors
-                                                      .grey, // Unselected background
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            child: Text(
-                                              "Nearest",
-                                              style: TextStyle(
-                                                  fontFamily: "defaultfonts",
-                                                  fontSize: 16),
-                                            ),
-                                          ),
-                                        ),
-                                        Tab(
-                                          child: Container(
-                                            width: double.infinity,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: _tabController.index == 3
-                                                  ? Color(
-                                                      0xff7905F5) // Selected background
-                                                  : Colors
-                                                      .grey, // Unselected background
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
-                                            child: Text(
-                                              "Newest",
-                                              style: TextStyle(
-                                                  fontFamily: "defaultfonts",
-                                                  fontSize: 16),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+            return Scaffold(
+                  appBar: AppBar(
+                  toolbarHeight: height / 400,
+                  foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  automaticallyImplyLeading: false,
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                    surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
+              
+                ),
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              body: Padding(
+                padding: EdgeInsets.only(   right: width / 20,
+               left: width / 20,),
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "Favourites",
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              fontFamily: "defaultfontsbold",
+                              fontSize: 20),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: height / 30),
+                                child: Container(
+                                  height: height / 20,
+                                  color: Colors.transparent,
+                                  child: TabBar(
+                                    dividerColor: Colors.transparent,
+                                    controller: _tabController,
+                                    labelColor: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                    unselectedLabelColor:
+                                        const Color.fromARGB(255, 0, 0, 0),
+                                    labelStyle: TextStyle(
+                                      fontSize: height / 50,
                                     ),
+                                    indicator: BoxDecoration(
+                                      color: Color(
+                                          0xff7905F5), // Selected tab background color
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    indicatorSize: TabBarIndicatorSize.label,
+                                    indicatorPadding: EdgeInsets.zero,
+                                    labelPadding:
+                                        EdgeInsets.only(left: 5, right: 5),
+                                    tabs: [
+                                      Tab(
+                                        child: Container(
+                                          width: double.infinity,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: _tabController.index == 0
+                                                ? Color(0xff7905F5)
+                                                : Color(
+                                                    0xffCAC7C7), // Unselected background
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Text(
+                                            "All",
+                                            style: TextStyle(
+                                                fontFamily: "defaultfonts",
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                      Tab(
+                                        child: Container(
+                                          width: double.infinity,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: _tabController.index == 1
+                                                ? Color(
+                                                    0xff7905F5) // Selected background
+                                                : Colors
+                                                    .grey, // Unselected background
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Text(
+                                            "Online",
+                                            style: TextStyle(
+                                                fontFamily: "defaultfonts",
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                      Tab(
+                                        child: Container(
+                                          width: double.infinity,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: _tabController.index == 2
+                                                ? Color(
+                                                    0xff7905F5) // Selected background
+                                                : Colors
+                                                    .grey, // Unselected background
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Text(
+                                            "Nearest",
+                                            style: TextStyle(
+                                                fontFamily: "defaultfonts",
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                      Tab(
+                                        child: Container(
+                                          width: double.infinity,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: _tabController.index == 3
+                                                ? Color(
+                                                    0xff7905F5) // Selected background
+                                                : Colors
+                                                    .grey, // Unselected background
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Text(
+                                            "Newest",
+                                            style: TextStyle(
+                                                fontFamily: "defaultfonts",
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    color: Colors.white,
-                                    child: TabBarView(
-                                      controller: _tabController,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: width / 40,
-                                              right: width / 40,
-                                              top: height / 20),
-                                          child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection("Favourite")
-                                                  .doc(curentuser.email!)
-                                                  .collection('fav1')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasError) {
-                                                  return Center(
-                                                      child: Text(
-                                                          'Error: ${snapshot.error}'));
-                                                }
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return Center(
-                                                      child:
-                                                          CircularProgressIndicator());
-                                                }
-                                                final data =
-                                                    snapshot.data!.docs;
-                                                return GridView.builder(
-                                                  physics: ScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount: data.length,
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 2,
-                                                    crossAxisSpacing:
-                                                        width * 0.02,
-                                                    mainAxisSpacing:
-                                                        height * 0.02,
-                                                    childAspectRatio: 0.8,
-                                                  ),
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    final user = data[index];
-                                                    final String userEmail =
-                                                        user['email'];
-                                                    // Fetch the status for this specific user
-                                                    bool isOnline = false;
-                                                    String lastSeen =
-                                                        "Last seen: N/A";
-                                                    lastSeenhistory =
-                                                        "Last seen: N/A";
-                                                    if (usersStatusDetails
-                                                        .containsKey(
-                                                            userEmail)) {
-                                                      final userStatus =
-                                                          usersStatusDetails[
-                                                              userEmail];
-                                                      isOnline = userStatus[
-                                                              'status'] ==
-                                                          'online';
-                                                      if (isOnline) {
-                                                        lastSeen = "Online";
-                                                        lastSeenhistory =
-                                                            "Online";
-                                                        statecolour =
-                                                            const Color
-                                                                .fromARGB(255,
-                                                                49, 255, 56);
-                                                      } else {
-                                                        var lastSeenDate = DateTime
-                                                                .fromMillisecondsSinceEpoch(
-                                                                    userStatus[
-                                                                        'lastSeen'])
-                                                            .toLocal();
-                                                        lastSeen =
-                                                            "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-                                                        lastSeenhistory =
-                                                            lastSeen;
-                                                        statecolour =
-                                                            Colors.white;
-                                                      }
-                                                    }
-                                                    return Container(
-                                                      child: favcontainer(
-                                                        profileimage: data[
-                                                                    index][
-                                                                'profile_pic'] ??
-                                                            "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                                                        name: data[index]
-                                                            ['name'],
-                                                        distance:
-                                                            calculateDistance(
-                                                                data[index]
-                                                                    ["X"],
-                                                                data[index]
-                                                                    ["Y"],
-                                                                userdataperson[
-                                                                    "X"],
-                                                                userdataperson[
-                                                                    "Y"]),
-                                                        location: data[index]
-                                                            ['Address'],
-                                                        startLatitude:
-                                                            data[index]["X"],
-                                                        startLongitude:
-                                                            data[index]["Y"],
-                                                        endLatitude:
-                                                            userdataperson["X"],
-                                                        endLongitude:
-                                                            userdataperson["Y"],
-                                                        age: data[index]['Age'],
-                                                        height: data[index]
-                                                                ['height'] ??
-                                                            "",
-                                                        labels: data[index]
-                                                            ['Interest'],
-                                                        iconss: data[index]
-                                                            ["Icon"],
-                                                        imagecollection:
-                                                            data[index]
-                                                                ['images'],
-                                                        ID: data[index].id,
-                                                        useremail:
-                                                            userdataperson[
-                                                                'email'],
-                                                        onlinecheck: lastSeen,
-                                                        statecolour:
-                                                            statecolour,
-                                                        education: data[index]
-                                                            ['education'],
-                                                        languages: data[index]
-                                                            ['languages'], description: data[index]['description'],
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              }),
-                                        ),
-                                        OnlineUsersPage(),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: width / 40,
-                                              right: width / 40,
-                                              top: height / 20),
-                                          child: StreamBuilder<QuerySnapshot>(
+                              ),
+                              Expanded(
+                                child: Container(
+                                  color: Colors.white,
+                                  child: TabBarView(
+                                    controller: _tabController,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: width / 40,
+                                            right: width / 40,
+                                            top: height / 20),
+                                        child: StreamBuilder<QuerySnapshot>(
                                             stream: FirebaseFirestore.instance
                                                 .collection("Favourite")
                                                 .doc(curentuser.email!)
@@ -398,24 +264,12 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                     child:
                                                         CircularProgressIndicator());
                                               }
-                                              final data = snapshot.data!.docs;
-                                              final filteredData =
-                                                  data.where((user) {
-                                                double userDistance =
-                                                    calculateDistance(
-                                                  user["X"],
-                                                  user["Y"],
-                                                  userdataperson["X"],
-                                                  userdataperson["Y"],
-                                                );
-                                                return userDistance >= 0 &&
-                                                    userDistance <= 100;
-                                              }).toList();
-              
+                                              final data =
+                                                  snapshot.data!.docs;
                                               return GridView.builder(
                                                 physics: ScrollPhysics(),
                                                 shrinkWrap: true,
-                                                itemCount: filteredData.length,
+                                                itemCount: data.length,
                                                 gridDelegate:
                                                     SliverGridDelegateWithFixedCrossAxisCount(
                                                   crossAxisCount: 2,
@@ -425,31 +279,34 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                       height * 0.02,
                                                   childAspectRatio: 0.8,
                                                 ),
-                                                itemBuilder: (context, index) {
-                                                  final user =
-                                                      filteredData[index];
+                                                itemBuilder:
+                                                    (context, index) {
+                                                  final user = data[index];
                                                   final String userEmail =
                                                       user['email'];
+                                                  // Fetch the status for this specific user
                                                   bool isOnline = false;
                                                   String lastSeen =
                                                       "Last seen: N/A";
                                                   lastSeenhistory =
                                                       "Last seen: N/A";
                                                   if (usersStatusDetails
-                                                      .containsKey(userEmail)) {
+                                                      .containsKey(
+                                                          userEmail)) {
                                                     final userStatus =
                                                         usersStatusDetails[
                                                             userEmail];
-                                                    isOnline =
-                                                        userStatus['status'] ==
-                                                            'online';
+                                                    isOnline = userStatus[
+                                                            'status'] ==
+                                                        'online';
                                                     if (isOnline) {
                                                       lastSeen = "Online";
                                                       lastSeenhistory =
                                                           "Online";
                                                       statecolour =
-                                                          const Color.fromARGB(
-                                                              255, 49, 255, 56);
+                                                          const Color
+                                                              .fromARGB(255,
+                                                              49, 255, 56);
                                                     } else {
                                                       var lastSeenDate = DateTime
                                                               .fromMillisecondsSinceEpoch(
@@ -466,219 +323,364 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                   }
                                                   return Container(
                                                     child: favcontainer(
-                                                      profileimage: user[
+                                                      profileimage: data[
+                                                                  index][
                                                               'profile_pic'] ??
                                                           "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                                                      name: user['name'],
+                                                      name: data[index]
+                                                          ['name'],
                                                       distance:
                                                           calculateDistance(
-                                                              user["X"],
-                                                              user["Y"],
+                                                              data[index]
+                                                                  ["X"],
+                                                              data[index]
+                                                                  ["Y"],
                                                               userdataperson[
                                                                   "X"],
                                                               userdataperson[
                                                                   "Y"]),
-                                                      location: user['Address'],
-                                                      startLatitude: user["X"],
-                                                      startLongitude: user["Y"],
+                                                      location: data[index]
+                                                          ['Address'],
+                                                      startLatitude:
+                                                          data[index]["X"],
+                                                      startLongitude:
+                                                          data[index]["Y"],
                                                       endLatitude:
                                                           userdataperson["X"],
                                                       endLongitude:
                                                           userdataperson["Y"],
-                                                      age: user['Age'],
-                                                      height:
-                                                          user['height'] ?? "",
-                                                      labels: user['Interest'],
-                                                      iconss: user["Icon"],
+                                                      age: data[index]['Age'],
+                                                      height: data[index]
+                                                              ['height'] ??
+                                                          "",
+                                                      labels: data[index]
+                                                          ['Interest'],
+                                                      iconss: data[index]
+                                                          ["Icon"],
                                                       imagecollection:
-                                                          user['images'],
-                                                      ID: user.id,
-                                                      useremail: userdataperson[
-                                                          'email'],
+                                                          data[index]
+                                                              ['images'],
+                                                      ID: data[index].id,
+                                                      useremail:
+                                                          userdataperson[
+                                                              'email'],
                                                       onlinecheck: lastSeen,
-                                                      statecolour: statecolour,
-                                                      education:
-                                                          user['education'],
-                                                      languages:
-                                                          user['languages'], description: user['description'],
+                                                      statecolour:
+                                                          statecolour,
+                                                      education: data[index]
+                                                          ['education'],
+                                                      languages: data[index]
+                                                          ['languages'], description: data[index]['description'],
                                                     ),
                                                   );
                                                 },
                                               );
-                                            },
-                                          ),
-                                        ),
-                                                             Padding(
-                                  padding: EdgeInsets.only(
-                                      left: width / 40,
-                                      right: width / 40,
-                                      top: height / 20),
-                                  child: StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection("Favourite")
-                                          .doc(curentuser.email!)
-                                          .collection('fav1')
-                                          .orderBy('created', descending: true)
-                                          .snapshots(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasError) {
-                                          return Center(
-                                              child: Text(
-                                                  'Error: ${snapshot.error}'));
-                                        }
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        }
-                                        final data =
-                                            snapshot.data!.docs;
-                                        return GridView.builder(
-                                          physics: ScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount: data.length,
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing:
-                                                width * 0.02,
-                                            mainAxisSpacing:
-                                                height * 0.02,
-                                            childAspectRatio: 0.8,
-                                          ),
-                                          itemBuilder:
-                                              (context, index) {
-                                            final user = data[index];
-                                            final String userEmail =
-                                                user['email'];
-                                            // Fetch the status for this specific user
-                                            bool isOnline = false;
-                                            String lastSeen =
-                                                "Last seen: N/A";
-                                            lastSeenhistory =
-                                                "Last seen: N/A";
-                                            if (usersStatusDetails
-                                                .containsKey(
-                                                    userEmail)) {
-                                              final userStatus =
-                                                  usersStatusDetails[
-                                                      userEmail];
-                                              isOnline = userStatus[
-                                                      'status'] ==
-                                                  'online';
-                                              if (isOnline) {
-                                                lastSeen = "Online";
-                                                lastSeenhistory =
-                                                    "Online";
-                                                statecolour =
-                                                    const Color
-                                                        .fromARGB(255,
-                                                        49, 255, 56);
-                                              } else {
-                                                var lastSeenDate = DateTime
-                                                        .fromMillisecondsSinceEpoch(
-                                                            userStatus[
-                                                                'lastSeen'])
-                                                    .toLocal();
-                                                lastSeen =
-                                                    "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-                                                lastSeenhistory =
-                                                    lastSeen;
-                                                statecolour =
-                                                    Colors.white;
-                                              }
+                                            }),
+                                      ),
+                                      OnlineUsersPage(),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: width / 40,
+                                            right: width / 40,
+                                            top: height / 20),
+                                        child: StreamBuilder<QuerySnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection("Favourite")
+                                              .doc(curentuser.email!)
+                                              .collection('fav1')
+                                              .snapshots(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasError) {
+                                              return Center(
+                                                  child: Text(
+                                                      'Error: ${snapshot.error}'));
                                             }
-                                            return Container(
-                                              child: favcontainer(
-                                                profileimage: data[
-                                                            index][
-                                                        'profile_pic'] ??
-                                                            "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                                                name: data[index]
-                                                    ['name'],
-                                                distance:
-                                                    calculateDistance(
-                                                        data[index]
-                                                            ["X"],
-                                                        data[index]
-                                                            ["Y"],
-                                                        userdataperson[
-                                                            "X"],
-                                                        userdataperson[
-                                                            "Y"]),
-                                                location: data[index]
-                                                    ['Address'],
-                                                startLatitude:
-                                                    data[index]["X"],
-                                                startLongitude:
-                                                    data[index]["Y"],
-                                                endLatitude:
-                                                    userdataperson["X"],
-                                                endLongitude:
-                                                    userdataperson["Y"],
-                                                age: data[index]['Age'],
-                                                height: data[index]
-                                                        ['height'] ??
-                                                    "",
-                                                labels: data[index]
-                                                    ['Interest'],
-                                                iconss: data[index]
-                                                    ["Icon"],
-                                                imagecollection:
-                                                    data[index]
-                                                        ['images'],
-                                                ID: data[index].id,
-                                                useremail:
-                                                    userdataperson[
-                                                        'email'],
-                                                onlinecheck: lastSeen,
-                                                statecolour:
-                                                    statecolour,
-                                                education: data[index]
-                                                    ['education'],
-                                                languages: data[index]
-                                                    ['languages'], description: data[index]['description'],
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            }
+                                            final data = snapshot.data!.docs;
+                                            final filteredData =
+                                                data.where((user) {
+                                              double userDistance =
+                                                  calculateDistance(
+                                                user["X"],
+                                                user["Y"],
+                                                userdataperson["X"],
+                                                userdataperson["Y"],
+                                              );
+                                              return userDistance >= 0 &&
+                                                  userDistance <= 100;
+                                            }).toList();
+            
+                                            return GridView.builder(
+                                              physics: ScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: filteredData.length,
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing:
+                                                    width * 0.02,
+                                                mainAxisSpacing:
+                                                    height * 0.02,
+                                                childAspectRatio: 0.8,
                                               ),
+                                              itemBuilder: (context, index) {
+                                                final user =
+                                                    filteredData[index];
+                                                final String userEmail =
+                                                    user['email'];
+                                                bool isOnline = false;
+                                                String lastSeen =
+                                                    "Last seen: N/A";
+                                                lastSeenhistory =
+                                                    "Last seen: N/A";
+                                                if (usersStatusDetails
+                                                    .containsKey(userEmail)) {
+                                                  final userStatus =
+                                                      usersStatusDetails[
+                                                          userEmail];
+                                                  isOnline =
+                                                      userStatus['status'] ==
+                                                          'online';
+                                                  if (isOnline) {
+                                                    lastSeen = "Online";
+                                                    lastSeenhistory =
+                                                        "Online";
+                                                    statecolour =
+                                                        const Color.fromARGB(
+                                                            255, 49, 255, 56);
+                                                  } else {
+                                                    var lastSeenDate = DateTime
+                                                            .fromMillisecondsSinceEpoch(
+                                                                userStatus[
+                                                                    'lastSeen'])
+                                                        .toLocal();
+                                                    lastSeen =
+                                                        "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                                                    lastSeenhistory =
+                                                        lastSeen;
+                                                    statecolour =
+                                                        Colors.white;
+                                                  }
+                                                }
+                                                return Container(
+                                                  child: favcontainer(
+                                                    profileimage: user[
+                                                            'profile_pic'] ??
+                                                        "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+                                                    name: user['name'],
+                                                    distance:
+                                                        calculateDistance(
+                                                            user["X"],
+                                                            user["Y"],
+                                                            userdataperson[
+                                                                "X"],
+                                                            userdataperson[
+                                                                "Y"]),
+                                                    location: user['Address'],
+                                                    startLatitude: user["X"],
+                                                    startLongitude: user["Y"],
+                                                    endLatitude:
+                                                        userdataperson["X"],
+                                                    endLongitude:
+                                                        userdataperson["Y"],
+                                                    age: user['Age'],
+                                                    height:
+                                                        user['height'] ?? "",
+                                                    labels: user['Interest'],
+                                                    iconss: user["Icon"],
+                                                    imagecollection:
+                                                        user['images'],
+                                                    ID: user.id,
+                                                    useremail: userdataperson[
+                                                        'email'],
+                                                    onlinecheck: lastSeen,
+                                                    statecolour: statecolour,
+                                                    education:
+                                                        user['education'],
+                                                    languages:
+                                                        user['languages'], description: user['description'],
+                                                  ),
+                                                );
+                                              },
                                             );
                                           },
-                                        );
-                                      }),
-                                ),    
-                                 
-                                 
-                                 
-                                 
-                                 
-                                      ],
-                                    ),
+                                        ),
+                                      ),
+                                                           Padding(
+                                padding: EdgeInsets.only(
+                                    left: width / 40,
+                                    right: width / 40,
+                                    top: height / 20),
+                                child: StreamBuilder<QuerySnapshot>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection("Favourite")
+                                        .doc(curentuser.email!)
+                                        .collection('fav1')
+                                        .orderBy('created', descending: true)
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                            child: Text(
+                                                'Error: ${snapshot.error}'));
+                                      }
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child:
+                                                CircularProgressIndicator());
+                                      }
+                                      final data =
+                                          snapshot.data!.docs;
+                                      return GridView.builder(
+                                        physics: ScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: data.length,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing:
+                                              width * 0.02,
+                                          mainAxisSpacing:
+                                              height * 0.02,
+                                          childAspectRatio: 0.8,
+                                        ),
+                                        itemBuilder:
+                                            (context, index) {
+                                          final user = data[index];
+                                          final String userEmail =
+                                              user['email'];
+                                          // Fetch the status for this specific user
+                                          bool isOnline = false;
+                                          String lastSeen =
+                                              "Last seen: N/A";
+                                          lastSeenhistory =
+                                              "Last seen: N/A";
+                                          if (usersStatusDetails
+                                              .containsKey(
+                                                  userEmail)) {
+                                            final userStatus =
+                                                usersStatusDetails[
+                                                    userEmail];
+                                            isOnline = userStatus[
+                                                    'status'] ==
+                                                'online';
+                                            if (isOnline) {
+                                              lastSeen = "Online";
+                                              lastSeenhistory =
+                                                  "Online";
+                                              statecolour =
+                                                  const Color
+                                                      .fromARGB(255,
+                                                      49, 255, 56);
+                                            } else {
+                                              var lastSeenDate = DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                          userStatus[
+                                                              'lastSeen'])
+                                                  .toLocal();
+                                              lastSeen =
+                                                  "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                                              lastSeenhistory =
+                                                  lastSeen;
+                                              statecolour =
+                                                  Colors.white;
+                                            }
+                                          }
+                                          return Container(
+                                            child: favcontainer(
+                                              profileimage: data[
+                                                          index][
+                                                      'profile_pic'] ??
+                                                          "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+                                              name: data[index]
+                                                  ['name'],
+                                              distance:
+                                                  calculateDistance(
+                                                      data[index]
+                                                          ["X"],
+                                                      data[index]
+                                                          ["Y"],
+                                                      userdataperson[
+                                                          "X"],
+                                                      userdataperson[
+                                                          "Y"]),
+                                              location: data[index]
+                                                  ['Address'],
+                                              startLatitude:
+                                                  data[index]["X"],
+                                              startLongitude:
+                                                  data[index]["Y"],
+                                              endLatitude:
+                                                  userdataperson["X"],
+                                              endLongitude:
+                                                  userdataperson["Y"],
+                                              age: data[index]['Age'],
+                                              height: data[index]
+                                                      ['height'] ??
+                                                  "",
+                                              labels: data[index]
+                                                  ['Interest'],
+                                              iconss: data[index]
+                                                  ["Icon"],
+                                              imagecollection:
+                                                  data[index]
+                                                      ['images'],
+                                              ID: data[index].id,
+                                              useremail:
+                                                  userdataperson[
+                                                      'email'],
+                                              onlinecheck: lastSeen,
+                                              statecolour:
+                                                  statecolour,
+                                              education: data[index]
+                                                  ['education'],
+                                              languages: data[index]
+                                                  ['languages'], description: data[index]['description'],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    }),
+                              ),    
+                               
+                               
+                               
+                               
+                               
+                                    ],
                                   ),
                                 ),
-                                SizedBox(
-                                  height: height / 60,
-                                )
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: height / 60,
+                              )
+                            ],
                           ),
-                        ],
-                      ),
-               
-               
-               Align(
-  alignment: Alignment.bottomCenter,
-  child: Padding(
-    padding: EdgeInsets.only(bottom: height / 60),
-    child: BottomNavBar(
-      selectedIndex2: 2,
-    ),
-  ),
-)
-
-               
-               
-               
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+             
+             
+            //  Align(
+              // alignment: Alignment.bottomCenter,
+              // child: Padding(
+                // padding: EdgeInsets.only(bottom: height / 60),
+                // child: BottomNavBar(
+                  // selectedIndex2: 2,
+                // ),
+              // ),
+            // )
+            
+             
+             
+             
+                  ],
                 ),
               ),
             );

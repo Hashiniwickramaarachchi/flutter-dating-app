@@ -3,6 +3,7 @@ import 'package:datingapp/Usermanegement/signin.dart';
 import 'package:datingapp/Usermanegement/signup.dart';
 import 'package:datingapp/ambassdor/newuser/signup.dart';
 import 'package:datingapp/homepage.dart';
+import 'package:datingapp/mainscreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,7 @@ class _wlcomepremiumState extends State<wlcomepremium> {
                        GestureDetector(
                          onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-              return homepage();
+              return MainScreen();
             },));
                          },
                          child: 

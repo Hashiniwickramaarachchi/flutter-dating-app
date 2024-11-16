@@ -165,19 +165,19 @@ class _personState extends State<person> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        width: width,
-                                        child: Expanded(
-                                          child: Text(
-                                            textAlign: TextAlign.center,
-                                            widget.name,
-                                            style: TextStyle(
-                                                color: const Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                fontFamily: "defaultfontsbold",
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 24),
-                                          ),
+                                      Padding(
+                                        padding:  EdgeInsets.only(left: 10,right: 10),
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          widget.name,
+                                          style: TextStyle(
+                                              color: const Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontFamily: "defaultfontsbold",
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 24),
+                                               maxLines: 1, // Limit to one line
+                                         overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
                                         ),
                                       ),
                                       Text(
@@ -234,7 +234,14 @@ class _personState extends State<person> {
                                         await FirebaseFirestore.instance
                                             .collection('Favourite')
                                             .doc(widget
-                                                .useremail); // Add the data to the main document in Favourite
+                                                .useremail);
+                                                
+                                                 // Add the data to the main document in Favourite
+
+                                                  await FirebaseFirestore.instance
+     .collection('Favourite')
+     .doc(widget
+         .useremail).set({"name":''});
                                     print(
                                         "Favourite document created with ID: ${favDocRef.id}");
                                     // Step 3: Create a subcollection under the newly created document

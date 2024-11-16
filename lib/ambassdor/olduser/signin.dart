@@ -1,6 +1,7 @@
 import 'package:datingapp/Usermanegement/addemail.dart';
 import 'package:datingapp/Usermanegement/gender.dart';
 import 'package:datingapp/Usermanegement/signup.dart';
+import 'package:datingapp/ambassdor/A_Mainscree.dart';
 import 'package:datingapp/ambassdor/ambassdorshow.dart';
 import 'package:datingapp/ambassdor/newuser/homepage.dart';
 import 'package:datingapp/ambassdor/newuser/signup.dart';
@@ -28,6 +29,7 @@ class _A_signinState extends State<A_signin> {
   final email = TextEditingController();
   final password = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool isLoading = false; // Add a loading state
 
   @override
   Widget build(BuildContext context) {
@@ -160,10 +162,20 @@ class _A_signinState extends State<A_signin> {
                   height: height / 15,
                   width: width,
                   child: Center(
-                      child: Text(
-                    "Sign in",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )),
+                      child: 
+        
+            isLoading
+        ? CircularProgressIndicator(
+            color: Colors.white,
+          ) // Show loader when loading
+        : Text(
+            "Sign in",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        
+        
+                  
+                  ),
                   decoration: BoxDecoration(
                       color: Color(0xff7905F5),
                       borderRadius: BorderRadius.circular(height / 10)),
@@ -333,6 +345,9 @@ class _A_signinState extends State<A_signin> {
       final ambassadorSnapshot =
           await _firestore.collection('Ambassdor').doc(email.text.trim()).get();
       if (ambassadorSnapshot.exists) {
+        setState(() {
+  isLoading = true; 
+});
         try {
           UserCredential userCredential =
               await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -367,10 +382,10 @@ class _A_signinState extends State<A_signin> {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) {
                 return 
-                showsigninresult(
-                    userLatitude: latitude,
-                    userLongitude: longitude,
-                    useremail: email.text.trim());
+              A_MainScreen();
+              
+              
+              
               },
             ));
           } catch (e) {
@@ -476,7 +491,7 @@ class _A_signinState extends State<A_signin> {
           double longitude = position.longitude;
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
-              return DashboardScreen();
+              return A_MainScreen();
             },
           ));
         }else{

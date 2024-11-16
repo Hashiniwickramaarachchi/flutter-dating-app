@@ -456,7 +456,6 @@ class _A_settingactivityState extends State<A_settingactivity> {
                 // } catch (e) {
                   // print('Error logging out: $e');
                 // }
-                    Future<void> _logout() async {
       // Show loading dialog
       showDialog(
         context: context,
@@ -482,16 +481,20 @@ class _A_settingactivityState extends State<A_settingactivity> {
         // Close the loading dialog
         Navigator.of(context).pop();
         // Navigate to splash screen
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => A_signin()),  // Replace with your splash scre
-        );
+       
+         // Replace with your splash scre
+       Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => A_signin()), 
+  (Route<dynamic> route) => false,
+);
+
       } catch (e) {
         // Close the loading dialog
         Navigator.of(context).pop();
         // Handle logout errors if needed
         print('Error logging out: $e');
       }
-    }
+    
 
               },
               child: Padding(

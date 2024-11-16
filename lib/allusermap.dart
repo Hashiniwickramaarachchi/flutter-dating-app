@@ -5,6 +5,7 @@ import 'package:datingapp/bootmnavbar.dart';
 import 'package:datingapp/fav.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/premium/ambassdorshow.dart';
+import 'package:datingapp/userchatpage.dart';
 import 'package:datingapp/viewpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -45,7 +46,118 @@ class _allusermapState extends State<allusermap> {
   Color statecolour = Colors.white;
   bool isLoading = true; // Track loading state
   int loadedUsers = 0; // Counter for loaded users
+  bool _isMapInitialized = false;
+  String buttonText = "Request Ambassador";
+  bool isLoadingambassdor = false;
 
+  Future<void> handleButtonPress() async {
+
+  if (buttonText == "Your Ambassador") {
+      // Navigate to the chat page if the text is "Your Ambassador"
+      
+     try {
+        final userEmail = widget.useremail;
+
+        // Fetch ambassador email from the requestedAmbassador collection
+        DocumentSnapshot requestSnapshot = await FirebaseFirestore.instance
+            .collection('requestedAmbassador')
+            .doc(userEmail)
+            .get();
+
+        if (requestSnapshot.exists) {
+          final data = requestSnapshot.data() as Map<String, dynamic>;
+          final ambassadorEmail = data['ambassadorEmail'];
+
+          if (ambassadorEmail.isNotEmpty) {
+            // Fetch ambassador details from the ambassador collection
+            DocumentSnapshot ambassadorSnapshot = await FirebaseFirestore.instance
+                .collection('Ambassdor')
+                .doc(ambassadorEmail)
+                .get();
+
+            if (ambassadorSnapshot.exists) {
+              final ambassadorData =
+                  ambassadorSnapshot.data() as Map<String, dynamic>;
+
+              // Navigate to ChatPage with ambassador details
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => 
+             
+             ChatPage(chatPartnerEmail: ambassadorEmail, who: "Ambassdor", chatPartnername: ambassadorData['name'], chatPartnerimage: ambassadorData['profile_pic'], onlinecheck: lastSeenhistory, statecolour: statecolour)
+             
+             
+             
+              ));
+              return;
+            }
+          }
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("No ambassador assigned yet."),
+        ));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Error: ${e.toString()}"),
+        ));
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
+      }
+   
+      return;
+    }  
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final userEmail = widget.useremail;
+
+      // Check Firestore if a request already exists
+      DocumentReference docRef = FirebaseFirestore.instance
+          .collection('requestedAmbassador')
+          .doc(userEmail);
+
+      DocumentSnapshot docSnapshot = await docRef.get();
+
+      if (!docSnapshot.exists) {
+        // Create a new request document
+        await docRef.set({
+          'request': 'requested',
+          'ambassadorEmail': '', // Initially empty
+          'requestedDate': FieldValue.serverTimestamp(),
+          'email': userEmail, // User email
+        });
+
+        setState(() {
+          buttonText = "Ambassador request is in queue";
+        });
+      } else {
+        // If a document exists and ambassadorEmail is still empty
+        final data = docSnapshot.data() as Map<String, dynamic>;
+        if (data['ambassadorEmail'] == '') {
+          setState(() {
+            buttonText = "Ambassador request is in queue";
+          });
+        } else {
+          setState(() {
+            buttonText = "Your Ambassador";
+          });
+        }
+      }
+    } catch (e) {
+      // Handle any errors
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error: ${e.toString()}"),
+      ));
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -58,9 +170,15 @@ class _allusermapState extends State<allusermap> {
 
   @override
   void dispose() {
+    super.dispose();
+    // Ensure no pending map updates occur when navigating away
+    _controller.future
+        .then((controller) => controller.dispose())
+        .catchError((_) {
+      // Ignore errors if already disposed
+    });
     // Call this when the app is closed
     _onlineStatusService.setUserOffline();
-    super.dispose();
   }
 
   Future<void> fetchUsersStatus() async {
@@ -96,6 +214,15 @@ class _allusermapState extends State<allusermap> {
     // Convert meters to kilometers
     double distanceInKilometers = distanceInMeters / 1000;
     return distanceInKilometers;
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    if (!_controller.isCompleted) {
+      _controller.complete(controller);
+    }
+    setState(() {
+      _isMapInitialized = true; // Map is ready
+    });
   }
 
   Future<void> _getAllUsers() async {
@@ -146,25 +273,27 @@ class _allusermapState extends State<allusermap> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => viewpage(
-                        address: data['Address'],
-                        age: data['Age'],
-                        languages: data['languages'],
-                        education: data['education'],
-                        distance: calculateDistance(data["X"], data["Y"],
-                                widget.userLatitude, widget.userLongitude)
-                            .toInt(),
-                        height: data['height'],
-                        image: data['profile_pic'] ??
-                            "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                        name: data['name'],
-                        ID: widget.useremail,
-                        iconss: data["Icon"],
-                        labels: data['Interest'],
-                        imagecollection: data['images'],
-                        fav: favStatus[data['email']]!,
-                        onlinecheck: lastSeen,
-                        statecolour: statecolour,
-                        useremail: widget.useremail, description: data['description'],)),
+                          address: data['Address'],
+                          age: data['Age'],
+                          languages: data['languages'],
+                          education: data['education'],
+                          distance: calculateDistance(data["X"], data["Y"],
+                                  widget.userLatitude, widget.userLongitude)
+                              .toInt(),
+                          height: data['height'],
+                          image: data['profile_pic'] ??
+                              "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+                          name: data['name'],
+                          ID: data['email'],
+                          iconss: data["Icon"],
+                          labels: data['Interest'],
+                          imagecollection: data['images'],
+                          fav: favStatus[data['email']]!,
+                          onlinecheck: lastSeen,
+                          statecolour: statecolour,
+                          useremail: widget.useremail,
+                          description: data['description'],
+                        )),
               );
             },
           ),
@@ -184,7 +313,7 @@ class _allusermapState extends State<allusermap> {
           "height": data['height'],
           "iconss": data["Icon"],
           "labels": data['Interest'],
-          'description':data['description'],
+          'description': data['description'],
           "imagecollection": data['images'],
         });
 
@@ -325,14 +454,19 @@ class _allusermapState extends State<allusermap> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final userdataperson =
-                snapshot.data!.data() as Map<String, dynamic>;
+                snapshot.data!.data() as Map<String, dynamic>?;
+            if (userdataperson == null) {
+              return Center(
+                child: Text("User data not found."),
+              );
+            }
+
             return Scaffold(
               body: Stack(
                 children: [
                   GoogleMap(
                     initialCameraPosition: CameraPosition(
-                      target:
-                          LatLng(widget.userLatitude, widget.userLongitude),
+                      target: LatLng(widget.userLatitude, widget.userLongitude),
                       zoom: 10,
                     ),
                     markers: _markers,
@@ -340,11 +474,12 @@ class _allusermapState extends State<allusermap> {
                       _controller.complete(controller);
                     },
                   ),
-                  if (isLoading)
+                  if (!_isMapInitialized)
                     Center(
                       child:
-                          CircularProgressIndicator(), // Show loading indicator
+                          CircularProgressIndicator(), // Loading indicator until map is ready
                     ),
+
                   Padding(
                     padding: EdgeInsets.only(bottom: height / 6),
                     child: Column(
@@ -382,37 +517,39 @@ class _allusermapState extends State<allusermap> {
                                 }
                               }
                               return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: GestureDetector(
                                   onTap: () {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
                                       builder: (context) {
                                         return viewpage(
-                                            address: user['location'],
-                                            age: user['age'],
-                                            languages: user['languages'],
-                                            education: user['education'],
-                                            distance: calculateDistance(
-                                                    user["latitude"],
-                                                    user["longitude"],
-                                                    widget.userLatitude,
-                                                    widget.userLongitude)
-                                                .toInt(),
-                                            height: user['height'],
-                                            image: user['profile_pic'] ??
-                                                "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                                            name: user['name'],
-                                            ID: widget.useremail,
-                                            iconss: user["iconss"],
-                                            labels: user['labels'],
-                                            imagecollection:
-                                                user['imagecollection'],
-                                            fav: favStatus[user['email']]!,
-                                            onlinecheck: lastSeen,
-                                            statecolour: statecolour,
-                                            useremail: widget.useremail, description: user['description'],);
+                                          address: user['location'],
+                                          age: user['age'],
+                                          languages: user['languages'],
+                                          education: user['education'],
+                                          distance: calculateDistance(
+                                                  user["latitude"],
+                                                  user["longitude"],
+                                                  widget.userLatitude,
+                                                  widget.userLongitude)
+                                              .toInt(),
+                                          height: user['height'],
+                                          image: user['profile_pic'] ??
+                                              "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+                                          name: user['name'],
+                                          ID: user['email'],
+                                          iconss: user["iconss"],
+                                          labels: user['labels'],
+                                          imagecollection:
+                                              user['imagecollection'],
+                                          fav: favStatus[user['email']]!,
+                                          onlinecheck: lastSeen,
+                                          statecolour: statecolour,
+                                          useremail: widget.useremail,
+                                          description: user['description'],
+                                        );
                                       },
                                     ));
                                   },
@@ -435,8 +572,8 @@ class _allusermapState extends State<allusermap> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                              user['profile_pic']),
+                                          backgroundImage:
+                                              NetworkImage(user['profile_pic']),
                                           radius: 28,
                                         ),
                                         Column(
@@ -445,27 +582,24 @@ class _allusermapState extends State<allusermap> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                     Container(
-                      color: Colors.transparent,
-           width: width/3,
-           child: Expanded(
-             child: Center(
-               child: Text(
-                textAlign: TextAlign.center,
-                  user['name'],
-                 style: TextStyle(
-                   color: const Color(0xff26150F),
-                   fontFamily: "defaultfontsbold",
-                   fontWeight: FontWeight.w500,
-                   fontSize: 18,
-                 ),
-                 softWrap: true,
-                 overflow: TextOverflow
-                     .visible, // You can also use TextOverflow.ellipsis if you want to truncate
-               ),
-             ),
-           ),
-         ),
+                                            Center(
+                                              child: Text(
+                                                user['name'],
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color:
+                                                      const Color(0xff26150F),
+                                                  fontFamily:
+                                                      "defaultfontsbold",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 18,
+                                                ),
+                                                maxLines:
+                                                    1, // Limit to one line
+                                                overflow: TextOverflow
+                                                    .ellipsis, // Adds "..." if the text is too long
+                                              ),
+                                            ),
                                             Text(
                                               user['location'],
                                               style: TextStyle(
@@ -483,8 +617,7 @@ class _allusermapState extends State<allusermap> {
                                             onPressed: () async {
                                               setState(() {
                                                 favStatus[user['email']] =
-                                                    !favStatus[
-                                                        user['email']]!;
+                                                    !favStatus[user['email']]!;
                                               });
                                               // Update Firestore collection
                                               if (favStatus[user['email']]!) {
@@ -494,13 +627,10 @@ class _allusermapState extends State<allusermap> {
                                                     .get()
                                                     .then((DocumentSnapshot
                                                         documentSnapshot) async {
-                                                  if (documentSnapshot
-                                                      .exists) {
+                                                  if (documentSnapshot.exists) {
                                                     // Get the document data from the "Sell" collection
-                                                    Map<String, dynamic>
-                                                        data =
-                                                        documentSnapshot
-                                                                .data()
+                                                    Map<String, dynamic> data =
+                                                        documentSnapshot.data()
                                                             as Map<String,
                                                                 dynamic>;
                                                     try {
@@ -525,12 +655,10 @@ class _allusermapState extends State<allusermap> {
                                                               data); // Add the data from the "Sell" collection
                                                       print(
                                                           "Subcollection 'fav1' created with document ID: ${user['email']}");
-                                                      FirebaseFirestore
-                                                          .instance
+                                                      FirebaseFirestore.instance
                                                           .collection(
                                                               'Favourite') // Replace with your collection name
-                                                          .doc(widget
-                                                              .useremail)
+                                                          .doc(widget.useremail)
                                                           .collection("fav1")
                                                           .doc(user['email'])
                                                           .set(data);
@@ -542,14 +670,11 @@ class _allusermapState extends State<allusermap> {
                                                 });
                                               } else {
                                                 try {
-                                                  DocumentReference
-                                                      favDocRef =
-                                                      FirebaseFirestore
-                                                          .instance
+                                                  DocumentReference favDocRef =
+                                                      FirebaseFirestore.instance
                                                           .collection(
                                                               'Favourite')
-                                                          .doc(widget
-                                                              .useremail)
+                                                          .doc(widget.useremail)
                                                           .collection("fav1")
                                                           .doc(user['email']);
                                                   await favDocRef.delete();
@@ -585,46 +710,54 @@ class _allusermapState extends State<allusermap> {
                   if (userdataperson['profile'] == 'premium') ...[
                     Padding(
                       padding: EdgeInsets.only(left: 20, top: 80),
-                      child: ElevatedButton(
+                      child:
+                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(30))),
                             backgroundColor: Color(0xff7905F5),
                           ),
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (context) {
-                                return ambassdorshow(
-                                    useremail: widget.useremail);
-                              },
-                            ));
-                          },
+                          onPressed: 
+                        
+                        
+                        
+                        
+                        isLoadingambassdor
+          ? null
+          : () {
+              handleButtonPress();
+            },
+
+
+
+
+
+                        
+                          
                           child: Padding(
                             padding: EdgeInsets.only(top: 10, bottom: 10),
-                            child: Text(
-                              "Request Ambassador",
-                              style: TextStyle(color: Colors.white,fontSize:15,fontFamily: "button" )
-                            ),
+                            child: isLoading
+            ? CircularProgressIndicator(color: Colors.white)
+                            
+                            
+                            :Text(buttonText,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontFamily: "button")),
                           )),
                     )
                   ],
-           
-           
-           
-           
-                  Positioned(
-                  left: width/20,
-                  right: width/20,
-                  bottom: height/60,
-                    child: BottomNavBar(
-                      selectedIndex2: 1,
-                    ),
-                  )
-           
-           
-           
-           
+
+                  // Positioned(
+                  // left: width/20,
+                  // right: width/20,
+                  // bottom: height/60,
+                  // child: BottomNavBar(
+                  // selectedIndex2: 1,
+                  // ),
+                  // )
                 ],
               ),
             );

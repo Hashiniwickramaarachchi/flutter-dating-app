@@ -21,6 +21,7 @@ class _A_signupState extends State<A_signup> {
   final password = TextEditingController();
   bool _password = true;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  bool isLoading = false; // Add a loading state
 
   bool isChecked = false;
   @override
@@ -28,375 +29,469 @@ class _A_signupState extends State<A_signup> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-                            appBar: AppBar(
-      toolbarHeight:height/400,
-      foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-      automaticallyImplyLeading: false,
-    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-       
-    ),
-            body: Container(
-    color: Color.fromARGB(255, 255, 255, 255),
-    height: height,
-    width: width,
-    child: Padding(
-      padding: EdgeInsets.only(
-          bottom: height / 60,
-          left: width / 18,
-          right: width / 18),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: Container(
-                height: height / 12,
-                child: Image(
-                    image: AssetImage(
-                        "images/appex logo purple transparent.png")),
-              ),
-            ),
-            Text(
-              "Create Account",
-              style: TextStyle(
-                  color: const Color(0xff26150F),
-                  fontFamily: "defaultfontsbold",
-                  fontWeight: FontWeight.w500,
-                  fontSize: 32),
-            ),
-            Padding(
-              padding:  EdgeInsets.only(top: height/80),
-              child: Text(
-                "Fill your valid information below",
-                style: TextStyle(
-                    color: const Color(0xff7D7676),
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "defaultfontsbold",
-                    fontSize:16),
-              ),
-            ),
-            SizedBox(
-              height: height / 15,
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: height / 47,
-              ),
-              child: TextField(
-                style: Theme.of(context).textTheme.headlineSmall,
-                controller: name,
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  hintText: 'Name',
-                  contentPadding:
-                      EdgeInsets.only(left: width / 50, top: height / 90),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: height / 47,
-              ),
-              child: TextField(
-                controller: email,
-                style: Theme.of(context).textTheme.headlineSmall,
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  hintText: 'Email',
-                  contentPadding:
-                      EdgeInsets.only(left: width / 50, top: height / 90),
-                ),
-              ),
-            ),
-            TextField(
-              controller: password,
-              obscureText: _password,
-              style: Theme.of(context).textTheme.headlineSmall,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'Password',
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _password = !_password;
-                      });
-                    },
-                    icon: Icon(
-                      _password ? Icons.visibility_off : Icons.visibility,
-                      color: Color(0xff4D4D4D),
-                      size: height / 40,
-                    )),
-                contentPadding:
-                    EdgeInsets.only(left: width / 50, top: height / 50),
-              ),
-            ),
-                        SizedBox(height: height/90,),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+      appBar: AppBar(
+        toolbarHeight: height / 400,
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+      ),
+      body: Container(
+        color: Color.fromARGB(255, 255, 255, 255),
+        height: height,
+        width: width,
+        child: Padding(
+          padding: EdgeInsets.only(
+              bottom: height / 60, left: width / 18, right: width / 18),
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                Checkbox(
-                  side: BorderSide(color: Color(0xff7905F5)),
-                  value: isChecked,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      isChecked = value ?? false;
-                    });
-                  },
+                Center(
+                  child: Container(
+                    height: height / 12,
+                    child: Image(
+                        image: AssetImage(
+                            "images/appex logo purple transparent.png")),
+                  ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      'Agree with ',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: "mulish",
-                          color: Color(0xff4D4D4D)),
-                    ),
-                    Text(
-                      'Terms and Conditions',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Color(0xff4D4D4D),
-                          decorationThickness: 2,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: "mulish",
-                          color: Color(0xff4D4D4D)),
-                    ),
-                  ],
+                Text(
+                  "Create Account",
+                  style: TextStyle(
+                      color: const Color(0xff26150F),
+                      fontFamily: "defaultfontsbold",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 32),
                 ),
-              ],
-            ),
-            Padding(
-              padding:
-                  EdgeInsets.only(top: height / 35, bottom: height / 40),
-              child: 
-              GestureDetector(
-                onTap: () {
-                  Singupcheck();
-                },
-                child: 
-                Container(
+                Padding(
+                  padding: EdgeInsets.only(top: height / 80),
+                  child: Text(
+                    "Fill your valid information below",
+                    style: TextStyle(
+                        color: const Color(0xff7D7676),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "defaultfontsbold",
+                        fontSize: 16),
+                  ),
+                ),
+                SizedBox(
                   height: height / 15,
-                  width: width,
-                  child: Center(
-                      child: Text(
-                    "Sign up",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )),
-                  decoration: BoxDecoration(
-                      color: Color(0xff7905F5),
-                      borderRadius: BorderRadius.circular(height / 10)),
                 ),
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    color: Color.fromARGB(232, 0, 0, 0),
-                    thickness: 1,
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: height / 47,
+                  ),
+                  child: TextField(
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    controller: name,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      hintText: 'Name',
+                      contentPadding:
+                          EdgeInsets.only(left: width / 50, top: height / 90),
+                    ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      right: width / 30, left: width / 30),
-                  child: Text("or continue with",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'mulish',
-                        color: Color(0xff26150F),
-                      )),
-                ),
-                Expanded(
-                  child: Divider(
-                    color: Color.fromARGB(232, 0, 0, 0),
-                    thickness: 1,
+                    bottom: height / 47,
+                  ),
+                  child: TextField(
+                    controller: email,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(),
+                      hintText: 'Email',
+                      contentPadding:
+                          EdgeInsets.only(left: width / 50, top: height / 90),
+                    ),
                   ),
                 ),
-              ],
-            ),
-            Padding(
-              padding:
-                  EdgeInsets.only(left: width / 10, right: width / 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: height / 30,
-                          left: height / 55,
-                          right: height / 55),
-                      child: GestureDetector(
-                        onTap: () {
-                          signInWithGoogle(context);
+                TextField(
+                  controller: password,
+                  obscureText: _password,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'Password',
+                    suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _password = !_password;
+                          });
                         },
-                        child: Container(
-                          child: Image(
-                              image: AssetImage(
-                                  "images/Auto Layout Horizontal.png")),
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(height / 3),
-                              border: Border.all(color: Color(0xffCAC7C7))),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: height / 30,
-                          left: height / 55,
-                          right: height / 55),
-                      child: Container(
-                        child:
-                            Image(image: AssetImage("images/Group.png")),
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(height / 3),
-                            border: Border.all(color: Color(0xffCAC7C7))),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: height / 30,
-                          left: height / 55,
-                          right: height / 55),
-                      child: Container(
-                        child: Image(
-                            image: AssetImage(
-                                "images/logos_microsoft-icon.png")),
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(height / 3),
-                            border: Border.all(color: Color(0xffCAC7C7))),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: height / 40),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Already have an account? ",
-                        style: TextStyle(
-                          fontSize: height / 53,
-                          fontFamily: 'mulish',
-                          color: Color(0xff26150F),
+                        icon: Icon(
+                          _password ? Icons.visibility_off : Icons.visibility,
+                          color: Color(0xff4D4D4D),
+                          size: height / 40,
                         )),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return A_signin();
-                          },
-                        ));
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 50),
+                  ),
+                ),
+                SizedBox(
+                  height: height / 90,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      side: BorderSide(color: Color(0xff7905F5)),
+                      value: isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          isChecked = value ?? false;
+                        });
                       },
-                      child: Text("Sign in",
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Agree with ',
                           style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            decorationColor: Color(0xff7905F5),
-                            decorationThickness: 2,
-                            fontSize: height / 53,
-                            fontWeight: FontWeight.w900,
-                            fontFamily: 'mulish',
-                            color: Color(0xff7905F5),
-                          )),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "mulish",
+                              color: Color(0xff4D4D4D)),
+                        ),
+                        Text(
+                          'Terms and Conditions',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationColor: Color(0xff4D4D4D),
+                              decorationThickness: 2,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "mulish",
+                              color: Color(0xff4D4D4D)),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-            )
-          ],
+                Padding(
+                  padding:
+                      EdgeInsets.only(top: height / 35, bottom: height / 40),
+                  child: GestureDetector(
+                    onTap: () {
+                      Singupcheck();
+                    },
+                    child: Container(
+                      height: height / 15,
+                      width: width,
+                      child: Center(
+                        child: 
+                        isLoading
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              ) // Show loader when loading
+                            : Text(
+                                "Sign up",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                      ),
+                      decoration: BoxDecoration(
+                          color: Color(0xff7905F5),
+                          borderRadius: BorderRadius.circular(height / 10)),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: Color.fromARGB(232, 0, 0, 0),
+                        thickness: 1,
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(right: width / 30, left: width / 30),
+                      child: Text("or continue with",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'mulish',
+                            color: Color(0xff26150F),
+                          )),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: Color.fromARGB(232, 0, 0, 0),
+                        thickness: 1,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: width / 10, right: width / 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: height / 30,
+                              left: height / 55,
+                              right: height / 55),
+                          child: GestureDetector(
+                            onTap: () {
+                              signInWithGoogle(context);
+                            },
+                            child: Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      "images/Auto Layout Horizontal.png")),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(height / 3),
+                                  border: Border.all(color: Color(0xffCAC7C7))),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: height / 30,
+                              left: height / 55,
+                              right: height / 55),
+                          child: Container(
+                            child: Image(image: AssetImage("images/Group.png")),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(height / 3),
+                                border: Border.all(color: Color(0xffCAC7C7))),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: height / 30,
+                              left: height / 55,
+                              right: height / 55),
+                          child: Container(
+                            child: Image(
+                                image: AssetImage(
+                                    "images/logos_microsoft-icon.png")),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(height / 3),
+                                border: Border.all(color: Color(0xffCAC7C7))),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: height / 40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Already have an account? ",
+                            style: TextStyle(
+                              fontSize: height / 53,
+                              fontFamily: 'mulish',
+                              color: Color(0xff26150F),
+                            )),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) {
+                                return A_signin();
+                              },
+                            ));
+                          },
+                          child: Text("Sign in",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color(0xff7905F5),
+                                decorationThickness: 2,
+                                fontSize: height / 53,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'mulish',
+                                color: Color(0xff7905F5),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
-    ),
-            ),
-          );
+    );
   }
 
-  Future Singupcheck() async {
-    if (name.text.isNotEmpty &&
-        password.text.isNotEmpty &&
-        email.text.isNotEmpty &&
-        isChecked == true) {
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: email.text.trim(), password: password.text.trim());
+  // Future Singupcheck() async {
+    // if (name.text.isNotEmpty &&
+        // password.text.isNotEmpty &&
+        // email.text.isNotEmpty &&
+        // isChecked == true) {
+      // setState(() {
+        // isLoading = true; // Start loading
+      // });
+      // try {
+        // UserCredential userCredential = await FirebaseAuth.instance
+            // .createUserWithEmailAndPassword(
+                // email: email.text.trim(), password: password.text.trim());
+      //  
+        // Position position = await Geolocator.getCurrentPosition(
+            // desiredAccuracy: LocationAccuracy.high);
+        // double latitude = position.latitude;
+        // double longitude = position.longitude;
+// 
+        // FirebaseFirestore.instance
+            // .collection("Ambassdor")
+            // .doc(userCredential.user!.email!)
+            // .set({
+          // 'name': name.text.trim(),
+          // 'email': email.text.trim(),
+          // 'addedusers': [],
+          // 'Address': '',
+          // 'Age': 10,
+          // 'Gender': '',
+          // 'Icon': [],
+          // 'Interest': [],
+          // 'Phonenumber': '',
+          // 'X': latitude,
+          // 'Y': longitude,
+          // 'images': [],
+          // 'profile_pic': '',
+          // 'lastSeen': FieldValue.serverTimestamp(),
+          // 'status': 'Online',
+          // 'height': '150 cm',
+          // "languages": ['English'],
+          // 'education': '',
+          // "match_count": 0,
+          // 'addedusers': [],
+          // 'created': FieldValue.serverTimestamp(),
+          // "rating": [],
+          // 'description': ''
+        // });
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          // content: Text(
+            // "Account Created!!",
+            // style: TextStyle(color: Colors.white),
+          // ),
+        // ));
+        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+          // builder: (context) {
+            // return A_landingpage();
+          // },
+        // ));
+      // } on FirebaseAuthException catch (e) {
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          // content: Text(
+            // "${e.message}",
+            // style: TextStyle(color: Colors.red),
+          // ),
+        // ));
+      // }
+    // } else {
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        // content: Text("Fill the lines"),
+      // ));
+    // }
+  // }
+Future Singupcheck() async {
+  if (name.text.isNotEmpty &&
+      password.text.isNotEmpty &&
+      email.text.isNotEmpty &&
+      isChecked == true) {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+
+    // Request location permission
+    LocationPermission permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      setState(() {
+        isLoading = false; // Stop loading
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Location permission is required for account creation. Please enable it in settings.",
+          style: TextStyle(color: Colors.red),
+        ),
+      ));
+      return;
+    }
+
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: email.text.trim(), password: password.text.trim());
+
+      // Get user location
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       double latitude = position.latitude;
       double longitude = position.longitude;
-      
-        FirebaseFirestore.instance
-            .collection("Ambassdor")
-            .doc(userCredential.user!.email!)
-            .set({
-          'name': name.text.trim(),
-          'email': email.text.trim(),
-          'addedusers':[],
-          'Address': '',
-          'Age': 10,
-          'Gender': '',
-          'Icon': [],
-          'Interest': [],
-          'Phonenumber': '',
-          'X': latitude,
-          'Y': longitude,
-          'images': [],
-          'profile_pic': '',
-          'lastSeen': FieldValue.serverTimestamp(),
-          'status': 'Online',
-          'height': '150 cm',
-          "languages": ['English'],
-          'education': '',
-                    "match_count":0,
-             'addedusers':[],
-                       'created':FieldValue.serverTimestamp(),
-                       "rating":[],
-                       'description':''
 
+      // Save user data in Firestore
+      FirebaseFirestore.instance
+          .collection("Ambassdor")
+          .doc(userCredential.user!.email!)
+          .set({
+        'name': name.text.trim(),
+        'email': email.text.trim(),
+        'addedusers': [],
+        'Address': '',
+        'Age': 10,
+        'Gender': '',
+        'Icon': [],
+        'Interest': [],
+        'Phonenumber': '',
+        'X': latitude,
+        'Y': longitude,
+        'images': [],
+        'profile_pic': '',
+        'lastSeen': FieldValue.serverTimestamp(),
+        'status': 'Online',
+        'height': '150 cm',
+        "languages": ['English'],
+        'education': '',
+        "match_count": 0,
+        'created': FieldValue.serverTimestamp(),
+        "rating": [],
+        'description': ''
+      });
 
-        });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            "Account Created!!",
-            style: TextStyle(color: Colors.white),
-          ),
-        ));
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) {
-            return A_landingpage();
-          },
-        ));
-      } on FirebaseAuthException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            "${e.message}",
-            style: TextStyle(color: Colors.red),
-          ),
-        ));
-      }
-    } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Fill the lines"),
+        content: Text(
+          "Account Created!!",
+          style: TextStyle(color: Colors.white),
+        ),
+      ));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) {
+          return A_landingpage();
+        },
+      ));
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        isLoading = false; // Stop loading
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "${e.message}",
+          style: TextStyle(color: Colors.red),
+        ),
       ));
     }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Please fill in all the required fields."),
+    ));
   }
-    Future<void> signInWithGoogle(BuildContext context) async {
+}
+
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
       // Create an instance of GoogleSignIn
       final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -424,10 +519,10 @@ class _A_signupState extends State<A_signup> {
 
       if (user != null) {
         // Add user to Firestore
-         Position position = await Geolocator.getCurrentPosition(
-     desiredAccuracy: LocationAccuracy.high);
- double latitude = position.latitude;
- double longitude = position.longitude;
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        double latitude = position.latitude;
+        double longitude = position.longitude;
         await FirebaseFirestore.instance
             .collection('Ambassdor')
             .doc(user.email)
@@ -449,21 +544,21 @@ class _A_signupState extends State<A_signup> {
           'height': '150 cm',
           "languages": ['English'],
           'education': 'enter your education',
-          "match_count":0,
-          'addedusers':[],
-                    'created':FieldValue.serverTimestamp(),
-                       "rating":[]
-
-
+          "match_count": 0,
+          'addedusers': [],
+          'created': FieldValue.serverTimestamp(),
+          "rating": []
         });
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content:
               Text("Account Created!!", style: TextStyle(color: Colors.white)),
         ));
-Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
-  return A_landingpage();
-},));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) {
+            return A_landingpage();
+          },
+        ));
       }
     } catch (e) {
       print(e);

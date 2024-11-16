@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/ambassdor/A_Mainscree.dart';
 import 'package:datingapp/ambassdor/bottombar.dart';
 import 'package:datingapp/ambassdor/filterpage.dart';
 import 'package:datingapp/ambassdor/onlinecheck.dart';
@@ -353,16 +354,56 @@ class _A_homepageState extends State<A_homepage> {
                           ),
                         ],
                       ),
-                      Positioned(
+                      // Positioned(
+                      // 
+                          // bottom: height / 60,
+                          // right: width / 20,
+                          // left: width / 20,
+                        // 
+                        // child: A_BottomNavBar(
+                          // selectedIndex2: 0, check: 'new',
+                        // ),
+                      // ),
+
+                                        Positioned(
+          left: 30,
+          right: 30,
+          bottom: 30,
+          child: A_BottomNavBar(
+            selectedIndex2: 0, onItemTapped: (int index) { 
+              if (index == 1) {
+         Navigator.pushReplacement(
+           context,
+           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 1,)),
+         );
+       }          else if (index == 0) {
+         Navigator.pushReplacement(
+           context,
+           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 0,)),
+         );
+       } 
+      else if (index == 2) {
+         Navigator.pushReplacement(
+           context,
+           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 2,)),
+         );
+       } 
+      else if (index == 3) {
+         Navigator.pushReplacement(
+           context,
+           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 3,)),
+         );
+       } 
+     else  if (index == 4) {
+         Navigator.pushReplacement(
+           context,
+           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 4,)),
+         );
+       } 
+             },
+          ),
+        )
                       
-                          bottom: height / 60,
-                          right: width / 20,
-                          left: width / 20,
-                        
-                        child: A_BottomNavBar(
-                          selectedIndex2: 0, check: 'new',
-                        ),
-                      ),
                     ],
                   ),
                 ),

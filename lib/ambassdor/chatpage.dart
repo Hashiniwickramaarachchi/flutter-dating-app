@@ -315,14 +315,14 @@ class _A_ChatscreenState extends State<A_Chatscreen> {
                   ),
                 ),
               ),
-              Positioned(
-                    bottom: height / 60,left: width/20,right: width/20,
-                    
-                
-                child: A_BottomNavBar(
-                  selectedIndex2: 3, check: 'already',
-                )
-              )
+              // Positioned(
+                    // bottom: height / 60,left: width/20,right: width/20,
+                    // 
+                // 
+                // child: A_BottomNavBar(
+                  // selectedIndex2: 3, check: 'already',
+                // )
+              // )
             ],
           ),
         );

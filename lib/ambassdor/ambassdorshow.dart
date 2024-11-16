@@ -412,17 +412,17 @@ backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                 )),
               ],
             ),
-            Positioned(
-                
-  left: 0,
-  right: 0,
-   bottom: height / 60,                
-                
-              child: A_BottomNavBar(
-                selectedIndex2: 0, check: 'new',
-              ),
-            
-            )
+            // Positioned(
+                // 
+  // left: 0,
+  // right: 0,
+  //  bottom: height / 60,                
+                // 
+              // child: A_BottomNavBar(
+                // selectedIndex2: 0, check: 'new',
+              // ),
+            // 
+            // )
           ],
         ),
       ),

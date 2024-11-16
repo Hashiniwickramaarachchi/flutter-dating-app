@@ -164,9 +164,9 @@ class _premiumpersonState extends State<premiumperson> {
                           fontFamily: "defaultfontsbold",
                           fontWeight: FontWeight.w900,
                           fontSize: 16),
-                            softWrap: true,
-  overflow: TextOverflow
-      .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+  maxLines: 1, // Limit to one line
+ overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
+ 
                     ),
                   ),
                   Text(

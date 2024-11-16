@@ -201,7 +201,7 @@ class _loactionaddingState extends State<loactionadding> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) {
                           return Manual(); // Replace with your manual location screen

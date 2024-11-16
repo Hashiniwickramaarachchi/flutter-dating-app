@@ -169,19 +169,16 @@ class _A_personState extends State<A_person> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Flexible(
-                                        child: Text(
-                                          widget.name,
-                                          style: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontFamily: "defaultfontsbold",
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 24),
-                                         softWrap: true,
- overflow: TextOverflow
-     .visible, // You can
-                                        ),
+                                      Text(
+                                        widget.name,
+                                        style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontFamily: "defaultfontsbold",
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 24),
+                                             maxLines: 1, // Limit to one line
+                                         overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
                                       ),
                                       Text(
                                         widget.location,

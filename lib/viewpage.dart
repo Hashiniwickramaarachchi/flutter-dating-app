@@ -12,7 +12,7 @@ class viewpage extends StatefulWidget {
   int distance;
   String education;
   List<dynamic> languages;
-String description;
+  String description;
   int age;
   String ID;
   final String onlinecheck;
@@ -56,7 +56,6 @@ class _viewpageState extends State<viewpage> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      
       body: Stack(
         children: [
           Container(
@@ -64,8 +63,7 @@ class _viewpageState extends State<viewpage> {
             width: width,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image:
-                    NetworkImage(widget.image), // Replace with actual image
+                image: NetworkImage(widget.image), // Replace with actual image
                 fit: BoxFit.cover,
               ),
             ),
@@ -98,7 +96,11 @@ class _viewpageState extends State<viewpage> {
                         borderRadius: BorderRadius.circular(height / 10),
                       ),
                       child: Padding(
-                        padding:  EdgeInsets.only(left: width/15,right: width/15,top: height/70,bottom: height/70),
+                        padding: EdgeInsets.only(
+                            left: width / 15,
+                            right: width / 15,
+                            top: height / 70,
+                            bottom: height / 70),
                         child: Text(
                           "${widget.distance}Km far away",
                           style: TextStyle(
@@ -196,6 +198,11 @@ class _viewpageState extends State<viewpage> {
                                                         .collection('Favourite')
                                                         .doc(widget
                                                             .useremail); // Add the data to the main document in Favourite
+
+                                                await FirebaseFirestore.instance
+                                                    .collection('Favourite')
+                                                    .doc(widget
+                                                        .useremail).set({"name":''}); // Add the data to the main document in Favourite
                                                 print(
                                                     "Favourite document created with ID: ${favDocRef.id}");
                                                 // Step 3: Create a subcollection under the newly created document
@@ -299,27 +306,27 @@ class _viewpageState extends State<viewpage> {
                       SizedBox(height: height / 25),
                       // Description
 
-    if(widget.description.isNotEmpty)...[                  
-                      Text(
-                        'Description',
-                        style: TextStyle(
-                            color: const Color.fromARGB(255, 0, 0, 0),
-                            fontFamily: "defaultfontsbold",
-                            fontWeight: FontWeight.bold,
-                            fontSize:18),
-                      ),
-                      SizedBox(height: height / 150),
-    
-                      Text(
-                        widget.description,
-                        style: TextStyle(
-                            color: const Color(0xff565656),
-                            fontFamily: "defaultfonts",
-                            fontSize: 16),
-                      ),
-                      SizedBox(height: height / 50),
-                      // Interests
-    ],
+                      if (widget.description.isNotEmpty) ...[
+                        Text(
+                          'Description',
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                        SizedBox(height: height / 150),
+
+                        Text(
+                          widget.description,
+                          style: TextStyle(
+                              color: const Color(0xff565656),
+                              fontFamily: "defaultfonts",
+                              fontSize: 16),
+                        ),
+                        SizedBox(height: height / 50),
+                        // Interests
+                      ],
                       Text(
                         'Interest',
                         style: TextStyle(
@@ -328,13 +335,12 @@ class _viewpageState extends State<viewpage> {
                             fontWeight: FontWeight.bold,
                             fontSize: 18),
                       ),
-                                            SizedBox(height: height / 150),
+                      SizedBox(height: height / 150),
 
                       Center(
                         child: Wrap(
                             spacing: width / 90,
                             runSpacing: height / 70,
-                            
                             children: List<Widget>.generate(
                               widget.labels.length,
                               (int index) {
@@ -356,33 +362,35 @@ class _viewpageState extends State<viewpage> {
                             fontWeight: FontWeight.bold,
                             fontSize: 18),
                       ),
-                      SizedBox(height: height/150,),
+                      SizedBox(
+                        height: height / 150,
+                      ),
                       _buildInfoRow(context, 'Age', widget.age.toString()),
                       _buildInfoRow(context, 'Height', '${widget.height}'),
                       _buildInfoRowlanugaes(
                           context, 'Languages', widget.languages),
                       SizedBox(height: height / 90),
-                     
-                     if(widget.education.isNotEmpty)...[
-                      Text(
-                        'Education',
-                        style: TextStyle(
-                            color: const Color(0xff565656),
-                            fontFamily: "defaultfonts",
-                            fontSize:16),
-                      ),
-                      SizedBox(height: height / 90),
-                      Text(
-                        widget.education,
-                        style: TextStyle(
-                            color: const Color.fromARGB(255, 0, 0, 0),
-                            fontFamily: "defaultfonts",
-                            fontSize: 16),
-                      ),
-    
-                      SizedBox(height: height / 50),
-                      // Gallery
-                     ],
+
+                      if (widget.education.isNotEmpty) ...[
+                        Text(
+                          'Education',
+                          style: TextStyle(
+                              color: const Color(0xff565656),
+                              fontFamily: "defaultfonts",
+                              fontSize: 16),
+                        ),
+                        SizedBox(height: height / 90),
+                        Text(
+                          widget.education,
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              fontFamily: "defaultfonts",
+                              fontSize: 16),
+                        ),
+
+                        SizedBox(height: height / 50),
+                        // Gallery
+                      ],
                       Text(
                         'Gallery',
                         style: TextStyle(
@@ -393,9 +401,8 @@ class _viewpageState extends State<viewpage> {
                       ),
                       Container(
                         color: Colors.transparent,
-        margin: EdgeInsets.zero,
+                        margin: EdgeInsets.zero,
                         child: GridView.builder(
-                        
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: widget.imagecollection.length,
@@ -450,7 +457,10 @@ class _viewpageState extends State<viewpage> {
   Widget _buildInterestChip(
       BuildContext context, String label, int iconname, final height) {
     return Chip(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30,)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+          30,
+        )),
         side: BorderSide(color: Colors.transparent),
         avatar: Icon(
           IconData(iconname, fontFamily: 'MaterialIcons'),
