@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:datingapp/ambassdor/onlinecheck.dart';
 import 'package:datingapp/bootmnavbar.dart';
 import 'package:datingapp/fav.dart';
 import 'package:datingapp/onlinecheck.dart';
@@ -40,6 +41,9 @@ class _allusermapState extends State<allusermap> {
   List<Map<String, dynamic>> filteredUsers = []; // List to hold users
   Map<String, bool> favStatus = {}; // Map to track favorite status by email
   final OnlineStatusService _onlineStatusService = OnlineStatusService();
+    final A_OnlineStatusService A_onlineStatusService = A_OnlineStatusService();
+
+
   final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref();
   Map<String, dynamic> usersStatusDetails = {}; // Change from List to Map
   String lastSeenhistory = "Last seen: N/A";
@@ -50,122 +54,197 @@ class _allusermapState extends State<allusermap> {
   String buttonText = "Request Ambassador";
   bool isLoadingambassdor = false;
 
-  Future<void> handleButtonPress() async {
+  // Future<void> handleButtonPress() async {
+    // if (buttonText == "Your Ambassador") {
 
-  if (buttonText == "Your Ambassador") {
-      // Navigate to the chat page if the text is "Your Ambassador"
-      
-     try {
-        final userEmail = widget.useremail;
+      // try {
+        // final userEmail = widget.useremail;
 
-        // Fetch ambassador email from the requestedAmbassador collection
-        DocumentSnapshot requestSnapshot = await FirebaseFirestore.instance
-            .collection('requestedAmbassador')
-            .doc(userEmail)
-            .get();
+        // DocumentSnapshot requestSnapshot = await FirebaseFirestore.instance
+            // .collection('requestedAmbassador')
+            // .doc(userEmail)
+            // .get();
 
-        if (requestSnapshot.exists) {
-          final data = requestSnapshot.data() as Map<String, dynamic>;
-          final ambassadorEmail = data['ambassadorEmail'];
+        // if (requestSnapshot.exists) {
+          // final data = requestSnapshot.data() as Map<String, dynamic>;
+          // final ambassadorEmail = data['ambassadorEmail'];
 
-          if (ambassadorEmail.isNotEmpty) {
-            // Fetch ambassador details from the ambassador collection
-            DocumentSnapshot ambassadorSnapshot = await FirebaseFirestore.instance
-                .collection('Ambassdor')
-                .doc(ambassadorEmail)
-                .get();
+          // if (ambassadorEmail.isNotEmpty) {
+            // DocumentSnapshot ambassadorSnapshot = await FirebaseFirestore
+                // .instance
+                // .collection('Ambassdor')
+                // .doc(ambassadorEmail)
+                // .get();
 
-            if (ambassadorSnapshot.exists) {
-              final ambassadorData =
-                  ambassadorSnapshot.data() as Map<String, dynamic>;
+            // if (ambassadorSnapshot.exists) {
+              // final ambassadorData =
+                  // ambassadorSnapshot.data() as Map<String, dynamic>;
 
-              // Navigate to ChatPage with ambassador details
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => 
-             
-             ChatPage(chatPartnerEmail: ambassadorEmail, who: "Ambassdor", chatPartnername: ambassadorData['name'], chatPartnerimage: ambassadorData['profile_pic'], onlinecheck: lastSeenhistory, statecolour: statecolour)
-             
-             
-             
-              ));
-              return;
-            }
-          }
-        }
+              // Navigator.of(context).push(MaterialPageRoute(
+                  // builder: (context) => ChatPage(
+                      // chatPartnerEmail: ambassadorEmail,
+                      // who: "Ambassdor",
+                      // chatPartnername: ambassadorData['name'],
+                      // chatPartnerimage: ambassadorData['profile_pic'],
+                      // onlinecheck: lastSeenhistory,
+                      // statecolour: statecolour)));
+              // return;
+            // }
+          // }
+        // }
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("No ambassador assigned yet."),
-        ));
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Error: ${e.toString()}"),
-        ));
-      } finally {
-        setState(() {
-          isLoading = false;
-        });
-      }
-   
-      return;
-    }  
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          // content: Text("No ambassador assigned yet."),
+        // ));
+      // } catch (e) {
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          // content: Text("Error: ${e.toString()}"),
+        // ));
+      // } finally {
+        // setState(() {
+          // isLoading = false;
+        // });
+      // }
+
+      // return;
+    // }
+    // setState(() {
+      // isLoading = true;
+    // });
+
+    // try {
+      // final userEmail = widget.useremail;
+
+      // DocumentReference docRef = FirebaseFirestore.instance
+          // .collection('requestedAmbassador')
+          // .doc(userEmail);
+
+      // DocumentSnapshot docSnapshot = await docRef.get();
+
+      // if (!docSnapshot.exists) {
+        // await docRef.set({
+          // 'request': 'requested',
+          // 'ambassadorEmail': '', // Initially empty
+          // 'requestedDate': FieldValue.serverTimestamp(),
+          // 'email': userEmail, // User email
+        // });
+
+        // setState(() {
+          // buttonText = "Ambassador request is in queue";
+        // });
+      // } else {
+        // final data = docSnapshot.data() as Map<String, dynamic>;
+        // if (data['ambassadorEmail'] == '') {
+          // setState(() {
+            // buttonText = "Ambassador request is in queue";
+          // });
+        // } else {
+          // setState(() {
+            // buttonText = "Your Ambassador";
+          // });
+        // }
+      // }
+    // } catch (e) {
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        // content: Text("Error: ${e.toString()}"),
+      // ));
+    // } finally {
+      // setState(() {
+        // isLoading = false;
+      // });
+    // }
+  // }
+ Future<void> handleButtonPress() async {
     setState(() {
-      isLoading = true;
+      isLoadingambassdor = true;
     });
 
     try {
       final userEmail = widget.useremail;
 
-      // Check Firestore if a request already exists
-      DocumentReference docRef = FirebaseFirestore.instance
+      // Check if the document exists
+      DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
           .collection('requestedAmbassador')
-          .doc(userEmail);
-
-      DocumentSnapshot docSnapshot = await docRef.get();
+          .doc(userEmail)
+          .get();
 
       if (!docSnapshot.exists) {
-        // Create a new request document
-        await docRef.set({
+        // Create a new request document if it doesn't exist
+        await FirebaseFirestore.instance
+            .collection('requestedAmbassador')
+            .doc(userEmail)
+            .set({
           'request': 'requested',
-          'ambassadorEmail': '', // Initially empty
+          'ambassadorEmail': '',
           'requestedDate': FieldValue.serverTimestamp(),
-          'email': userEmail, // User email
+          'email': userEmail,
         });
 
-        setState(() {
-          buttonText = "Ambassador request is in queue";
-        });
-      } else {
-        // If a document exists and ambassadorEmail is still empty
-        final data = docSnapshot.data() as Map<String, dynamic>;
-        if (data['ambassadorEmail'] == '') {
-          setState(() {
-            buttonText = "Ambassador request is in queue";
-          });
-        } else {
-          setState(() {
-            buttonText = "Your Ambassador";
-          });
-        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Request submitted successfully."),
+        ));
       }
     } catch (e) {
-      // Handle any errors
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Error: ${e.toString()}"),
       ));
     } finally {
       setState(() {
-        isLoading = false;
+        isLoadingambassdor = false;
+      });
+    }
+  }
+
+  Future<void> navigateToChatPage(String ambassadorEmail) async {
+    setState(() {
+      isLoadingambassdor = true;
+    });
+
+    try {
+      // Fetch ambassador details from Firestore
+      DocumentSnapshot ambassadorSnapshot = await FirebaseFirestore.instance
+          .collection('Ambassdor') // Correct spelling if needed
+          .doc(ambassadorEmail)
+          .get();
+
+      if (ambassadorSnapshot.exists) {
+        final ambassadorData =
+            ambassadorSnapshot.data() as Map<String, dynamic>;
+
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ChatPage(
+            chatPartnerEmail: ambassadorEmail,
+            who: "Ambassdor", // Ensure spelling consistency
+            chatPartnername: ambassadorData['name'],
+            chatPartnerimage: ambassadorData['profile_pic'],
+            onlinecheck: lastSeenhistory, // Replace with real data if needed
+            statecolour: statecolour,    // Replace with real data if needed
+          ),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Ambassador details not found."),
+        ));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error: ${e.toString()}"),
+      ));
+    } finally {
+      setState(() {
+        isLoadingambassdor = false;
       });
     }
   }
   @override
   void initState() {
     super.initState();
+    handleButtonPress();
     _getAllUsers(); // Fetch all users
     _addLoggedUserMarker();
     fetchUsersStatus();
     // Call this when the app starts or the user logs in
-    _onlineStatusService.updateUserStatus();
+    _checkUserExistsAndUpdateStatus();
   }
 
   @override
@@ -178,8 +257,55 @@ class _allusermapState extends State<allusermap> {
       // Ignore errors if already disposed
     });
     // Call this when the app is closed
-    _onlineStatusService.setUserOffline();
+_checkUserExistsAndUpdateStatusoffline();
   }
+
+
+
+Future<void> _checkUserExistsAndUpdateStatus() async {
+  final userEmail = widget.useremail; // Assuming you have the user email
+
+  try {
+    // Check if the document exists in the 'users' collection
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userEmail)
+        .get();
+
+    if (userDoc.exists) {
+      // User exists, update the online status
+      _onlineStatusService.updateUserStatus();
+    } else {
+      A_onlineStatusService.updateUserStatus();
+    }
+  } catch (e) {
+    print("Error checking user existence: $e");
+  }
+}
+
+
+Future<void> _checkUserExistsAndUpdateStatusoffline() async {
+  final userEmail = widget.useremail; // Assuming you have the user email
+
+  try {
+    // Check if the document exists in the 'users' collection
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userEmail)
+        .get();
+
+    if (userDoc.exists) {
+      // User exists, update the online status
+      _onlineStatusService.setUserOffline();
+    } else {
+      A_onlineStatusService.setUserOffline();
+    }
+  } catch (e) {
+    print("Error checking user existence: $e");
+  }
+}
+
+
 
   Future<void> fetchUsersStatus() async {
     DatabaseReference usersStatusRef = _databaseRef.child('status');
@@ -252,8 +378,8 @@ class _allusermapState extends State<allusermap> {
               bool isOnline = false;
               String lastSeen = "Last seen: N/A";
               lastSeenhistory = "Last seen: N/A";
-              if (usersStatusDetails.containsKey(widget.useremail)) {
-                final userStatus = usersStatusDetails[widget.useremail];
+              if (usersStatusDetails.containsKey(data['email'])) {
+                final userStatus = usersStatusDetails[data['email']];
                 isOnline = userStatus['status'] == 'online';
                 if (isOnline) {
                   lastSeen = "Online";
@@ -496,9 +622,9 @@ class _allusermapState extends State<allusermap> {
                               String lastSeen = "Last seen: N/A";
                               lastSeenhistory = "Last seen: N/A";
                               if (usersStatusDetails
-                                  .containsKey(widget.useremail)) {
+                                  .containsKey(user['email'])) {
                                 final userStatus =
-                                    usersStatusDetails[widget.useremail];
+                                    usersStatusDetails[user['email']];
                                 isOnline = userStatus['status'] == 'online';
                                 if (isOnline) {
                                   lastSeen = "Online";
@@ -708,46 +834,135 @@ class _allusermapState extends State<allusermap> {
                     ),
                   ),
                   if (userdataperson['profile'] == 'premium') ...[
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, top: 80),
-                      child:
-                       ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
-                            backgroundColor: Color(0xff7905F5),
-                          ),
-                          onPressed: 
-                        
-                        
-                        
-                        
-                        isLoadingambassdor
-          ? null
-          : () {
-              handleButtonPress();
-            },
+                    // Padding(
+                      // padding: EdgeInsets.only(left: 20, top: 80),
+                      // child: ElevatedButton(
+                          // style: ElevatedButton.styleFrom(
+                            // shape: RoundedRectangleBorder(
+                                // borderRadius:
+                                    // BorderRadius.all(Radius.circular(30))),
+                            // backgroundColor: Color(0xff7905F5),
+                          // ),
+                          // onPressed: isLoadingambassdor
+                              // ? null
+                              // : () {
+                                  // handleButtonPress();
+                                // },
+                          // child: Padding(
+                            // padding: EdgeInsets.only(top: 10, bottom: 10),
+                            // child: isLoading
+                                // ? CircularProgressIndicator(color: Colors.white)
+                                // : Text(buttonText,
+                                    // style: TextStyle(
+                                        // color: Colors.white,
+                                        // fontSize: 15,
+                                        // fontFamily: "button")),
+                          // )),
+                    // 
+                    StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('requestedAmbassador')
+          .doc(widget.useremail)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+
+        if (snapshot.hasError) {
+          return Text("Error: ${snapshot.error}");
+        }
+
+        String buttonText = "Request Ambassador";
+        String? ambassadorEmail;
+
+        if (snapshot.hasData && snapshot.data!.exists) {
+          final data = snapshot.data!.data() as Map<String, dynamic>;
+          ambassadorEmail = data['ambassadorEmail'] ?? '';
 
 
 
 
 
-                        
-                          
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
-                            child: isLoading
-            ? CircularProgressIndicator(color: Colors.white)
-                            
-                            
-                            :Text(buttonText,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontFamily: "button")),
-                          )),
-                    )
+             // Fetch the status for this specific user
+             bool isOnline = false;
+             String lastSeen = "Last seen: N/A";
+             lastSeenhistory = "Last seen: N/A";
+             if (usersStatusDetails
+                 .containsKey(ambassadorEmail)) {
+               final userStatus =
+                   usersStatusDetails[ambassadorEmail];
+               isOnline =
+                   userStatus['status'] == 'online';
+               if (isOnline) {
+                 lastSeen = "Online";
+                 lastSeenhistory = "Online";
+                 statecolour = const Color.fromARGB(
+                     255, 49, 255, 56);
+               } else {
+                 var lastSeenDate =
+                     DateTime.fromMillisecondsSinceEpoch(
+                             userStatus['lastSeen'])
+                         .toLocal();
+                 lastSeen =
+                     "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                 lastSeenhistory = lastSeen;
+                 statecolour = Colors.white;
+               }
+             }
+
+
+
+
+
+
+
+
+
+
+
+
+          buttonText = ambassadorEmail!.isEmpty 
+              ? "Ambassador request is in queue"
+              : "Your Ambassador";
+        }
+
+        return Padding(
+          padding: EdgeInsets.only(left: 20, top: 80),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              backgroundColor: Color(0xff7905F5),
+            ),
+            onPressed: isLoading
+                ? null
+                : () async {
+                    if (buttonText == "Your Ambassador" &&
+                        ambassadorEmail != null) {
+                      await navigateToChatPage(ambassadorEmail);
+                    } else if (buttonText == "Request Ambassador") {
+                      await handleButtonPress();
+                    }
+                  },
+            child: Padding(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              child: isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                      buttonText,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontFamily: "button",
+                      ),
+                    ),
+            ),
+          ),
+        );
+      },
+    )
                   ],
 
                   // Positioned(

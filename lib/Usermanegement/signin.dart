@@ -340,9 +340,12 @@ class _signinState extends State<signin> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Signin", style: TextStyle(color: Colors.white)),
           ));
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
-            return MainScreen();
-          }));
+        
+        Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => MainScreen()), 
+  (Route<dynamic> route) => false,
+);
+        
         } on FirebaseAuthException catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("${e.message}", style: TextStyle(color: Colors.red)),
@@ -436,11 +439,14 @@ if (userSnapshot.exists) {
 
           final data = updatedUserDoc.data() as Map<String, dynamic>?;
 
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) {
-              return MainScreen();
-            },
-          ));
+
+        Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => MainScreen()), 
+  (Route<dynamic> route) => false,
+);
+
+
+
         }else{
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Enter Valid Email for User Account",

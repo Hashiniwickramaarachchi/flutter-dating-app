@@ -573,7 +573,7 @@ class _FilterResultsMapPageState extends State<FilterResultsMapPage> {
           Positioned(
             left: 30,
             right: 30,
-            bottom: 30,
+                  bottom: MediaQuery.of(context).size.height/40,
             child: BottomNavBar(
               selectedIndex2: 1, onItemTapped: (int index) { 
                 if (index == 1) {

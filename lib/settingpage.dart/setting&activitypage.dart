@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/Usermanegement/signin.dart';
-import 'package:datingapp/dynamic.dart';
 import 'package:datingapp/invite.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/premium/premiumbuy.dart';
@@ -12,7 +11,6 @@ import 'package:datingapp/settingpage.dart/profileupdate.dart';
 import 'package:datingapp/settingpage.dart/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 
 class settingactivity extends StatefulWidget {
@@ -326,7 +324,7 @@ class _settingactivityState extends State<settingactivity> {
                   GestureDetector(
                     onTap: () async{
                    
-            _createAndShareDynamicLink();
+            // _createAndShareDynamicLink();
 
   
   
@@ -598,15 +596,15 @@ Navigator.of(context).pushAndRemoveUntil(
       ),
     );
   }
-    Future<void> _createAndShareDynamicLink() async {
-  final link = await DynamicLinkService.instance.createDynamicLink();
-  _shareDynamicLink(link);
-}
-
-Future<void> _shareDynamicLink(String link) async {
-  Share.share(
-    'Here is a dynamic link for you: $link',
-    subject: 'Check this out!', // Use subject as the title (optional) use share etends for thuis 
-  );
-}
+    // Future<void> _createAndShareDynamicLink() async {
+  // final link = await DynamicLinkService.instance.createDynamicLink();
+  // _shareDynamicLink(link);
+// }
+// 
+// Future<void> _shareDynamicLink(String link) async {
+  // Share.share(
+    // 'Here is a dynamic link for you: $link',
+    // subject: 'Check this out!', // Use subject as the title (optional) use share etends for thuis 
+  // );
+// }
 }

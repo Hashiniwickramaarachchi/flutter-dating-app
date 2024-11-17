@@ -116,79 +116,61 @@ class _allpremiumState extends State<allpremium> {
         var data = doc.data() as Map<String, dynamic>;
 
         // Check if all necessary fields exist
-      
-      
-      
-      
-      
-        
-        
 
-        
-            // Add filtered user to the list
-            // filteredUsers.add({
-            // 'name': data['name'],
-            // 'Age': data['Age'],
-            // 'distance': userDistance.toInt(),
-            // 'profile_pic': data['profile_pic'],
-            // 'X': data['X'],
-            // 'Y': data['Y'],
-            // 'Address': data['Address'],
-            // 'email': data['email'],
-            // 'Gender': data['Gender'],
-            // 'Icon': data['Icon'],
-            // 'Interest': data['Interest'],
-            // 'Phonenumber': data['Phonenumber'],
-            // 'images': data['images'],
-            // 'height': data['height'],
-            // "languages": data['languages'],
-            // 'education': data['education']
-            // });
+        // Add filtered user to the list
+        // filteredUsers.add({
+        // 'name': data['name'],
+        // 'Age': data['Age'],
+        // 'distance': userDistance.toInt(),
+        // 'profile_pic': data['profile_pic'],
+        // 'X': data['X'],
+        // 'Y': data['Y'],
+        // 'Address': data['Address'],
+        // 'email': data['email'],
+        // 'Gender': data['Gender'],
+        // 'Icon': data['Icon'],
+        // 'Interest': data['Interest'],
+        // 'Phonenumber': data['Phonenumber'],
+        // 'images': data['images'],
+        // 'height': data['height'],
+        // "languages": data['languages'],
+        // 'education': data['education']
+        // });
 
-if (data['profile']=='premium' && data['email']!=widget.useremail) {
-  
-  double userDistance = _calculateDistance(
-      widget.userLatitude, widget.userLongitude, data['X'], data['Y']);
+        if (data['profile'] == 'premium' && data['email'] != widget.useremail) {
+          double userDistance = _calculateDistance(
+              widget.userLatitude, widget.userLongitude, data['X'], data['Y']);
 
-            Map<String, dynamic> userInfo = {
-              'name': data['name'],
-              'Age': data['Age'],
-              'distance': userDistance.toInt(),
-              'profile_pic': data['profile_pic'],
-              'X': data['X'],
-              'Y': data['Y'],
-              'Address': data['Address'],
-              'email': data['email'],
-              'Gender': data['Gender'],
-              'Icon': data['Icon'],
-              'Interest': data['Interest'],
-              'Phonenumber': data['Phonenumber'],
-              'images': data['images'],
-              'height': data['height'],
-              "languages": data['languages'],
-              'education': data['education'],
-              'description':data['description']
-            };
-            allUsers.add(userInfo); // Add user to the full list
+          Map<String, dynamic> userInfo = {
+            'name': data['name'],
+            'Age': data['Age'],
+            'distance': userDistance.toInt(),
+            'profile_pic': data['profile_pic'],
+            'X': data['X'],
+            'Y': data['Y'],
+            'Address': data['Address'],
+            'email': data['email'],
+            'Gender': data['Gender'],
+            'Icon': data['Icon'],
+            'Interest': data['Interest'],
+            'Phonenumber': data['Phonenumber'],
+            'images': data['images'],
+            'height': data['height'],
+            "languages": data['languages'],
+            'education': data['education'],
+            'description': data['description']
+          };
+          allUsers.add(userInfo); // Add user to the full list
 
-            favStatus[data['email']] = false;
+          favStatus[data['email']] = false;
 
-            // Get profile picture as marker with rounded border
-            Uint8List markerIcon =
-                await _getMarkerWithImage(data['profile_pic']);
+          // Get profile picture as marker with rounded border
+          Uint8List markerIcon = await _getMarkerWithImage(data['profile_pic']);
 
-            // Add marker to map
-}else{
-
+          // Add marker to map
+        } else {
           print('No user');
-
-
-}
-
-
-       
-       
-       
+        }
       }
 
       setState(() {
@@ -276,17 +258,17 @@ if (data['profile']=='premium' && data['email']!=widget.useremail) {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-print(widget.userLatitude);
-print(widget.useremail);
+    print(widget.userLatitude);
+    print(widget.useremail);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                                                appBar: AppBar(
-            toolbarHeight:height/400,
-            foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-            automaticallyImplyLeading: false,
-          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-          ),
+      appBar: AppBar(
+        toolbarHeight: height / 400,
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+      ),
       body: Padding(
         padding: EdgeInsets.only(
           left: width / 20,
@@ -297,45 +279,47 @@ print(widget.useremail);
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                            Row(
-              children: [
-                Container(
-                  height: height / 10,
-                  width: width / 10,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 1,
-                      color: Colors.black,
+                Row(
+                  children: [
+                    Container(
+                      height: height / 10,
+                      width: width / 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.black,
+                        ),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: const Color.fromARGB(255, 121, 5, 245),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: const Color.fromARGB(255, 121, 5, 245),
+                    SizedBox(width: width / 20),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          "Premium Members",
+                          style: TextStyle(
+                              color: const Color(0xff26150F),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20),
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(width: width / 15),
+                  ],
                 ),
-                SizedBox(width: width / 20),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      "Premium Members",
-                      style: TextStyle(
-                          color: const Color(0xff26150F),
-                          fontFamily: "defaultfontsbold",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20),
-                    ),
-                  ),
+                SizedBox(
+                  height: height / 60,
                 ),
-                SizedBox(width: width / 15),
-              ],
-            ), 
-            SizedBox(height: height/60,), 
                 Row(
                   children: [
                     Expanded(
@@ -393,10 +377,9 @@ print(widget.useremail);
                         lastSeenhistory = "Online";
                         statecolour = const Color.fromARGB(255, 49, 255, 56);
                       } else {
-                        var lastSeenDate =
-                            DateTime.fromMillisecondsSinceEpoch(
-                                    userStatus['lastSeen'])
-                                .toLocal();
+                        var lastSeenDate = DateTime.fromMillisecondsSinceEpoch(
+                                userStatus['lastSeen'])
+                            .toLocal();
                         lastSeen =
                             "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
                         lastSeenhistory = lastSeen;
@@ -412,7 +395,7 @@ print(widget.useremail);
                           onlinecheck: lastSeen,
                           statecolour: statecolour,
                           profileimage: user['profile_pic'] ??
-                              "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+           "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
                           name: user['name'].toString().toUpperCase(),
                           distance: 300,
                           location: user['Address'],
@@ -426,7 +409,11 @@ print(widget.useremail);
                           iconss: user["Icon"],
                           imagecollection: user['images'],
                           ID: user['email'],
-                          useremail: widget.useremail, gender: user['Gender'], languages: user['languages'], education: user['education'], description: user['description'],
+                          useremail: widget.useremail,
+                          gender: user['Gender'],
+                          languages: user['languages'],
+                          education: user['education'],
+                          description: user['description'],
                         ),
                       ),
                     );

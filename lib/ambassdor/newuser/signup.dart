@@ -468,11 +468,16 @@ Future Singupcheck() async {
           style: TextStyle(color: Colors.white),
         ),
       ));
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) {
-          return A_landingpage();
-        },
-      ));
+
+
+   
+           Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => A_landingpage()), 
+  (Route<dynamic> route) => false,
+);
+   
+
+
     } on FirebaseAuthException catch (e) {
       setState(() {
         isLoading = false; // Stop loading
@@ -554,11 +559,16 @@ Future Singupcheck() async {
           content:
               Text("Account Created!!", style: TextStyle(color: Colors.white)),
         ));
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) {
-            return A_landingpage();
-          },
-        ));
+
+
+   
+           Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => A_landingpage()), 
+  (Route<dynamic> route) => false,
+);
+   
+
+
       }
     } catch (e) {
       print(e);

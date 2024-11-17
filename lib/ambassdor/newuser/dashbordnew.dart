@@ -235,7 +235,7 @@ class _A_dashbordnewState extends State<A_dashbordnew> {
                    Positioned(
            left: 30,
            right: 30,
-           bottom: 30,
+                  bottom: MediaQuery.of(context).size.height/40,
            child: A_BottomNavBar(
              selectedIndex2: 1, onItemTapped: (int index) { 
                if (index == 1) {

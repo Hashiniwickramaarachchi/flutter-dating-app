@@ -155,19 +155,17 @@ class _premiumpersonState extends State<premiumperson> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                    child: Text(
-                      widget.name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: const Color(0xff565656),
-                          fontFamily: "defaultfontsbold",
-                          fontWeight: FontWeight.w900,
-                          fontSize: 16),
-  maxLines: 1, // Limit to one line
- overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
- 
-                    ),
+                  Text(
+                    widget.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: const Color(0xff565656),
+                        fontFamily: "defaultfontsbold",
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16),
+                  maxLines: 1, // Display only one line
+                   overflow: TextOverflow.ellipsis, // Truncate and show '...'
+                   
                   ),
                   Text(
                     widget.location,

@@ -87,9 +87,12 @@ class _wlcomepremiumState extends State<wlcomepremium> {
                        child: 
                        GestureDetector(
                          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-              return MainScreen();
-            },));
+       
+       Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => MainScreen()), 
+  (Route<dynamic> route) => false,
+);
+       
                          },
                          child: 
                          Container(

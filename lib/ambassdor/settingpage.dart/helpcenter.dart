@@ -195,7 +195,8 @@ class _A_helpcenterState extends State<A_helpcenter> {
                               StreamBuilder<QuerySnapshot>(
                                   stream: FirebaseFirestore.instance
                                       .collection(
-                                          "${widget.mainname} App showing")
+                                                                                    "faqs").where('category',isEqualTo: '${widget.mainname}')
+
                                       .snapshots(),
                                   builder: (context, snapshot) {
                                                            

@@ -7,11 +7,14 @@ import 'package:datingapp/Usermanegement/signin.dart';
 import 'package:datingapp/homepage.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/splashscreen.dart';
+import 'package:datingapp/userchatpage.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:provider/provider.dart';
 
 void main()async{
 
@@ -27,7 +30,29 @@ await Firebase.initializeApp(options:DefaultFirebaseOptions.currentPlatform);
     if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
-runApp(MyApp());
+
+
+  await FirebaseMessaging.instance.subscribeToTopic("topic");
+
+  final fcmToken= await FirebaseMessaging.instance.getToken();
+  print("FCM TOKEN $fcmToken");
+  
+runApp(   MultiProvider(
+      providers: [
+        Provider<ChatPage>(
+          create: (_) => ChatPage(
+            chatPartnerEmail: 'example@example.com',
+            chatPartnername: 'John Doe',
+            chatPartnerimage: 'image_url',
+            onlinecheck: 'online',
+            statecolour: Colors.green,
+            who: 'user',
+          ),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 
 
 

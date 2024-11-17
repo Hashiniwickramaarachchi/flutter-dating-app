@@ -126,8 +126,8 @@ class _ChatscreenState extends State<Chatscreen> {
                       color: Color.fromARGB(255, 121, 5, 245),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(
-                          left: width / 20, right: width / 20),
+                      padding:
+                          EdgeInsets.only(left: width / 20, right: width / 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -135,8 +135,8 @@ class _ChatscreenState extends State<Chatscreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    userdataperson['profile_pic']),
+                                backgroundImage:
+                                    NetworkImage(userdataperson['profile_pic']),
                                 radius: 22,
                               ),
                               Expanded(
@@ -173,6 +173,141 @@ class _ChatscreenState extends State<Chatscreen> {
                             ],
                           ),
                           SizedBox(height: height / 70),
+                          // Container(
+                          // height: height / 7,
+                          // child: StreamBuilder<QuerySnapshot>(
+                          // stream: FirebaseFirestore.instance
+                          // .collection("users")
+                          // .snapshots(),
+                          // builder: (context, snapshot) {
+                          // if (snapshot.hasError) {
+                          // return Center(
+                          // child:
+                          // Text('Error: ${snapshot.error}'));
+                          // }
+                          // if (snapshot.connectionState ==
+                          // ConnectionState.waiting) {
+                          // return const Center(
+                          // child: CircularProgressIndicator());
+                          // }
+                          // final data = snapshot.data!.docs.where((doc) {
+                          // return doc['email'] != currentUser.email &&
+                          // (searchQuery.isEmpty ||
+                          // doc['name']
+                          // .toLowerCase()
+                          // .contains(searchQuery));
+                          // }).toList();
+                          // return ListView.builder(
+                          // itemCount: data.length,
+                          // scrollDirection: Axis.horizontal,
+                          // itemBuilder: (context, index) {
+                          // final user = data[index];
+                          // final String userEmail = user['email'];
+
+                          // bool isOnline = false;
+                          // String lastSeen = "Last seen: N/A";
+                          // lastSeenhistory = "Last seen: N/A";
+
+                          // if (usersStatusDetails
+                          // .containsKey(userEmail)) {
+                          // final userStatus =
+                          // usersStatusDetails[userEmail];
+                          // isOnline =
+                          // userStatus['status'] == 'online';
+
+                          // if (isOnline) {
+                          // lastSeen = "Online";
+                          // lastSeenhistory = "Online";
+                          // statecolour = const Color.fromARGB(
+                          // 255, 49, 255, 56);
+                          // } else {
+                          // var lastSeenDate = DateTime
+                          // .fromMillisecondsSinceEpoch(
+                          // userStatus['lastSeen'])
+                          // .toLocal();
+                          // lastSeen =
+                          // "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                          // lastSeenhistory = lastSeen;
+                          // statecolour = Colors.white;
+                          // }
+                          // }
+
+                          // return GestureDetector(
+                          // onTap: () {
+                          // Navigator.push(
+                          // context,
+                          // MaterialPageRoute(
+                          // builder: (context) => ChatPage(
+                          // chatPartnerEmail: user['email'],
+                          // chatPartnername: user['name'],
+                          // chatPartnerimage:
+                          // user['profile_pic'],
+                          // onlinecheck: lastSeen,
+                          // statecolour: statecolour,
+                          // who: 'user',
+                          // ),
+                          // ),
+                          // );
+                          // },
+                          // child: Padding(
+                          // padding: EdgeInsets.only(
+                          // right: width / 15),
+                          // child: Column(
+                          // crossAxisAlignment:
+                          // CrossAxisAlignment.center,
+                          // children: [
+                          // Stack(
+                          // children: [
+                          // CircleAvatar(
+                          // backgroundImage:
+                          // NetworkImage(user[
+                          // 'profile_pic']),
+                          // radius: 26,
+                          // ),
+                          // if (isOnline) // Conditionally show the green dot
+                          // Positioned(
+                          // right: 0,
+                          // bottom: 0,
+                          // child: Container(
+                          // height: 12,
+                          // width: 12,
+                          // decoration:
+                          // BoxDecoration(
+                          // color: Colors.green,
+                          // shape:
+                          // BoxShape.circle,
+                          // border: Border.all(
+                          // color: Colors
+                          // .transparent, // Add a white border to match the profile pic edge
+                          // width: 1.5,
+                          // ),
+                          // ),
+                          // ),
+                          // ),
+                          // ],
+                          // ),
+                          // SizedBox(
+                          // height: height / 150,
+                          // ),
+                          // Text(
+                          // capitalizeFirstLetter(
+                          // user['name']),
+                          // style: TextStyle(
+                          // color: const Color.fromARGB(
+                          // 255, 255, 255, 255),
+                          // fontFamily: "defaultfonts",
+                          // fontWeight: FontWeight.w500,
+                          // fontSize: 11),
+                          // ),
+                          // ],
+                          // ),
+                          // ),
+                          // );
+                          // },
+                          // );
+                          // },
+                          // ),
+                          // ),
                           Container(
                             height: height / 7,
                             child: StreamBuilder<QuerySnapshot>(
@@ -182,14 +317,14 @@ class _ChatscreenState extends State<Chatscreen> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) {
                                   return Center(
-                                      child:
-                                          Text('Error: ${snapshot.error}'));
+                                      child: Text('Error: ${snapshot.error}'));
                                 }
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 }
+                                // Filter the data and exclude the current user
                                 final data = snapshot.data!.docs.where((doc) {
                                   return doc['email'] != currentUser.email &&
                                       (searchQuery.isEmpty ||
@@ -197,42 +332,54 @@ class _ChatscreenState extends State<Chatscreen> {
                                               .toLowerCase()
                                               .contains(searchQuery));
                                 }).toList();
+
+                                // Sort the data to show online users first
+                                data.sort((a, b) {
+                                  final aStatus = usersStatusDetails[a['email']]
+                                          ?['status'] ??
+                                      'offline';
+                                  final bStatus = usersStatusDetails[b['email']]
+                                          ?['status'] ??
+                                      'offline';
+                                  return bStatus.compareTo(
+                                      aStatus); // 'online' comes before 'offline'
+                                });
+
                                 return ListView.builder(
                                   itemCount: data.length,
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) {
                                     final user = data[index];
                                     final String userEmail = user['email'];
-            
+
                                     // Fetch the status for this specific user
                                     bool isOnline = false;
                                     String lastSeen = "Last seen: N/A";
                                     lastSeenhistory = "Last seen: N/A";
-            
+
                                     if (usersStatusDetails
                                         .containsKey(userEmail)) {
                                       final userStatus =
                                           usersStatusDetails[userEmail];
                                       isOnline =
                                           userStatus['status'] == 'online';
-            
                                       if (isOnline) {
                                         lastSeen = "Online";
                                         lastSeenhistory = "Online";
                                         statecolour = const Color.fromARGB(
                                             255, 49, 255, 56);
                                       } else {
-                                        var lastSeenDate = DateTime
-                                                .fromMillisecondsSinceEpoch(
+                                        var lastSeenDate =
+                                            DateTime.fromMillisecondsSinceEpoch(
                                                     userStatus['lastSeen'])
-                                            .toLocal();
+                                                .toLocal();
                                         lastSeen =
                                             "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
                                         lastSeenhistory = lastSeen;
                                         statecolour = Colors.white;
                                       }
                                     }
-            
+
                                     return GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -251,8 +398,8 @@ class _ChatscreenState extends State<Chatscreen> {
                                         );
                                       },
                                       child: Padding(
-                                        padding: EdgeInsets.only(
-                                            right: width / 15),
+                                        padding:
+                                            EdgeInsets.only(right: width / 15),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -260,9 +407,8 @@ class _ChatscreenState extends State<Chatscreen> {
                                             Stack(
                                               children: [
                                                 CircleAvatar(
-                                                  backgroundImage:
-                                                      NetworkImage(user[
-                                                          'profile_pic']),
+                                                  backgroundImage: NetworkImage(
+                                                      user['profile_pic']),
                                                   radius: 26,
                                                 ),
                                                 if (isOnline) // Conditionally show the green dot
@@ -272,14 +418,12 @@ class _ChatscreenState extends State<Chatscreen> {
                                                     child: Container(
                                                       height: 12,
                                                       width: 12,
-                                                      decoration:
-                                                          BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         color: Colors.green,
-                                                        shape:
-                                                            BoxShape.circle,
+                                                        shape: BoxShape.circle,
                                                         border: Border.all(
                                                           color: Colors
-                                                              .transparent, // Add a white border to match the profile pic edge
+                                                              .transparent,
                                                           width: 1.5,
                                                         ),
                                                       ),
@@ -287,9 +431,7 @@ class _ChatscreenState extends State<Chatscreen> {
                                                   ),
                                               ],
                                             ),
-                                            SizedBox(
-                                              height: height / 150,
-                                            ),
+                                            SizedBox(height: height / 150),
                                             Text(
                                               capitalizeFirstLetter(
                                                   user['name']),
@@ -333,12 +475,12 @@ class _ChatscreenState extends State<Chatscreen> {
                     ),
                   ),
                   // Positioned(
-                      //  left: width/20,
-              //  right: width/20,
-              //  bottom: height/60,
-                    // child: BottomNavBar(
-                      // selectedIndex2: 3,
-                    // ),
+                  //  left: width/20,
+                  //  right: width/20,
+                  //  bottom: height/60,
+                  // child: BottomNavBar(
+                  // selectedIndex2: 3,
+                  // ),
                   // )
                 ],
               ),

@@ -379,15 +379,20 @@ class _A_signinState extends State<A_signin> {
             double latitude = position.latitude;
             double longitude = position.longitude;
 
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) {
-                return 
-              A_MainScreen();
-              
-              
-              
-              },
-            ));
+ 
+ 
+ 
+    
+           Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => A_MainScreen()), 
+  (Route<dynamic> route) => false,
+);
+   
+ 
+ 
+ 
+ 
+ 
           } catch (e) {
             print("Location error: $e");
             return null;
@@ -470,11 +475,16 @@ class _A_signinState extends State<A_signin> {
             "rating": [],
             'description':''
           });
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) {
-              return A_homepage();
-            },
-          ));
+     
+           Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => A_homepage()), 
+  (Route<dynamic> route) => false,
+);
+   
+  
+  
+  
+  
         } else {
      final ambassadorSnapshot =
          await _firestore.collection('Ambassdor').doc(user.email).get();
@@ -489,11 +499,14 @@ class _A_signinState extends State<A_signin> {
               desiredAccuracy: LocationAccuracy.high);
           double latitude = position.latitude;
           double longitude = position.longitude;
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) {
-              return A_MainScreen();
-            },
-          ));
+   
+   
+           Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => A_MainScreen()), 
+  (Route<dynamic> route) => false,
+);
+   
+   
         }else{
 
    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
