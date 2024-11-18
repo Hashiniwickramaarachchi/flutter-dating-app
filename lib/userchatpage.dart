@@ -50,19 +50,19 @@ class _ChatPageState extends State<ChatPage> {
         'timestamp': FieldValue.serverTimestamp(),
       };
 
-   await FirebaseFirestore.instance
-       .collection("chats")
-       .doc(currentUser.email)
-       .set({
-     "name": "",
-   });
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(currentUser.email)
+          .set({
+        "name": "",
+      });
 
-        await FirebaseFirestore.instance
-         .collection("chats")
-         .doc(widget.chatPartnerEmail)
-         .set({
-       "name": "",
-     });
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(widget.chatPartnerEmail)
+          .set({
+        "name": "",
+      });
 
       await FirebaseFirestore.instance
           .collection("chats")
@@ -101,126 +101,151 @@ class _ChatPageState extends State<ChatPage> {
 
       _messageController.clear();
 
-   await FirebaseFirestore.instance
-       .collection("users")
-       .doc(widget.chatPartnerEmail)
-       .update({
-    
-    'deviceToken':await FirebaseMessaging.instance.getToken()
-   });
+      final userSnapshot = await _firestore
+          .collection('users')
+          .doc(widget.chatPartnerEmail)
+          .get();
+      final ambassadorSnapshot = await _firestore
+          .collection('Ambassdor')
+          .doc(widget.chatPartnerEmail)
+          .get();
+      if (userSnapshot.exists) {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(widget.chatPartnerEmail)
+            .update(
+                {'deviceToken': await FirebaseMessaging.instance.getToken()});
 
+        final userSnapshot =
+            await _firestore.collection('users').doc(currentUser.email).get();
+        final deviceToken = userSnapshot.data()?['deviceToken'];
 
-          final userSnapshot = await _firestore
-        .collection('users')
-        .doc(widget.chatPartnerEmail)
-        .get();
-    final deviceToken = userSnapshot.data()?['deviceToken'];
+        print("asas ${userSnapshot.data()?['deviceToken']}");
 
-    if (deviceToken != null) {
-      await PushNotificationService.sendNotificationToUser(
-          deviceToken,
-          context,
-          widget.chatPartnerEmail
-      );
-    }
+        if (deviceToken != null) {
+          await PushNotificationService.sendNotificationToUser(
+              deviceToken, context, widget.chatPartnerEmail);
+        }
+      } else if (ambassadorSnapshot.exists) {
+       
+               await FirebaseFirestore.instance
+            .collection("Ambassdor")
+            .doc(widget.chatPartnerEmail)
+            .update(
+                {'deviceToken': await FirebaseMessaging.instance.getToken()});
+
+        final ambassadorSnapshot =
+            await _firestore.collection('Ambassdor').doc(currentUser.email).get();
+        final deviceToken = ambassadorSnapshot.data()?['deviceToken'];
+
+        print("asas ${ambassadorSnapshot.data()?['deviceToken']}");
+
+        if (deviceToken != null) {
+          await PushNotificationService.sendNotificationToUser(
+              deviceToken, context, widget.chatPartnerEmail);
+        }
+       
+       
+       
+      }
     }
   }
 
   // void _sendMessage() async {
   // final currentUser = _auth.currentUser!;
   // if (_messageController.text.isNotEmpty) {
-    // final messageData = {
-      // 'sender': currentUser.email,
-      // 'receiver': widget.chatPartnerEmail,
-      // 'message': _messageController.text,
-      // 'isImage': false,
-      // 'timestamp': FieldValue.serverTimestamp(),
-    // };
+  // final messageData = {
+  // 'sender': currentUser.email,
+  // 'receiver': widget.chatPartnerEmail,
+  // 'message': _messageController.text,
+  // 'isImage': false,
+  // 'timestamp': FieldValue.serverTimestamp(),
+  // };
 
-    // await _firestore.collection('chats')
-        // .doc(currentUser.email)
-        // .collection('history')
-        // .doc(widget.chatPartnerEmail)
-        // .collection('messages')
-        // .add(messageData);
+  // await _firestore.collection('chats')
+  // .doc(currentUser.email)
+  // .collection('history')
+  // .doc(widget.chatPartnerEmail)
+  // .collection('messages')
+  // .add(messageData);
 
-    // await _firestore.collection('chats')
-        // .doc(widget.chatPartnerEmail)
-        // .collection('history')
-        // .doc(currentUser.email)
-        // .collection('messages')
-        // .add(messageData);
+  // await _firestore.collection('chats')
+  // .doc(widget.chatPartnerEmail)
+  // .collection('history')
+  // .doc(currentUser.email)
+  // .collection('messages')
+  // .add(messageData);
 
-    // _messageController.clear();
+  // _messageController.clear();
 
-    // final userSnapshot = await _firestore
-        // .collection('users')
-        // .doc(widget.chatPartnerEmail)
-        // .get();
-    // final deviceToken = userSnapshot.data()?['deviceToken'];
+  // final userSnapshot = await _firestore
+  // .collection('users')
+  // .doc(widget.chatPartnerEmail)
+  // .get();
+  // final deviceToken = userSnapshot.data()?['deviceToken'];
 
-    // if (deviceToken != null) {
-      // await PushNotificationService.sendNotificationToUser(
-          // deviceToken,
-          // context,
-          // widget.chatPartnerEmail
-      // );
-    // }
+  // if (deviceToken != null) {
+  // await PushNotificationService.sendNotificationToUser(
+  // deviceToken,
+  // context,
+  // widget.chatPartnerEmail
+  // );
+  // }
   // }
 // }
 
 // Future<void> _sendImage() async {
   // final ImagePicker _picker = ImagePicker();
   // final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-// 
+//
   // if (image != null) {
-    // String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    // File file = File(image.path);
-// 
-    // TaskSnapshot snapshot = await FirebaseStorage.instance
-        // .ref('chat_images/$fileName')
-        // .putFile(file);
-// 
-    // String downloadUrl = await snapshot.ref.getDownloadURL();
-// 
-    // final imageMessageData = {
-      // 'sender': _auth.currentUser!.email,
-      // 'receiver': widget.chatPartnerEmail,
-      // 'message': downloadUrl,
-      // 'isImage': true,
-      // 'timestamp': FieldValue.serverTimestamp(),
-    // };
-// 
-    // await _firestore.collection('chats')
-        // .doc(_auth.currentUser!.email)
-        // .collection('history')
-        // .doc(widget.chatPartnerEmail)
-        // .collection('messages')
-        // .add(imageMessageData);
-// 
-    // await _firestore.collection('chats')
-        // .doc(widget.chatPartnerEmail)
-        // .collection('history')
-        // .doc(_auth.currentUser!.email)
-        // .collection('messages')
-        // .add(imageMessageData);
-// 
-    // final userSnapshot = await _firestore
-        // .collection('users')
-        // .doc(widget.chatPartnerEmail)
-        // .get();
-    // final deviceToken = userSnapshot.data()?['deviceToken'];
-// 
-    // if (deviceToken != null) {
-      // await PushNotificationService.sendNotificationToUser(
-          // deviceToken,
-          // context,
-          // widget.chatPartnerEmail
-      // );
-    // }
+  // String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+  // File file = File(image.path);
+//
+  // TaskSnapshot snapshot = await FirebaseStorage.instance
+  // .ref('chat_images/$fileName')
+  // .putFile(file);
+//
+  // String downloadUrl = await snapshot.ref.getDownloadURL();
+//
+  // final imageMessageData = {
+  // 'sender': _auth.currentUser!.email,
+  // 'receiver': widget.chatPartnerEmail,
+  // 'message': downloadUrl,
+  // 'isImage': true,
+  // 'timestamp': FieldValue.serverTimestamp(),
+  // };
+//
+  // await _firestore.collection('chats')
+  // .doc(_auth.currentUser!.email)
+  // .collection('history')
+  // .doc(widget.chatPartnerEmail)
+  // .collection('messages')
+  // .add(imageMessageData);
+//
+  // await _firestore.collection('chats')
+  // .doc(widget.chatPartnerEmail)
+  // .collection('history')
+  // .doc(_auth.currentUser!.email)
+  // .collection('messages')
+  // .add(imageMessageData);
+//
+  // final userSnapshot = await _firestore
+  // .collection('users')
+  // .doc(widget.chatPartnerEmail)
+  // .get();
+  // final deviceToken = userSnapshot.data()?['deviceToken'];
+//
+  // if (deviceToken != null) {
+  // await PushNotificationService.sendNotificationToUser(
+  // deviceToken,
+  // context,
+  // widget.chatPartnerEmail
+  // );
+  // }
   // }
 // }
-// 
+//
   Future<void> _sendImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -272,24 +297,40 @@ class _ChatPageState extends State<ChatPage> {
           .collection('messages')
           .add(imageMessageData);
 
- await FirebaseFirestore.instance
-     .collection("users")
-     .doc(widget.chatPartnerEmail)
-     .update({
-  
-  'deviceToken':await FirebaseMessaging.instance.getToken()
- });
-
-              final deviceToken = userSnapshot.data()?['deviceToken'];
-
-    if (deviceToken != null) {
-      await PushNotificationService.sendNotificationToUser(
-          deviceToken,
-          context,
-          widget.chatPartnerEmail
-      );
-    }
-    }
+     if (userSnapshot.exists) {
+       await FirebaseFirestore.instance
+           .collection("users")
+           .doc(widget.chatPartnerEmail)
+           .update(
+               {'deviceToken': await FirebaseMessaging.instance.getToken()});
+       final userSnapshot =
+           await _firestore.collection('users').doc(_auth.currentUser!.email).get();
+       final deviceToken = userSnapshot.data()?['deviceToken'];
+       print("asas ${userSnapshot.data()?['deviceToken']}");
+       if (deviceToken != null) {
+         await PushNotificationService.sendNotificationToUser(
+             deviceToken, context, widget.chatPartnerEmail);
+       }
+     } else if (ambassadorSnapshot.exists) {
+      
+              await FirebaseFirestore.instance
+           .collection("Ambassdor")
+           .doc(widget.chatPartnerEmail)
+           .update(
+               {'deviceToken': await FirebaseMessaging.instance.getToken()});
+       final ambassadorSnapshot =
+           await _firestore.collection('Ambassdor').doc(_auth.currentUser!.email).get();
+       final deviceToken = ambassadorSnapshot.data()?['deviceToken'];
+       print("asas ${ambassadorSnapshot.data()?['deviceToken']}");
+       if (deviceToken != null) {
+         await PushNotificationService.sendNotificationToUser(
+             deviceToken, context, widget.chatPartnerEmail);
+       }
+      
+      
+      
+     }
+   }
   }
 
   @override
@@ -369,10 +410,9 @@ class _ChatPageState extends State<ChatPage> {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-
                         child: PopupMenuButton<int>(
                           color: const Color.fromARGB(255, 255, 255, 255),
-                        offset: Offset(0, 100),
+                          offset: Offset(0, 100),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           icon: Icon(
@@ -399,21 +439,20 @@ class _ChatPageState extends State<ChatPage> {
                                           email: widget.chatPartnerEmail);
                                     },
                                   ));
-                                }
-                               else if (ambassadorSnapshot.exists) {
+                                } else if (ambassadorSnapshot.exists) {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) {
                                       return ambassdorshowchat(
                                           useremail: widget.chatPartnerEmail);
                                     },
                                   ));
-                                }
-                                else{
-
-    ScaffoldMessenger.of(context).showSnackBar(
-   SnackBar(content: Text('This User not Available',style: TextStyle(color: Colors.red),)));
-
-
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                          content: Text(
+                                    'This User not Available',
+                                    style: TextStyle(color: Colors.red),
+                                  )));
                                 }
                                 break;
                               case 2:
@@ -662,7 +701,7 @@ class _ChatPageState extends State<ChatPage> {
                       children: [
                         Expanded(
                           child: TextField(
-                            maxLines: null,
+                            maxLines: 1,
                             controller: _messageController,
                             style: TextStyle(
                                 color: const Color.fromARGB(255, 0, 0, 0),

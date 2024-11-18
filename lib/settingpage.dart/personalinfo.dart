@@ -38,14 +38,16 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   ];
 
   List<String> ageList = List.generate(100, (index) => (index + 1).toString());
-  List<String> heightList = List.generate(
-      100, (index) => "${100 + index} cm"); // Heights from 100cm to 199cm
+       List<String> heightList = ["0 cm"] + List.generate(100, (index) => "${100 + index} cm");
+
+  
 
   final Set<String> _selectedInterestIndices = {}; // Store multiple selections
   final Set<int> _selectedInterestIcons =
       {}; // Store icon codePoints as integers
 
   List<String> languages = [
+    'None',
     "English",
     "Chinese",
     "Spanish",
@@ -137,6 +139,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
         'education': education.text.trim(),
         'Age': int.tryParse(selectedAge.toString()), // Update age as integer
         'height': selectedHeight,
+        'description':desciption.text.trim()
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -167,7 +170,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
             if (education.text.isEmpty) {
               education.text = userdataperson['education'] ?? '';
             }
-
+   if (desciption.text.isEmpty) {
+     desciption.text = userdataperson['description'] ?? '';
+   }
             // education.text = education.text.toString() ?? userdataperson['education'];
             selectedAge = selectedAge ?? userdataperson['Age'].toString();
             selectedHeight =

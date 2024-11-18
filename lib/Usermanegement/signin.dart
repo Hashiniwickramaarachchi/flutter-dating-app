@@ -34,8 +34,7 @@ class _signinState extends State<signin> {
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-    
+        surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: Container(
         height: height,
@@ -43,9 +42,7 @@ class _signinState extends State<signin> {
         color: Color.fromARGB(255, 255, 255, 255),
         child: Padding(
           padding: EdgeInsets.only(
-              bottom: height / 60,
-              left: width / 18,
-              right: width / 18),
+              bottom: height / 60, left: width / 18, right: width / 18),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -177,8 +174,8 @@ class _signinState extends State<signin> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          right: width / 30, left: width / 30),
+                      padding:
+                          EdgeInsets.only(right: width / 30, left: width / 30),
                       child: Text("or sign in with",
                           style: TextStyle(
                             fontSize: 15,
@@ -218,8 +215,7 @@ class _signinState extends State<signin> {
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.circular(height / 3),
-                                  border:
-                                      Border.all(color: Color(0xffCAC7C7))),
+                                  border: Border.all(color: Color(0xffCAC7C7))),
                             ),
                           ),
                         ),
@@ -233,11 +229,9 @@ class _signinState extends State<signin> {
                               left: height / 55,
                               right: height / 55),
                           child: Container(
-                            child:
-                                Image(image: AssetImage("images/Group.png")),
+                            child: Image(image: AssetImage("images/Group.png")),
                             decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(height / 3),
+                                borderRadius: BorderRadius.circular(height / 3),
                                 border: Border.all(color: Color(0xffCAC7C7))),
                           ),
                         ),
@@ -255,8 +249,7 @@ class _signinState extends State<signin> {
                                 image: AssetImage(
                                     "images/logos_microsoft-icon.png")),
                             decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(height / 3),
+                                borderRadius: BorderRadius.circular(height / 3),
                                 border: Border.all(color: Color(0xffCAC7C7))),
                           ),
                         ),
@@ -296,28 +289,31 @@ class _signinState extends State<signin> {
                     ],
                   ),
                 ),
-                SizedBox(height: height/50,),
-                        GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
-              return A_signup();
-            },));
-          },
-          child: Text(
-            "Are You Ambassador?",
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-              decorationColor: Color(0xff7905F5),
-              decorationThickness: 2,
-      
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'mulish',
-              color: Color(0xff7905F5),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
+                SizedBox(
+                  height: height / 50,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) {
+                        return A_signup();
+                      },
+                    ));
+                  },
+                  child: Text(
+                    "Are You Ambassador?",
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationColor: Color(0xff7905F5),
+                      decorationThickness: 2,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'mulish',
+                      color: Color(0xff7905F5),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
           ),
@@ -340,12 +336,11 @@ class _signinState extends State<signin> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Signin", style: TextStyle(color: Colors.white)),
           ));
-        
-        Navigator.of(context).pushAndRemoveUntil(
-  MaterialPageRoute(builder: (context) => MainScreen()), 
-  (Route<dynamic> route) => false,
-);
-        
+
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => MainScreen()),
+            (Route<dynamic> route) => false,
+          );
         } on FirebaseAuthException catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("${e.message}", style: TextStyle(color: Colors.red)),
@@ -393,9 +388,15 @@ class _signinState extends State<signin> {
             .doc(user.email)
             .get();
 
-        if (!userDoc.exists) {
-          // Add the user to Firestore if not exists
-          await FirebaseFirestore.instance
+   final DocumentSnapshot AmbassdorDoc = await FirebaseFirestore.instance
+       .collection('Ambassdor')
+       .doc(user.email)
+       .get();
+        if (!userDoc.exists && !AmbassdorDoc.exists) {
+ 
+ 
+ 
+              await FirebaseFirestore.instance
               .collection('users')
               .doc(user.email)
               .set({
@@ -413,49 +414,60 @@ class _signinState extends State<signin> {
             'profile_pic': '',
             'lastSeen': FieldValue.serverTimestamp(),
             'status': 'Online',
-            'height': '0cm',
+            'height': '0 cm',
             'created': FieldValue.serverTimestamp(),
-            "languages": ['English'],
+            "languages": ['None'],
             'education': '',
             'profile': "standard",
-            "description":''
+            "description": ''
           });
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
               return gender();
             },
           ));
+
+ 
+
+ 
+ 
+ 
+ 
+
+
+
+  
+
+
+
+
+
+
+
+
+
         } else {
+          final userSnapshot =
+              await _firestore.collection('users').doc(user.email).get();
+          if (userSnapshot.exists) {
+            // Fetch the updated user document
+            final updatedUserDoc = await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.email)
+                .get();
 
-final userSnapshot =
-    await _firestore.collection('users').doc(user.email).get();
-if (userSnapshot.exists) {
+            final data = updatedUserDoc.data() as Map<String, dynamic>?;
 
-          // Fetch the updated user document
-          final updatedUserDoc = await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.email)
-              .get();
-
-          final data = updatedUserDoc.data() as Map<String, dynamic>?;
-
-
-        Navigator.of(context).pushAndRemoveUntil(
-  MaterialPageRoute(builder: (context) => MainScreen()), 
-  (Route<dynamic> route) => false,
-);
-
-
-
-        }else{
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("Enter Valid Email for User Account",
-          style: TextStyle(color: Colors.white)),
-    ));
-
-
-        }
-
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => MainScreen()),
+              (Route<dynamic> route) => false,
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Enter Valid Email for User Account",
+                  style: TextStyle(color: Colors.white)),
+            ));
+          }
         }
       }
 

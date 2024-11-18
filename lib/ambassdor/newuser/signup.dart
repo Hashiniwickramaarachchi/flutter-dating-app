@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/ambassdor/A_Mainscree.dart';
+import 'package:datingapp/ambassdor/newuser/homepage.dart';
 import 'package:datingapp/ambassdor/newuser/landingpage.dart';
 import 'package:datingapp/ambassdor/olduser/signin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -453,8 +455,8 @@ Future Singupcheck() async {
         'profile_pic': '',
         'lastSeen': FieldValue.serverTimestamp(),
         'status': 'Online',
-        'height': '150 cm',
-        "languages": ['English'],
+        'height': '0 cm',
+        "languages": ['None'],
         'education': '',
         "match_count": 0,
         'created': FieldValue.serverTimestamp(),
@@ -495,20 +497,15 @@ Future Singupcheck() async {
     ));
   }
 }
-
-  Future<void> signInWithGoogle(BuildContext context) async {
+  Future<User?> signInWithGoogle(BuildContext context) async {
     try {
-      // Create an instance of GoogleSignIn
-      final GoogleSignIn _googleSignIn = GoogleSignIn();
-
       // Sign out of Google Sign-In to ensure the sign-in screen shows up
-      await _googleSignIn.signOut();
+      await GoogleSignIn().signOut();
 
       // Trigger Google sign-in
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
-        // The user canceled the sign-in
-        return;
+        return null; // The user canceled the sign-in
       }
 
       final GoogleSignInAuthentication googleAuth =
@@ -518,65 +515,107 @@ Future Singupcheck() async {
         idToken: googleAuth.idToken,
       );
 
-      UserCredential userCredential =
+      final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      User? user = userCredential.user;
+      final User? user = userCredential.user;
 
       if (user != null) {
-        // Add user to Firestore
-        Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
-        double latitude = position.latitude;
-        double longitude = position.longitude;
-        await FirebaseFirestore.instance
+   final ambassadorSnapshot =
+       await FirebaseFirestore.instance.collection('users').doc(user.email).get();
+   if (!ambassadorSnapshot.exists) {         
+    
+            final DocumentSnapshot userDoc = await FirebaseFirestore.instance
             .collection('Ambassdor')
             .doc(user.email)
-            .set({
-          'name': user.displayName,
-          'email': user.email,
-          'Address': '',
-          'Age': 10,
-          'Gender': '',
-          'Icon': [],
-          'Interest': [],
-          'Phonenumber': '',
-          'X': latitude,
-          'Y': longitude,
-          'images': [],
-          'profile_pic': '',
-          'lastSeen': FieldValue.serverTimestamp(),
-          'status': 'Online',
-          'height': '150 cm',
-          "languages": ['English'],
-          'education': 'enter your education',
-          "match_count": 0,
-          'addedusers': [],
-          'created': FieldValue.serverTimestamp(),
-          "rating": []
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text("Account Created!!", style: TextStyle(color: Colors.white)),
-        ));
-
-
-   
+            .get();
+ final DocumentSnapshot AmbassdorDoc = await FirebaseFirestore.instance
+ .collection('users')
+ .doc(user.email)
+ .get();
+        if (!userDoc.exists && !AmbassdorDoc.exists) {
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          double latitude = position.latitude;
+          double longitude = position.longitude;
+          await FirebaseFirestore.instance
+              .collection('Ambassdor')
+              .doc(user.email)
+              .set({
+            'name': user.displayName,
+            'email': user.email,
+            'Address': '',
+            'Age': 0,
+            'Gender': '',
+            'Icon': [],
+            'Interest': [],
+            'Phonenumber': '',
+            'X': latitude,
+            'Y': longitude,
+            'images': [],
+            'profile_pic': '',
+            'lastSeen': FieldValue.serverTimestamp(),
+            'status': 'Online',
+            'height': '0 cm',
+            "languages": ['None'],
+            'education': '',
+            "match_count": 0,
+            'addedusers': [],
+            "rating": [],
+            'description':''
+          });
+     
            Navigator.of(context).pushAndRemoveUntil(
   MaterialPageRoute(builder: (context) => A_landingpage()), 
   (Route<dynamic> route) => false,
 );
    
+        }else{
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("This Email Not Valid in the Ambassdor Account",
+        style: TextStyle(color: Colors.white)),
+  ));
 
+        }
+  
+  
+  
+        } else {
+     final ambassadorSnapshot =
+         await FirebaseFirestore.instance.collection('Ambassdor').doc(user.email).get();
+     if (ambassadorSnapshot.exists) {         
+       final updatedUserDoc = await FirebaseFirestore.instance
+              .collection('Ambassdor')
+              .doc(user.email)
+              .get();
 
+          final data = updatedUserDoc.data() as Map<String, dynamic>?;
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          double latitude = position.latitude;
+          double longitude = position.longitude;
+   
+   
+           Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => A_MainScreen()), 
+  (Route<dynamic> route) => false,
+);
+   
+   
+        }else{
+
+   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+     content: Text("This Email Not Valid in the Ambassdor Account",
+         style: TextStyle(color: Colors.white)),
+   ));
+
+        }
+        }
       }
+
+      return user;
     } catch (e) {
-      print(e);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error: $e", style: TextStyle(color: Colors.red)),
-        ),
-      );
+      print('Error signing in with Google: $e');
+      return null;
     }
   }
 }

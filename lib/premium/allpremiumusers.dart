@@ -49,6 +49,7 @@ class _allpremiumState extends State<allpremium> {
   String lastSeenhistory = "Last seen: N/A";
   Color statecolour = Colors.white;
   TextEditingController _searchController = TextEditingController();
+  bool _isLoading = true; // Loading flag
 
   @override
   void initState() {
@@ -175,9 +176,15 @@ class _allpremiumState extends State<allpremium> {
 
       setState(() {
         filteredUsers = List.from(allUsers); // Initially show all users
+                _isLoading = false; // Update loading state
+
       }); // Update the map with new markers
     } catch (e) {
       print('Error fetching filtered users: $e');
+      setState(() {
+                _isLoading = false;
+
+      });
     }
   }
 
@@ -360,6 +367,10 @@ class _allpremiumState extends State<allpremium> {
                 SizedBox(
                   height: height / 20,
                 ),
+          _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            ):
                 Expanded(
                     child: ListView.builder(
                   itemCount: filteredUsers.length,

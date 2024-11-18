@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/ambassdor/settingpage.dart/setting&activitypage.dart';
 import 'package:datingapp/ambassdor/olduser/ambasterusers.dart';
 import 'package:datingapp/ambassdor/onlinecheck.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class A_profile extends StatefulWidget {
@@ -22,7 +26,45 @@ class _A_profileState extends State<A_profile> {
   Map<String, dynamic> usersStatusDetails = {};
   String lastSeenHistory = "Last seen: N/A";
   Color stateColor = Colors.white;
+   File? _image;
+  final ImagePicker _picker = ImagePicker();
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Future<void> _pickImage(String email) async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+        await _uploadImage(email);
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
+  }
+
+  Future<void> _uploadImage(String email) async {
+    if (_image == null) return;
+
+    final storageRef = _storage.ref().child('profile_pics/${email}');
+    try {
+      // Upload image to Firebase Storage
+      final uploadTask = await storageRef.putFile(_image!);
+      final imageUrl = await uploadTask.ref.getDownloadURL();
+
+      // Update Firestore
+      await _firestore
+          .collection('Ambassdor')
+          .doc(email)
+          .update({'profile_pic': imageUrl});
+
+      print("Profile picture updated successfully!");
+    } catch (e) {
+      print("Error uploading image: $e");
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -85,11 +127,13 @@ class _A_profileState extends State<A_profile> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final userdataperson = snapshot.data?.data() as Map<String, dynamic>?;
+
           if (userdataperson == null) {
             return Center(
               child: Text("Ambassador data not found."),
             );
           }
+                          final profilePic = userdataperson['profile_pic'] ?? '';
 
           final ratings = userdataperson['rating'] as List<dynamic>? ?? [];
           double averageRating = ratings.isEmpty
@@ -145,13 +189,63 @@ class _A_profileState extends State<A_profile> {
                         ],
                       ),
                         SizedBox(height: height / 30),
-                        CircleAvatar(
-                          radius: height / 10,
-                          backgroundImage: NetworkImage(
-                            userdataperson['profile_pic'] ??
-                                "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                          ),
-                        ),
+                    
+                    
+                               Center(
+         child: Stack(
+           children: [
+             GestureDetector(
+               onTap:() {
+                 _pickImage(userdataperson['email']);
+               },
+               child: Padding(
+                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 30),
+                 child: Container(
+                   height: MediaQuery.of(context).size.height / 5,
+                   width: MediaQuery.of(context).size.width / 2.5,
+                   decoration: BoxDecoration(
+                     border: Border.all(color: Color.fromARGB(255, 121, 5, 245),width: 2),
+                     
+                     shape: BoxShape.circle,
+                     color: const Color.fromARGB(255, 206, 206, 206),
+                   ),
+                   child: profilePic.isEmpty
+                       ? Icon(
+                           Icons.person,
+                           color: const Color.fromARGB(255, 66, 66, 66),
+                           size: MediaQuery.of(context).size.height / 15,
+                         )
+                       : ClipOval(
+                           child: Image.network(
+                             profilePic,
+                             fit: BoxFit.cover,
+                             width: MediaQuery.of(context).size.width / 2.5,
+                             height: MediaQuery.of(context).size.height / 5,
+                           ),
+                         ),
+                 ),
+               ),
+             ),
+                Positioned(
+    left: width / 3,
+    top: height / 6,
+    child:
+     Container(
+      height: height / 20,
+      width: width / 20,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image:
+                  AssetImage("assetss/red.png"))),
+    ),
+  ),
+           ],
+         ),
+       ),
+                    
+                    
+                    
+                    
                         SizedBox(height: height / 50),
                         Text(
                           userdataperson['name'] ?? "UNKNOWN",

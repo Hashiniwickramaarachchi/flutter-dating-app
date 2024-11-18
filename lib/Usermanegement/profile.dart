@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/bootmnavbar.dart';
 import 'package:datingapp/homepage.dart';
 import 'package:datingapp/premium/allpremiumusers.dart';
 import 'package:datingapp/settingpage.dart/setting&activitypage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,7 +19,45 @@ class profile extends StatefulWidget {
 }
 
 class _profileState extends State<profile> {
-  XFile? _image;
+   File? _image;
+  final ImagePicker _picker = ImagePicker();
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> _pickImage(String email) async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+        await _uploadImage(email);
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
+  }
+
+  Future<void> _uploadImage(String email) async {
+    if (_image == null) return;
+
+    final storageRef = _storage.ref().child('profile_pics/${email}');
+    try {
+      // Upload image to Firebase Storage
+      final uploadTask = await storageRef.putFile(_image!);
+      final imageUrl = await uploadTask.ref.getDownloadURL();
+
+      // Update Firestore
+      await _firestore
+          .collection('users')
+          .doc(email)
+          .update({'profile_pic': imageUrl});
+
+      print("Profile picture updated successfully!");
+    } catch (e) {
+      print("Error uploading image: $e");
+    }
+  }
   final List<Map<String, dynamic>> _interests = [
     {'icon': Icons.music_note, 'label': 'Music'},
     {'icon': Icons.directions_bike, 'label': 'Dance'},
@@ -48,7 +89,8 @@ class _profileState extends State<profile> {
               child: Text("User data not found."),
             );
           }
-        
+                final profilePic = userData['profile_pic'] ?? '';
+
         
 
             return Scaffold(
@@ -102,41 +144,57 @@ class _profileState extends State<profile> {
                                           "images/heroicons-outline_menu-alt-2.png")))
                             ],
                           ),
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: height / 30),
-                              child: Container(
-                                height: height / 5,
-                                width: width / 2.5,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color:
-                                          Color.fromARGB(255, 121, 5, 245)),
-                                  shape: BoxShape.circle,
-                                  color: const Color.fromARGB(
-                                      255, 206, 206, 206),
-                                ),
-                                child: _image == userData['profile_pic']
-                                    ? Icon(
-                                        Icons.person,
-                                        color: const Color.fromARGB(
-                                            255, 66, 66, 66),
-                                        size: height / 15,
-                                      )
-                                    : Container(
-                                        height: height / 6,
-                                        width: width / 3,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  userData[
-                                                      "profile_pic"],),fit: BoxFit.cover),
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                              ),
+            Center(
+          child: Stack(
+            children: [
+              GestureDetector(
+                onTap:() {
+                  _pickImage(userData['email']);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 30),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 5,
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color.fromARGB(255, 121, 5, 245),width: 2),
+                      
+                      shape: BoxShape.circle,
+                      color: const Color.fromARGB(255, 206, 206, 206),
+                    ),
+                    child: profilePic.isEmpty
+                        ? Icon(
+                            Icons.person,
+                            color: const Color.fromARGB(255, 66, 66, 66),
+                            size: MediaQuery.of(context).size.height / 15,
+                          )
+                        : ClipOval(
+                            child: Image.network(
+                              profilePic,
+                              fit: BoxFit.cover,
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              height: MediaQuery.of(context).size.height / 5,
                             ),
                           ),
+                  ),
+                ),
+              ),
+                 Positioned(
+     left: width / 3,
+     top: height / 6,
+     child:
+      Container(
+       height: height / 20,
+       width: width / 20,
+       decoration: BoxDecoration(
+           image: DecorationImage(
+               image:
+                   AssetImage("assetss/red.png"))),
+     ),
+   ),
+            ],
+          ),
+        ),
                           SizedBox(
                             height: height / 50,
                           ),

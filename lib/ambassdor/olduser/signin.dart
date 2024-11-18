@@ -4,6 +4,7 @@ import 'package:datingapp/Usermanegement/signup.dart';
 import 'package:datingapp/ambassdor/A_Mainscree.dart';
 import 'package:datingapp/ambassdor/ambassdorshow.dart';
 import 'package:datingapp/ambassdor/newuser/homepage.dart';
+import 'package:datingapp/ambassdor/newuser/landingpage.dart';
 import 'package:datingapp/ambassdor/newuser/signup.dart';
 import 'package:datingapp/ambassdor/olduser/dashbortlogged.dart';
 import 'package:datingapp/ambassdor/olduser/showresultsignin.dart';
@@ -439,12 +440,18 @@ class _A_signinState extends State<A_signin> {
 
       if (user != null) {
         // Check Firestore for the user document
+
         final DocumentSnapshot userDoc = await FirebaseFirestore.instance
             .collection('Ambassdor')
             .doc(user.email)
             .get();
 
-        if (!userDoc.exists) {
+             final DocumentSnapshot AmbassdorDoc = await FirebaseFirestore.instance
+     .collection('users')
+     .doc(user.email)
+     .get();
+
+        if (!userDoc.exists && !AmbassdorDoc.exists) {
           Position position = await Geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.high);
           double latitude = position.latitude;
@@ -467,9 +474,9 @@ class _A_signinState extends State<A_signin> {
             'profile_pic': '',
             'lastSeen': FieldValue.serverTimestamp(),
             'status': 'Online',
-            'height': '0cm',
-            "languages": ['English'],
-            'education': 'enter your education',
+            'height': '0 cm',
+            "languages": ['None'],
+            'education': '',
             "match_count": 0,
             'addedusers': [],
             "rating": [],
@@ -477,11 +484,11 @@ class _A_signinState extends State<A_signin> {
           });
      
            Navigator.of(context).pushAndRemoveUntil(
-  MaterialPageRoute(builder: (context) => A_homepage()), 
+  MaterialPageRoute(builder: (context) => A_landingpage()), 
   (Route<dynamic> route) => false,
 );
-   
-  
+
+
   
   
   

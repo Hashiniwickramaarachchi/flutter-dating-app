@@ -239,7 +239,6 @@ class _allusermapState extends State<allusermap> {
   @override
   void initState() {
     super.initState();
-    handleButtonPress();
     _getAllUsers(); // Fetch all users
     _addLoggedUserMarker();
     fetchUsersStatus();
@@ -424,6 +423,8 @@ Future<void> _checkUserExistsAndUpdateStatusoffline() async {
             },
           ),
         );
+setState(() {
+  
 
         // Add the user to filteredUsers if you still want to display them in the list
         filteredUsers.add({
@@ -442,7 +443,7 @@ Future<void> _checkUserExistsAndUpdateStatusoffline() async {
           'description': data['description'],
           "imagecollection": data['images'],
         });
-
+});
         favStatus[data['email']] = false; // Initialize favorite status
         loadedUsers++; // Increment loaded users counter
         _checkIfLoadingComplete();
