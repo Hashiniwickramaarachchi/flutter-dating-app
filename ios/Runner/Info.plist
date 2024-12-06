@@ -18,15 +18,15 @@
 
 
 	<key>CFBundleDisplayName</key>
-	<string>Apexlove</string>
+	<string>AppexLove</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apexlove.app</string>
+	<string>com.appexlove.app</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Apexlove</string>
+	<string>AppexLove</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
