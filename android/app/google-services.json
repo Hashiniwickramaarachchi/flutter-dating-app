@@ -8,6 +8,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:972396664960:android:9515a4af47d566eac7ee65",
+        "android_client_info": {
+          "package_name": "com.appexlove.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972396664960-h8cjklq3hhv6a899iaoq5ovujbf16be3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdhu31nFWneuo6-oEkadtgqViRbHQLevI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972396664960-h8cjklq3hhv6a899iaoq5ovujbf16be3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "972396664960-boiij8g0ebke1fdqt24rr7lgpslpqv9p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.datingapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:972396664960:android:b25e40942b206391c7ee65",
         "android_client_info": {
           "package_name": "com.example.datingapp"

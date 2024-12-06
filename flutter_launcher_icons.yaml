@@ -1,0 +1,7 @@
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assetss/appex logo-pdf (1)_page-0001.jpg"
+  adaptive_icon_foreground: "assetss/appex logo-pdf (1)_page-0001.jpg"
+  adaptive_icon_background: "#FFFFFF"
+  remove_alpha_ios: true

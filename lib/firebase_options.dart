@@ -52,19 +52,23 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBdhu31nFWneuo6-oEkadtgqViRbHQLevI',
-    appId: '1:972396664960:android:b25e40942b206391c7ee65',
+    appId: '1:972396664960:android:9515a4af47d566eac7ee65',
     messagingSenderId: '972396664960',
     projectId: 'appexlove-e7972',
+    databaseURL: 'https://appexlove-e7972-default-rtdb.firebaseio.com',
     storageBucket: 'appexlove-e7972.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAOj3xj7vLOaZ2j16uTs-6mCP3BI_F9rnU',
-    appId: '1:972396664960:ios:6b93548e8ab42f2bc7ee65',
+    appId: '1:972396664960:ios:357695c74f91c3d9c7ee65',
     messagingSenderId: '972396664960',
     projectId: 'appexlove-e7972',
+    databaseURL: 'https://appexlove-e7972-default-rtdb.firebaseio.com',
     storageBucket: 'appexlove-e7972.appspot.com',
-    iosBundleId: 'com.example.datingapp',
+    androidClientId: '972396664960-o23h6lpkvqjs6bblm08utchj1uicq9qb.apps.googleusercontent.com',
+    iosClientId: '972396664960-nnoe5ivlco57pi7c21u3sd78s80hejfk.apps.googleusercontent.com',
+    iosBundleId: 'com.appexlove.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +77,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '972396664960',
     projectId: 'appexlove-e7972',
     storageBucket: 'appexlove-e7972.appspot.com',
-    iosBundleId: 'com.example.datingapp',
+    iosBundleId: 'com.appexlove.app',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
