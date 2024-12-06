@@ -1,7 +1,11 @@
 import 'package:datingapp/Usermanegement/addemail.dart';
 import 'package:datingapp/Usermanegement/gender.dart';
 import 'package:datingapp/Usermanegement/signup.dart';
+import 'package:datingapp/accountdelectionpage.dart';
 import 'package:datingapp/ambassdor/newuser/signup.dart';
+import 'package:datingapp/block.dart';
+import 'package:datingapp/deactivepage.dart';
+import 'package:datingapp/deleted.dart';
 import 'package:datingapp/homepage.dart';
 import 'package:datingapp/mainscreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +14,7 @@ import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
 
 class signin extends StatefulWidget {
   const signin({super.key});
@@ -327,24 +332,53 @@ class _signinState extends State<signin> {
       final userSnapshot =
           await _firestore.collection('users').doc(email.text.trim()).get();
       if (userSnapshot.exists) {
-        try {
-          UserCredential userCredential =
-              await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: email.text.trim(),
-            password: password.text.trim(),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Signin", style: TextStyle(color: Colors.white)),
-          ));
+        final data = userSnapshot.data() as Map<String, dynamic>?;
+        if (data!['statusType'] == 'active') {
+          try {
+            UserCredential userCredential =
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: email.text.trim(),
+              password: password.text.trim(),
+            );
 
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(email.text.trim())
+                .update({'Logged': 'true'});
+
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Signin", style: TextStyle(color: Colors.white)),
+            ));
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => MainScreen()),
+              (Route<dynamic> route) => false,
+            );
+          } on FirebaseAuthException catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text("${e.message}", style: TextStyle(color: Colors.red)),
+            ));
+          }
+        } else if (data!['statusType'] == 'block') {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => MainScreen()),
+            MaterialPageRoute(builder: (context) => block()),
             (Route<dynamic> route) => false,
           );
-        } on FirebaseAuthException catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("${e.message}", style: TextStyle(color: Colors.red)),
+        } else if (data!['statusType'] == 'delete') {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) {
+              return DeleteAccountPage(
+                initiateDelete: true,
+                who: 'users',
+              );
+            },
           ));
+        } else {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => deactivepage()),
+            (Route<dynamic> route) => false,
+          );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -388,15 +422,17 @@ class _signinState extends State<signin> {
             .doc(user.email)
             .get();
 
-   final DocumentSnapshot AmbassdorDoc = await FirebaseFirestore.instance
-       .collection('Ambassdor')
-       .doc(user.email)
-       .get();
-        if (!userDoc.exists && !AmbassdorDoc.exists) {
- 
- 
- 
-              await FirebaseFirestore.instance
+        final DocumentSnapshot AmbassdorDoc = await FirebaseFirestore.instance
+            .collection('Ambassdor')
+            .doc(user.email)
+            .get();
+
+        final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
+            .collection('delete')
+            .doc(user.email)
+            .get();
+        if (!userDoc.exists && !AmbassdorDoc.exists && !deleteDoc.exists) {
+          await FirebaseFirestore.instance
               .collection('users')
               .doc(user.email)
               .set({
@@ -416,36 +452,18 @@ class _signinState extends State<signin> {
             'status': 'Online',
             'height': '0 cm',
             'created': FieldValue.serverTimestamp(),
-            "languages": ['None'],
+            "languages": [],
             'education': '',
             'profile': "standard",
-            "description": ''
+            "description": '',
+            'statusType': "active",
+            'Logged': 'true'
           });
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
               return gender();
             },
           ));
-
- 
-
- 
- 
- 
- 
-
-
-
-  
-
-
-
-
-
-
-
-
-
         } else {
           final userSnapshot =
               await _firestore.collection('users').doc(user.email).get();
@@ -457,12 +475,42 @@ class _signinState extends State<signin> {
                 .get();
 
             final data = updatedUserDoc.data() as Map<String, dynamic>?;
+            if (data!['statusType'] == 'active') {
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user.email)
+                  .update({'Logged': 'true'});
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => MainScreen()),
+                (Route<dynamic> route) => false,
+              );
+            } else if (data!['statusType'] == 'block') {
+              await FirebaseAuth.instance.signOut();
 
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => MainScreen()),
-              (Route<dynamic> route) => false,
-            );
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => block()),
+                (Route<dynamic> route) => false,
+              );
+            } else if (data!['statusType'] == 'delete') {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) {
+                  return DeleteAccountPage(
+                    initiateDelete: true,
+                    who: 'users',
+                  );
+                },
+              ));
+            } else {
+              await FirebaseAuth.instance.signOut();
+
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => deactivepage()),
+                (Route<dynamic> route) => false,
+              );
+            }
           } else {
+                          await FirebaseAuth.instance.signOut();
+
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text("Enter Valid Email for User Account",
                   style: TextStyle(color: Colors.white)),

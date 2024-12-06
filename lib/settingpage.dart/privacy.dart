@@ -11,7 +11,11 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:image_picker/image_picker.dart';
 
 class privacy extends StatefulWidget {
-  const privacy({super.key});
+  String who;
+   privacy({
+    
+    required this.who,
+    super.key});
 
   @override
   State<privacy> createState() => _privacyState();
@@ -57,7 +61,7 @@ class _privacyState extends State<privacy> {
     final curentuser = FirebaseAuth.instance.currentUser!;
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
-            .collection("users")
+            .collection(widget.who)
             .doc(curentuser.email!)
             .snapshots(),
         builder: (context, snapshot) {

@@ -100,14 +100,14 @@ class _A_homepageState extends State<A_homepage> {
                 color: Color.fromARGB(255, 255, 255, 255),
                 height: height,
                 width: width,
-                child: Padding(
-                  padding: EdgeInsets.only(
-            
-               right: width / 20,
-               left: width / 20,                    ),
-                  child: Stack(
-                    children: [
-                      Column(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding:  EdgeInsets.only(
+left: width/20,
+right: width/20
+                      ),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
@@ -354,58 +354,58 @@ class _A_homepageState extends State<A_homepage> {
                           ),
                         ],
                       ),
-                      // Positioned(
+                    ),
+                    // Positioned(
+                    // 
+                        // bottom: height / 60,
+                        // right: width / 20,
+                        // left: width / 20,
                       // 
-                          // bottom: height / 60,
-                          // right: width / 20,
-                          // left: width / 20,
-                        // 
-                        // child: A_BottomNavBar(
-                          // selectedIndex2: 0, check: 'new',
-                        // ),
+                      // child: A_BottomNavBar(
+                        // selectedIndex2: 0, check: 'new',
                       // ),
-
-                                        Positioned(
-          left: 30,
-          right: 30,
-                  bottom: MediaQuery.of(context).size.height/40,
-          child: A_BottomNavBar(
-            selectedIndex2: 0, onItemTapped: (int index) { 
-              if (index == 1) {
-         Navigator.pushReplacement(
-           context,
-           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 1,)),
-         );
-       }          else if (index == 0) {
-         Navigator.pushReplacement(
-           context,
-           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 0,)),
-         );
-       } 
-      else if (index == 2) {
-         Navigator.pushReplacement(
-           context,
-           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 2,)),
-         );
-       } 
-      else if (index == 3) {
-         Navigator.pushReplacement(
-           context,
-           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 3,)),
-         );
-       } 
-     else  if (index == 4) {
-         Navigator.pushReplacement(
-           context,
-           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 4,)),
-         );
-       } 
-             },
-          ),
-        )
-                      
-                    ],
-                  ),
+                    // ),
+                
+                                      Positioned(
+                                          left: 30,
+                  right: 30,
+                         bottom: MediaQuery.of(context).size.height/40,
+                          child: A_BottomNavBar(
+                            selectedIndex2: 0, onItemTapped: (int index) { 
+                              if (index == 1) {
+                         Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 1,)),
+                         );
+                       }          else if (index == 0) {
+                         Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 0,)),
+                         );
+                       } 
+                      else if (index == 2) {
+                         Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 2,)),
+                         );
+                       } 
+                      else if (index == 3) {
+                         Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 3,)),
+                         );
+                       } 
+                     else  if (index == 4) {
+                         Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(builder: (context) => A_MainScreen(initialIndex: 4,)),
+                         );
+                       } 
+                             },
+                          ),
+                        )
+                    
+                  ],
                 ),
               ),
             );

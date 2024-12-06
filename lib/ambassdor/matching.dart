@@ -173,7 +173,7 @@ class _CoupleMatchingPageState extends State<CoupleMatchingPage> {
                 ],
               ),
               SizedBox(height: height / 60),
-              Text(
+           const   Text(
                 "Fill in the details to find a match!",
                 style: TextStyle(
                     color: const Color(0xff7905F5),

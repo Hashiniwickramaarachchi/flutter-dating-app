@@ -141,7 +141,7 @@ class _A_landingpageState extends State<A_landingpage> {
                         onTap: () async {
                           Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) {
-                              return A_dashbordnew();
+                              return A_homepage();
                             },
                           ));
                         },

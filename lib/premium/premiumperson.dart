@@ -228,18 +228,21 @@ class _premiumpersonState extends State<premiumperson> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return ChatPage(
-                          chatPartnerEmail: widget.ID,
-                          chatPartnername: widget.name,
-                          chatPartnerimage: widget.profileimage,
-                          onlinecheck: widget.onlinecheck,
-                          statecolour: widget.statecolour,
-                          who: 'user',
-                        );
-                      },
-                    ));
+
+return checkInterestMatch();
+
+                    // Navigator.of(context).push(MaterialPageRoute(
+                      // builder: (context) {
+                        // return ChatPage(
+                          // chatPartnerEmail: widget.ID,
+                          // chatPartnername: widget.name,
+                          // chatPartnerimage: widget.profileimage,
+                          // onlinecheck: widget.onlinecheck,
+                          // statecolour: widget.statecolour,
+                          // who: 'user',
+                        // );
+                      // },
+                    // ));
                   },
                   child: Container(
                       decoration: BoxDecoration(
@@ -277,5 +280,67 @@ class _premiumpersonState extends State<premiumperson> {
     double distanceInKilometers = distanceInMeters / 1000;
 
     return distanceInKilometers;
+  }
+     void checkInterestMatch() async {
+    try {
+      // Get logged-in user's email
+
+      // Fetch interests from Firestore
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.useremail)
+          .get();
+      final targetDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.ID)
+          .get();
+
+      // Extract interests
+      List<dynamic> userInterests = userDoc.data()?['Interest'] ?? [];
+      List<dynamic> targetInterests = targetDoc.data()?['Interest'] ?? [];
+
+      // Calculate match percentage
+      if (userInterests.isNotEmpty && targetInterests.isNotEmpty) {
+        final commonInterests = userInterests
+            .where((interest) => targetInterests.contains(interest))
+            .toList();
+        final matchPercentage =
+            (commonInterests.length / targetInterests.length) * 100;
+
+        // Navigate or show message
+        if (matchPercentage >= 60) {
+      
+            Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return ChatPage(
+            chatPartnerEmail: widget.ID,
+            chatPartnername: widget.name,
+            chatPartnerimage: widget.profileimage,
+            onlinecheck: widget.onlinecheck,
+            statecolour: widget.statecolour,
+            who: 'user',
+          );
+        },
+      ));
+      
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Your interests match ${matchPercentage.toStringAsFixed(1)}% with ${widget.ID}. Please try again later!'),
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No interests found to compare.')),
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to check match. Try again.')),
+      );
+    }
   }
 }

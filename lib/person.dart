@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/userchatpage.dart';
 import 'package:datingapp/viewpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -24,7 +25,7 @@ class person extends StatefulWidget {
 
   final String onlinecheck;
   final Color statecolour;
-String description;
+  String description;
   List<dynamic> iconss;
   List<dynamic> labels;
   List<dynamic> imagecollection;
@@ -79,7 +80,6 @@ class _personState extends State<person> {
           children: [
             Expanded(
                 flex: 5,
-                
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -101,9 +101,12 @@ class _personState extends State<person> {
                           imagecollection: widget.imagecollection,
                           fav: fav,
                           ID: widget.ID,
-                          useremail: widget.useremail, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, languages: widget.languages
-                            
-                          , education: widget.education, description: widget.description,
+                          useremail: widget.useremail,
+                          onlinecheck: widget.onlinecheck,
+                          statecolour: widget.statecolour,
+                          languages: widget.languages,
+                          education: widget.education,
+                          description: widget.description,
                         );
                       },
                     ));
@@ -166,7 +169,8 @@ class _personState extends State<person> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding:  EdgeInsets.only(left: 10,right: 10),
+                                        padding: EdgeInsets.only(
+                                            left: 10, right: 10),
                                         child: Text(
                                           textAlign: TextAlign.center,
                                           widget.name,
@@ -176,8 +180,9 @@ class _personState extends State<person> {
                                               fontFamily: "defaultfontsbold",
                                               fontWeight: FontWeight.w900,
                                               fontSize: 24),
-                                               maxLines: 1, // Limit to one line
-                                         overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
+                                          maxLines: 1, // Limit to one line
+                                          overflow: TextOverflow
+                                              .ellipsis, // Adds "..." if the text is too long
                                         ),
                                       ),
                                       Text(
@@ -233,15 +238,14 @@ class _personState extends State<person> {
                                     DocumentReference favDocRef =
                                         await FirebaseFirestore.instance
                                             .collection('Favourite')
-                                            .doc(widget
-                                                .useremail);
-                                                
-                                                 // Add the data to the main document in Favourite
+                                            .doc(widget.useremail);
 
-                                                  await FirebaseFirestore.instance
-     .collection('Favourite')
-     .doc(widget
-         .useremail).set({"name":''});
+                                    // Add the data to the main document in Favourite
+
+                                    await FirebaseFirestore.instance
+                                        .collection('Favourite')
+                                        .doc(widget.useremail)
+                                        .set({"name": ''});
                                     print(
                                         "Favourite document created with ID: ${favDocRef.id}");
                                     // Step 3: Create a subcollection under the newly created document
@@ -279,19 +283,20 @@ class _personState extends State<person> {
                                     "Failed to retrieve document from Sell collection: $error");
                               });
                             } else {
-                               try {
-      DocumentReference favDocRef = FirebaseFirestore.instance
-          .collection('Favourite')
-          .doc(widget.useremail)
-          .collection("fav1")
-          .doc(widget.ID);
+                              try {
+                                DocumentReference favDocRef = FirebaseFirestore
+                                    .instance
+                                    .collection('Favourite')
+                                    .doc(widget.useremail)
+                                    .collection("fav1")
+                                    .doc(widget.ID);
 
-      await favDocRef.delete();
-      print("Favorite removed with document ID: ${widget.ID}");
-    } catch (error) {
-      print("Error removing from Favourite: $error");
-    }
-  
+                                await favDocRef.delete();
+                                print(
+                                    "Favorite removed with document ID: ${widget.ID}");
+                              } catch (error) {
+                                print("Error removing from Favourite: $error");
+                              }
                             }
                           },
                           icon: Icon(
@@ -307,10 +312,20 @@ class _personState extends State<person> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-                          return ChatPage(chatPartnerEmail: widget.ID, chatPartnername: widget.name, 
-                          chatPartnerimage: widget.profileimage, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, who: 'user',);
-                        },));
+
+ return  checkInterestMatch();
+                        // Navigator.of(context).push(MaterialPageRoute(
+                          // builder: (context) {
+                            // return ChatPage(
+                              // chatPartnerEmail: widget.ID,
+                              // chatPartnername: widget.name,
+                              // chatPartnerimage: widget.profileimage,
+                              // onlinecheck: widget.onlinecheck,
+                              // statecolour: widget.statecolour,
+                              // who: 'user',
+                            // );
+                          // },
+                        // ));
                       },
                       child: Container(
                           decoration: BoxDecoration(
@@ -349,4 +364,67 @@ class _personState extends State<person> {
 
     return distanceInKilometers;
   }
+   void checkInterestMatch() async {
+    try {
+      // Get logged-in user's email
+
+      // Fetch interests from Firestore
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.useremail)
+          .get();
+      final targetDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.ID)
+          .get();
+
+      // Extract interests
+      List<dynamic> userInterests = userDoc.data()?['Interest'] ?? [];
+      List<dynamic> targetInterests = targetDoc.data()?['Interest'] ?? [];
+
+      // Calculate match percentage
+      if (userInterests.isNotEmpty && targetInterests.isNotEmpty) {
+        final commonInterests = userInterests
+            .where((interest) => targetInterests.contains(interest))
+            .toList();
+        final matchPercentage =
+            (commonInterests.length / targetInterests.length) * 100;
+
+        // Navigate or show message
+        if (matchPercentage >= 60) {
+      
+            Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return ChatPage(
+            chatPartnerEmail: widget.ID,
+            chatPartnername: widget.name,
+            chatPartnerimage: widget.profileimage,
+            onlinecheck: widget.onlinecheck,
+            statecolour: widget.statecolour,
+            who: 'user',
+          );
+        },
+      ));
+      
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Your interests match ${matchPercentage.toStringAsFixed(1)}% with ${widget.ID}. Please try again later!'),
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No interests found to compare.')),
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to check match. Try again.')),
+      );
+    }
+  }
+
 }

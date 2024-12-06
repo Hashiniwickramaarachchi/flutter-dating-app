@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/accountdelectionpage.dart';
 import 'package:datingapp/ambassdor/bottombar.dart';
+import 'package:datingapp/block.dart';
+import 'package:datingapp/deactivepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -16,75 +19,136 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    final curentuser = FirebaseAuth.instance.currentUser;
-
-    if (curentuser == null) {
-      return Center(child: Text('No user is logged in.'));
-    }
-
-    return Scaffold(
-                                                   appBar: AppBar(
-               toolbarHeight:screenHeight/400,
-               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-               automaticallyImplyLeading: false,
-             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-             surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-             ),
+       final User? curentuser = FirebaseAuth.instance.currentUser;
+   if (curentuser == null) {
+     // Handle unauthenticated user state (e.g., redirect to login page or s
+     return Center(child: Text('No user is logged in.'));
+   }
+   return StreamBuilder<DocumentSnapshot>(
+       stream: FirebaseFirestore.instance
+           .collection("Ambassdor")
+           .doc(curentuser.email)
+           .snapshots(),
+       builder: (context, snapshot) {
+         if (snapshot.hasData) {
+           final userdataperson =
+               snapshot.data!.data() as Map<String, dynamic>?;
+           if (userdataperson?['statusType'] == 'deactive') {
+             WidgetsBinding.instance.addPostFrameCallback((_) async {
+               if (mounted) {
+                 await FirebaseAuth.instance.signOut();
+                 Navigator.of(context).pushAndRemoveUntil(
+                   MaterialPageRoute(builder: (context) => deactivepage()),
+                   (Route<dynamic> route) => false,
+                 );
+               }
+             });
+           }
+           if (userdataperson?['statusType'] == 'block') {
+             WidgetsBinding.instance.addPostFrameCallback((_) async {
+               if (mounted) {
+                 await FirebaseAuth.instance.signOut();
+                 Navigator.of(context).pushAndRemoveUntil(
+                   MaterialPageRoute(builder: (context) => block()),
+                   (Route<dynamic> route) => false,
+                 );
+               }
+             });
+           }
+           if (userdataperson?['statusType'] == 'delete') {
+             WidgetsBinding.instance.addPostFrameCallback((_) async {
+               if (mounted) {
+                 Navigator.of(context).pushReplacement(MaterialPageRoute(
+                   builder: (context) {
+                     return DeleteAccountPage(
+                       initiateDelete: true,
+                       who: 'Ambassdor',
+                     );
+                   },
+                 ));
+               }
+             });
+           }
+           if (userdataperson == null) {
+             return Center(
+               child: Text("User data not found."),
+             );
+           }      
+        return Scaffold(
+          appBar: AppBar(
+            toolbarHeight: screenHeight / 400,
+            foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+            automaticallyImplyLeading: false,
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+          ),
           backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      body: Padding(
- padding: EdgeInsets.only(
-   right: screenWidth / 20,
-   left: screenWidth / 20,
- ),        child: Stack(
-          children: [
-            Container(
-              height: screenHeight,
-              width: screenWidth,
-              child: StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("Ambassdor")
-                    .doc(curentuser.email)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final userdataperson = snapshot.data!.data() as Map<String, dynamic>;
-                    int addcount = userdataperson['addedusers'].length;
-                    int addmatch = userdataperson['match_count'];
-                    return SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: screenHeight * 0.02),
-                          _buildProgressSection(screenWidth, addcount, addmatch),
-                          SizedBox(height: screenHeight * 0.04),
-                          _buildSummarySection(screenWidth, addcount, addmatch),
-                          SizedBox(height: screenHeight * 0.04),
-                        ],
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text("Error: ${snapshot.error}"),
-                    );
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
+          body: Padding(
+            padding: EdgeInsets.only(
+              right: screenWidth / 20,
+              left: screenWidth / 20,
             ),
-            // Positioned(
-              // 
-        //  left: 0,
-        //  right: 0,
-        //  bottom: screenHeight / 60,             
-    // child: A_BottomNavBar(
+            child: Stack(
+              children: [
+                Container(
+                  height: screenHeight,
+                  width: screenWidth,
+                  child: StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("Ambassdor")
+                        .doc(curentuser.email)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final userdataperson =
+                            snapshot.data!.data() as Map<String, dynamic>;
+                        int addcount = userdataperson['addedusers'].length;
+                        int addmatch = userdataperson['match_count'];
+                        return SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: screenHeight * 0.02),
+                              _buildProgressSection(
+                                  screenWidth, addcount, addmatch),
+                              SizedBox(height: screenHeight * 0.04),
+                              _buildSummarySection(screenWidth, addcount, addmatch),
+                              SizedBox(height: screenHeight * 0.04),
+                            ],
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text("Error: ${snapshot.error}"),
+                        );
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                ),
+                // Positioned(
+                //
+                //  left: 0,
+                //  right: 0,
+                //  bottom: screenHeight / 60,
+                // child: A_BottomNavBar(
                 // selectedIndex2: 1,
                 // check: 'already',
-              // ),
-            // ),
-          ],
-        ),
-      ),
+                // ),
+                // ),
+              ],
+            ),
+          ),
+        );
+                  } else if (snapshot.hasError) {
+            return Center(
+              child: Text("Error: ${snapshot.error}"),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+      }
     );
   }
 
@@ -228,35 +292,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   List<BarChartGroupData> _getBarGroups(int addcount, int addmatch) {
- if (addcount == 0 && addmatch == 0) {
-    return [];
-  }
+    if (addcount == 0 && addmatch == 0) {
+      return [];
+    }
 
-  List<BarChartGroupData> barGroups = [];
-  final data = _getDataByPeriod(addcount, addmatch);
+    List<BarChartGroupData> barGroups = [];
+    final data = _getDataByPeriod(addcount, addmatch);
 
-  for (int i = 0; i < data.length; i++) {
-    barGroups.add(
-      BarChartGroupData(
-        x: i,
-        barRods: [
-          BarChartRodData(
-            toY: data[i]['thisPeriod']!.toDouble(),
-            color: Color(0xff7905F5),
-            width: 8,
-          ),
-          BarChartRodData(
-            toY: data[i]['lastPeriod']!.toDouble(),
-            color: Colors.red,
-            width: 8,
-          ),
-        ],
-        showingTooltipIndicators: [],
-      ),
-    );
+    for (int i = 0; i < data.length; i++) {
+      barGroups.add(
+        BarChartGroupData(
+          x: i,
+          barRods: [
+            BarChartRodData(
+              toY: data[i]['thisPeriod']!.toDouble(),
+              color: Color(0xff7905F5),
+              width: 8,
+            ),
+            BarChartRodData(
+              toY: data[i]['lastPeriod']!.toDouble(),
+              color: Colors.red,
+              width: 8,
+            ),
+          ],
+          showingTooltipIndicators: [],
+        ),
+      );
+    }
+    return barGroups;
   }
-  return barGroups;
-}
 
   List<Map<String, int>> _getDataByPeriod(int addcount, int addmatch) {
     switch (selectedPeriod) {

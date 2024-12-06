@@ -1,3 +1,4 @@
+import 'package:datingapp/deactivepage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,6 +73,9 @@ class _MainScreenState extends State<MainScreen> {
            child: Text("User data not found."),
          );
        }
+
+
+
           return Scaffold(
             body: Stack(
               children: [

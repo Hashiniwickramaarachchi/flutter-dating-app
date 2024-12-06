@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/ambassdor/share.dart';
 import 'package:datingapp/userchatpage.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class A_viewpage extends StatefulWidget {
   String address;
 
   int distance;
-String description;
+  String description;
   int age;
   String ID;
   final String onlinecheck;
@@ -20,9 +21,8 @@ String description;
   List<dynamic> labels;
   List<dynamic> imagecollection;
   bool fav;
-    List<dynamic> languaes;
+  List<dynamic> languaes;
   String education;
-
 
   String useremail;
 
@@ -64,8 +64,7 @@ class _A_viewpageState extends State<A_viewpage> {
             width: width,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image:
-                    NetworkImage(widget.image), // Replace with actual image
+                image: NetworkImage(widget.image), // Replace with actual image
                 fit: BoxFit.cover,
               ),
             ),
@@ -98,7 +97,11 @@ class _A_viewpageState extends State<A_viewpage> {
                         borderRadius: BorderRadius.circular(height / 10),
                       ),
                       child: Padding(
-                        padding:  EdgeInsets.only(left: width/15,right: width/15,top: height/70,bottom: height/70),
+                        padding: EdgeInsets.only(
+                            left: width / 15,
+                            right: width / 15,
+                            top: height / 70,
+                            bottom: height / 70),
                         child: Text(
                           "${widget.distance}Km far away",
                           style: TextStyle(
@@ -131,30 +134,23 @@ class _A_viewpageState extends State<A_viewpage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            flex: 4,
+                            flex: 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                             
-                             
-                             Text(
-                               widget.name,
-                               style: TextStyle(
-                                 color: const Color(0xff26150F),
-                                 fontFamily: "defaultfontsbold",
-                                 fontWeight: FontWeight.w500,
-                                 fontSize: height / 35,
-                               ),
-                               softWrap: true,
-                               overflow: TextOverflow.visible, // You can also use TextOverflow.ellipsis if you want to truncate
-                             )
-                                ,
-                             
-                             
-                             
-                             
-                             
+                                Text(
+                                  widget.name,
+                                  style: TextStyle(
+                                    color: const Color(0xff26150F),
+                                    fontFamily: "defaultfontsbold",
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: height / 35,
+                                  ),
+                                  softWrap: true,
+                                  overflow: TextOverflow
+                                      .visible, // You can also use TextOverflow.ellipsis if you want to truncate
+                                ),
                                 Text(
                                   widget.address,
                                   style: TextStyle(
@@ -167,8 +163,9 @@ class _A_viewpageState extends State<A_viewpage> {
                             ),
                           ),
                           Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 // Container(
                                 // decoration: BoxDecoration(
@@ -244,9 +241,9 @@ class _A_viewpageState extends State<A_viewpage> {
                                 // size: height / 30,
                                 // )),
                                 // ),
-                                SizedBox(
-                                  width: width / 40,
-                                ),
+                            
+                            
+                            
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.of(context)
@@ -277,6 +274,44 @@ class _A_viewpageState extends State<A_viewpage> {
                                           ),
                                         ),
                                       )),
+                                ),
+                                     SizedBox(
+       width: width / 40,
+     ),
+                                GestureDetector(
+                                  onTap: () {
+                                    
+          showModalBottomSheet(
+   isScrollControlled: true,
+   shape: RoundedRectangleBorder(
+     borderRadius: BorderRadius.only(
+       topLeft: Radius.circular(50),
+       topRight: Radius.circular(50),
+     ),
+   ),
+   backgroundColor: Colors.transparent,
+   context: context,
+   builder: (context) {
+     return sharepage(
+       blockemail: widget.ID,
+       blockname: widget.name,
+       blockpic: widget.image,
+     );
+   },
+ );                         },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xff7905F5),
+                                    ),
+                                    child:Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Icon(Icons.share,color: Colors.white,size: height/30,),
+                                    )
+                                   
+                                   
+                                   
+                                  ),
                                 )
                               ],
                             ),
@@ -285,26 +320,25 @@ class _A_viewpageState extends State<A_viewpage> {
                       ),
                       SizedBox(height: height / 25),
                       // Description
-                    if(widget.description.isNotEmpty)...[  
-                      Text(
-                        'Description',
-                        style: TextStyle(
-                            color: const Color.fromARGB(255, 0, 0, 0),
-                            fontFamily: "defaultfontsbold",
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      SizedBox(height: height / 150),
-    
-                      Text(
-                        widget.description,
-                        style: TextStyle(
-                            color: const Color(0xff565656),
-                            fontFamily: "defaultfonts",
-                            fontSize: 16),
-                      ),
-                      SizedBox(height: height / 50),
-                      ],  // Interests
+                      if (widget.description.isNotEmpty) ...[
+                        Text(
+                          'Description',
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                        SizedBox(height: height / 150),
+                        Text(
+                          widget.description,
+                          style: TextStyle(
+                              color: const Color(0xff565656),
+                              fontFamily: "defaultfonts",
+                              fontSize: 16),
+                        ),
+                        SizedBox(height: height / 50),
+                      ], // Interests
                       Text(
                         'Interest',
                         style: TextStyle(
@@ -313,7 +347,9 @@ class _A_viewpageState extends State<A_viewpage> {
                             fontWeight: FontWeight.bold,
                             fontSize: 18),
                       ),
-                      SizedBox(height: height/150,),
+                      SizedBox(
+                        height: height / 150,
+                      ),
                       Center(
                         child: Wrap(
                             spacing: width / 90,
@@ -341,43 +377,42 @@ class _A_viewpageState extends State<A_viewpage> {
                       ),
                       _buildInfoRow(context, 'Age', widget.age.toString()),
                       _buildInfoRow(context, 'Height', '${widget.height}'),
- _buildInfoRowlanugaes(
-     context, 'Languages', widget.languaes),                      SizedBox(height: height / 90),
-                         if(widget.education.isNotEmpty)...[  
+                      _buildInfoRowlanugaes(
+                          context, 'Languages', widget.languaes),
+                      SizedBox(height: height / 90),
+                      if (widget.education.isNotEmpty) ...[
+                        Text(
+                          'Education',
+                          style: TextStyle(
+                              color: const Color(0xff565656),
+                              fontFamily: "defaultfonts",
+                              fontSize: 16),
+                        ),
+                        SizedBox(height: height / 90),
+                        Text(
+                          widget.education,
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              fontFamily: "defaultfonts",
+                              fontSize: 16),
+                        ),
 
-                      Text(
-                        'Education',
-                        style: TextStyle(
-                            color: const Color(0xff565656),
-                            fontFamily: "defaultfonts",
-                            fontSize: 16),
-                      ),
-                      SizedBox(height: height/90),
-                      Text(
-                        widget.education,
-                        style: TextStyle(
-                            color: const Color.fromARGB(255, 0, 0, 0),
-                            fontFamily: "defaultfonts",
-                            fontSize: 16),
-                      ),
-    
-                      SizedBox(height: height / 50),
-                      // Gallery
-                         ],
+                        SizedBox(height: height / 50),
+                        // Gallery
+                      ],
                       Text(
                         'Gallery',
                         style: TextStyle(
                             color: const Color.fromARGB(255, 0, 0, 0),
                             fontFamily: "defaultfontsbold",
                             fontWeight: FontWeight.bold,
-                            fontSize:18),
+                            fontSize: 18),
                       ),
                       GridView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: widget.imagecollection.length,
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: width * 0.02,
                           mainAxisSpacing: height * 0.02,
@@ -389,8 +424,7 @@ class _A_viewpageState extends State<A_viewpage> {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) {
                                   return FullScreenImageView(
-                                      imagePath:
-                                          widget.imagecollection[index]);
+                                      imagePath: widget.imagecollection[index]);
                                 },
                               ));
                             },
@@ -421,45 +455,46 @@ class _A_viewpageState extends State<A_viewpage> {
       // Name and Location
     );
   }
-Widget _buildInfoRowlanugaes(
-    BuildContext context, String title, List<dynamic> info) {
-  final height = MediaQuery.of(context).size.height;
-  return Padding(
-    padding: EdgeInsets.only(top: height / 90),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-              color: const Color(0xff565656),
-              fontFamily: "defaultfonts",
-              fontSize: 16),
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...info
-                .map((hobby) => Text(
-                      " ${hobby}",
-                      style: TextStyle(
-                          color: const Color(0xff565656),
-                          fontFamily: "defaultfonts",
-                          fontSize: 16),
-                    ))
-                .toList(),
-          ],
-        ),
-      ],
-    ),
-  );
-    }
+
+  Widget _buildInfoRowlanugaes(
+      BuildContext context, String title, List<dynamic> info) {
+    final height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.only(top: height / 90),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: const Color(0xff565656),
+                fontFamily: "defaultfonts",
+                fontSize: 16),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...info
+                  .map((hobby) => Text(
+                        " ${hobby}",
+                        style: TextStyle(
+                            color: const Color(0xff565656),
+                            fontFamily: "defaultfonts",
+                            fontSize: 16),
+                      ))
+                  .toList(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   // Build Interest Chip
   Widget _buildInterestChip(
       BuildContext context, String label, int iconname, final height) {
     return Chip(
-               side: BorderSide(color: Colors.transparent),
-
+        side: BorderSide(color: Colors.transparent),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         avatar: Icon(
           IconData(iconname, fontFamily: 'MaterialIcons'),

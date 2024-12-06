@@ -26,8 +26,8 @@ class _A_FeedbackPageState extends State<A_FeedbackPage> {
     super.initState();
     _loadUserRating(); // Load user's previous rating if available
   }
-
   Future<void> _loadUserRating() async {
+  try {
     final currentUser = FirebaseAuth.instance.currentUser!;
     final DocumentSnapshot ratingDoc = await FirebaseFirestore.instance
         .collection("Ratings")
@@ -36,11 +36,40 @@ class _A_FeedbackPageState extends State<A_FeedbackPage> {
 
     if (ratingDoc.exists) {
       final data = ratingDoc.data() as Map<String, dynamic>;
+      final feedbacks = data['feedbacks'] as List<dynamic>?;
+
+      if (feedbacks != null && feedbacks.isNotEmpty) {
+        // Sort feedbacks by timestamp and get the latest one
+        feedbacks.sort((a, b) {
+          DateTime dateA = DateTime.parse(a['timestamp']);
+          DateTime dateB = DateTime.parse(b['timestamp']);
+          return dateB.compareTo(dateA); // Descending order
+        });
+
+        // Get the latest rating
+        final latestFeedback = feedbacks.first;
+        setState(() {
+          rating = latestFeedback['rating'] ?? 0;
+        });
+      } else {
+        setState(() {
+          rating = 0; // Default rating if no feedback exists
+        });
+      }
+    } else {
       setState(() {
-        rating = data['rating'] ?? 0;
+        rating = 0; // Default rating if no document exists
       });
     }
+  } catch (e) {
+    print("Error loading rating: $e");
+    setState(() {
+      rating = 0; // Default rating on error
+    });
   }
+}
+
+
   Future<void> _pickScreenshot() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -69,34 +98,51 @@ class _A_FeedbackPageState extends State<A_FeedbackPage> {
     }
   }
   Future<void> _submitFeedback() async {
-    final currentUser = FirebaseAuth.instance.currentUser!;
-    String? screenshotUrl;
+  final currentUser = FirebaseAuth.instance.currentUser!;
+  String? screenshotUrl;
 
+  try {
     if (_screenshot != null) {
       screenshotUrl = await _uploadScreenshot();
     }
+
+    // Check and set default values for optional fields
+    final feedbackToSubmit = {
+      'feedbackType': feedbackType.isNotEmpty ? feedbackType : 'General Feedback',
+      'feedbackText': feedbackText.isNotEmpty ? feedbackText : 'No additional feedback provided',
+      'screenshotUrl': screenshotUrl, // Can be null
+      'timestamp': DateTime.now().toUtc().toIso8601String(),
+      'rating': rating, // Ensure this is a valid value
+    };
+
+    // Update Firestore
     await FirebaseFirestore.instance
-    
         .collection("Ratings")
         .doc(currentUser.email!)
         .set({
-      'rating': rating,
-      'feedbackType': feedbackType,
-      'feedbackText': feedbackText,
-            'screenshotUrl': screenshotUrl,
+      'feedbacks': FieldValue.arrayUnion([feedbackToSubmit]),
+    }, SetOptions(merge: true));
 
-      'timestamp': FieldValue.serverTimestamp(),
-    });
+    // Show success message
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Feedback submitted successfully!")),
     );
 
-_feedbackController.clear();
-setState(() {
-  _screenshot=null;
-
-});
+    // Clear fields after submission
+    _feedbackController.clear();
+    setState(() {
+      _screenshot = null;
+      feedbackText = '';
+    });
+  } catch (e) {
+    // Handle errors and show feedback to the user
+    print("Error submitting feedback: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Failed to submit feedback. Please try again.")),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -168,23 +214,23 @@ setState(() {
               ),
               SizedBox(height: height / 80),
               RatingBar.builder(
-                initialRating: rating,
-                itemSize: height / 30,
-                glowColor: Colors.black,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: false,
-                itemCount: 5,
-                itemBuilder: (context, _) => Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ),
-                onRatingUpdate: (ratingValue) {
-                  setState(() {
-                    rating = ratingValue;
-                  });
-                },
-              ),
+  initialRating: rating, // Ensure this is updated via _loadUserRating
+  itemSize: height / 30,
+  glowColor: Colors.black,
+  minRating: 1,
+  direction: Axis.horizontal,
+  allowHalfRating: false,
+  itemCount: 5,
+  itemBuilder: (context, _) => Icon(
+    Icons.star,
+    color: Colors.amber,
+  ),
+  onRatingUpdate: (ratingValue) {
+    setState(() {
+      rating = ratingValue;
+    });
+  },
+),
               SizedBox(height: 20),
               Container(
                 height: height / 3,

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/Usermanegement/signin.dart';
 import 'package:datingapp/accountdelectionpage.dart';
 import 'package:datingapp/ambassdor/olduser/signin.dart';
+import 'package:datingapp/userdeleted.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -100,7 +101,7 @@ class _accountdeleteState extends State<accountdelete> {
 
     // Check if currentUser is null before accessing its email
     if (currentUser == null) {
-      return Center(child: Text("User not found."));
+      return const Center(child: Text("User not found."));
     }
 
     return StreamBuilder<DocumentSnapshot>(
@@ -109,7 +110,7 @@ class _accountdeleteState extends State<accountdelete> {
         if (snapshot.hasData) {
           final userData = snapshot.data!.data() as Map<String, dynamic>?;
           if (userData == null) {
-            return Center(child: Text("User data not found."));
+            return const Center(child: Text("User data not found."));
           }
 
           return Stack(
@@ -117,7 +118,7 @@ class _accountdeleteState extends State<accountdelete> {
               Container(
                 width: width,
                 height: height / 1.5,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
@@ -129,14 +130,14 @@ class _accountdeleteState extends State<accountdelete> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(Icons.warning, color: Color(0xffE51C0B), size: 60),
+                      const Icon(Icons.warning, color: Color(0xffE51C0B), size: 60),
                       SizedBox(height: height / 60),
-                      Text(
+                      const Text(
                         "Are you sure?",
                         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       SizedBox(height: height / 50),
-                      Text(
+                      const Text(
                         "If you delete your account, you won’t be able to log in with it anymore. Are you sure you want to continue?",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Color(0xff565656), fontSize: 13),
@@ -145,15 +146,15 @@ class _accountdeleteState extends State<accountdelete> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           fixedSize: Size(width, 50),
-                          backgroundColor: Color(0xffE51C0B),
+                          backgroundColor: const Color(0xffE51C0B),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         ),
                         onPressed:() {
                           Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context) {
-                            return DeleteAccountPage(initiateDelete: true,who: widget.who,);
+                            return userdeleted(initiateDelete: true,who: widget.who,);
                           },));
                         },
-                        child: Text("Delete Account", style: TextStyle(color: Colors.white, fontSize: 20)),
+                        child: const Text("Delete Account", style: TextStyle(color: Colors.white, fontSize: 20)),
                       ),
                     ],
                   ),
@@ -164,7 +165,7 @@ class _accountdeleteState extends State<accountdelete> {
         } else if (snapshot.hasError) {
           return Center(child: Text("Error: ${snapshot.error}"));
         } else {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
       },
     );

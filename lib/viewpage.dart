@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/blockpage.dart';
+import 'package:datingapp/filterpage.dart';
+import 'package:datingapp/reprt.dart';
 import 'package:datingapp/userchatpage.dart';
 import 'package:flutter/material.dart';
 
@@ -133,7 +136,7 @@ class _viewpageState extends State<viewpage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            flex: 4,
+                            flex: 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
@@ -201,8 +204,10 @@ class _viewpageState extends State<viewpage> {
 
                                                 await FirebaseFirestore.instance
                                                     .collection('Favourite')
-                                                    .doc(widget
-                                                        .useremail).set({"name":''}); // Add the data to the main document in Favourite
+                                                    .doc(widget.useremail)
+                                                    .set({
+                                                  "name": ''
+                                                }); // Add the data to the main document in Favourite
                                                 print(
                                                     "Favourite document created with ID: ${favDocRef.id}");
                                                 // Step 3: Create a subcollection under the newly created document
@@ -269,19 +274,20 @@ class _viewpageState extends State<viewpage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (context) {
-                                        return ChatPage(
-                                          chatPartnerEmail: widget.ID,
-                                          chatPartnername: widget.name,
-                                          chatPartnerimage: widget.image,
-                                          onlinecheck: widget.onlinecheck,
-                                          statecolour: widget.statecolour,
-                                          who: 'user',
-                                        );
-                                      },
-                                    ));
+                                    return checkInterestMatch();
+                                    // Navigator.of(context)
+                                    // .push(MaterialPageRoute(
+                                    // builder: (context) {
+                                    // return ChatPage(
+                                    // chatPartnerEmail: widget.ID,
+                                    // chatPartnername: widget.name,
+                                    // chatPartnerimage: widget.image,
+                                    // onlinecheck: widget.onlinecheck,
+                                    // statecolour: widget.statecolour,
+                                    // who: 'user',
+                                    // );
+                                    // },
+                                    // ));
                                   },
                                   child: Container(
                                       decoration: BoxDecoration(
@@ -297,7 +303,121 @@ class _viewpageState extends State<viewpage> {
                                           ),
                                         ),
                                       )),
-                                )
+                                ),
+                                SizedBox(
+                                  width: width / 40,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Color(0xff7905F5),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: PopupMenuButton<int>(
+                                    offset: Offset(0, 55),
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    icon: Icon(Icons.more_vert,
+                                        size: 20, color: Colors.white),
+                                    onSelected: (value) async {
+                                      // Handle actions based on the selected value
+                                      switch (value) {
+                                        case 1:
+                                          showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(50),
+                                                topRight: Radius.circular(50),
+                                              ),
+                                            ),
+                                            backgroundColor: Colors.amber,
+                                            context: context,
+                                            builder: (context) {
+                                              return blockpage(
+                                                blockemail: widget.ID,
+                                                blockname: widget.name,
+                                                blockpic: widget.image,
+                                              );
+                                            },
+                                          );
+                                          break;
+                                        case 2:
+                                          showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(50),
+                                                topRight: Radius.circular(50),
+                                              ),
+                                            ),
+                                            backgroundColor: Colors.amber,
+                                            context: context,
+                                            builder: (context) {
+                                              return reprt(
+                                                reprtuser: widget.ID,
+                                              );
+                                            },
+                                          );
+                                          break;
+                                        case 3:
+                                          break;
+                                      }
+                                    },
+                                    itemBuilder: (BuildContext context) =>
+                                        <PopupMenuEntry<int>>[
+                                      PopupMenuItem<int>(
+                                          value: 1,
+                                          child: Container(
+                                              
+                                              
+                                            child: Center(
+                                              child: Text(
+                                                "Block",
+                                                style: TextStyle(
+                                                  color: Color(0xffFE2141),
+                                                  fontSize: 18,
+                                                  fontFamily:
+                                                      "defaultfontsbold",
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                      PopupMenuItem<int>(
+                                        value: 2,
+                                        child: Container(
+                                          child: Center(
+                                            child: Text(
+                                              "Report",
+                                              style: TextStyle(
+                                                color: Color(0xffFE2141),
+                                                fontSize: 18,
+                                                fontFamily: "defaultfontsbold",
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      PopupMenuItem<int>(
+                                        value: 3,
+                                        child: Container(
+                                          child: Center(
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                color: Color(0xff565656),
+                                                fontSize: 18,
+                                                fontFamily: "defaultfontsbold",
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -453,6 +573,67 @@ class _viewpageState extends State<viewpage> {
     );
   }
 
+  void checkInterestMatch() async {
+    try {
+      // Get logged-in user's email
+
+      // Fetch interests from Firestore
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.useremail)
+          .get();
+      final targetDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.ID)
+          .get();
+
+      // Extract interests
+      List<dynamic> userInterests = userDoc.data()?['Interest'] ?? [];
+      List<dynamic> targetInterests = targetDoc.data()?['Interest'] ?? [];
+
+      // Calculate match percentage
+      if (userInterests.isNotEmpty && targetInterests.isNotEmpty) {
+        final commonInterests = userInterests
+            .where((interest) => targetInterests.contains(interest))
+            .toList();
+        final matchPercentage =
+            (commonInterests.length / targetInterests.length) * 100;
+
+        // Navigate or show message
+        if (matchPercentage >= 60) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return ChatPage(
+                chatPartnerEmail: widget.ID,
+                chatPartnername: widget.name,
+                chatPartnerimage: widget.image,
+                onlinecheck: widget.onlinecheck,
+                statecolour: widget.statecolour,
+                who: 'user',
+              );
+            },
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Your interests match ${matchPercentage.toStringAsFixed(1)}% with ${widget.ID}. Please try again later!'),
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No interests found to compare.')),
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to check match. Try again.')),
+      );
+    }
+  }
+
   // Build Interest Chip
   Widget _buildInterestChip(
       BuildContext context, String label, int iconname, final height) {
@@ -504,34 +685,72 @@ class _viewpageState extends State<viewpage> {
   }
 }
 
+// Widget _buildInfoRowlanugaes(
+// BuildContext context, String title, List<dynamic> info) {
+// final height = MediaQuery.of(context).size.height;
+// return Padding(
+// padding: EdgeInsets.only(top: height / 90),
+// child: Row(
+// mainAxisAlignment: MainAxisAlignment.start,
+// children: [
+// Text(
+// title,
+// style: TextStyle(
+// color: const Color(0xff565656),
+// fontFamily: "defaultfonts",
+// fontSize: 16),
+// ),
+// Wrap(
+// spacing: 8.0, // Horizontal spacing between items
+// runSpacing: 4.0, // Vertical spacing between lines
+// children: info
+// .map((hobby) => Text(
+// " ${hobby}",
+// style: TextStyle(
+// color: const Color(0xff565656),
+// fontFamily: "defaultfonts",
+// fontSize: 16,
+// ),
+// ))
+// .toList(),
+// ),
+//
+// ],
+// ),
+// );
+// }
 Widget _buildInfoRowlanugaes(
     BuildContext context, String title, List<dynamic> info) {
   final height = MediaQuery.of(context).size.height;
   return Padding(
     padding: EdgeInsets.only(top: height / 90),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
           style: TextStyle(
-              color: const Color(0xff565656),
-              fontFamily: "defaultfonts",
-              fontSize: 16),
+            color: const Color(0xff565656),
+            fontFamily: "defaultfonts",
+            fontSize: 16,
+          ),
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...info
-                .map((hobby) => Text(
-                      " ${hobby}",
-                      style: TextStyle(
-                          color: const Color(0xff565656),
-                          fontFamily: "defaultfonts",
-                          fontSize: 16),
-                    ))
-                .toList(),
-          ],
+        SizedBox(height: height / 90), // Add some vertical spacing
+        Wrap(
+          spacing: 8.0, // Horizontal spacing between items
+          runSpacing: 4.0, // Vertical spacing between lines
+          children: info
+              .map(
+                (hobby) => Text(
+                  " ${hobby}",
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                    fontFamily: "defaultfonts",
+                    fontSize: 16,
+                  ),
+                ),
+              )
+              .toList(),
         ),
       ],
     ),
