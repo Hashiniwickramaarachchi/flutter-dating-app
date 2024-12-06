@@ -29,32 +29,21 @@ class _A_helpcenterState extends State<A_helpcenter> {
     if (curentuser != null) {
       try {
         // Check if the document exists
-        DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-            .collection(widget.mainname)
-            .doc(userEmail)
-            .get();
 
-        if (docSnapshot.exists) {
-          // Update the existing document with the new question
-          await FirebaseFirestore.instance
-              .collection(widget.mainname)
-              .doc(userEmail)
-              .update({
-            'Question': FieldValue.arrayUnion([
-              _questionController.text.trim(),
-            ]),
-          });
-        } else {
-          // Create the document if it does not exist
-          await FirebaseFirestore.instance
-              .collection(widget.mainname)
-              .doc(userEmail)
-              .set({
-            'Question': [
-              _questionController.text.trim(),
-            ],
-          });
-        }
+        // Update the existing document with the new question
+        await FirebaseFirestore.instance
+            .collection('category')
+            .doc(userEmail)
+            .set({
+          '${widget.mainname}': FieldValue.arrayUnion([
+            {
+              'issue': _questionController.text.trim(),
+              'timestamp': DateTime.now().toUtc().toIso8601String(),
+              // Use current UTC time
+            }
+          ]),
+          'email': userEmail
+        }, SetOptions(merge: true));
 
         // Clear the text field after submission
         _questionController.clear();
@@ -86,13 +75,13 @@ class _A_helpcenterState extends State<A_helpcenter> {
                 snapshot.data!.data() as Map<String, dynamic>;
 
             return Scaffold(
-                                                           appBar: AppBar(
-               toolbarHeight:height/400,
-               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-               automaticallyImplyLeading: false,
-             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-             surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-             ),
+              appBar: AppBar(
+                toolbarHeight: height / 400,
+                foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                automaticallyImplyLeading: false,
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+              ),
               backgroundColor: const Color.fromARGB(255, 255, 255, 255),
               body: SingleChildScrollView(
                 child: Column(
@@ -101,8 +90,7 @@ class _A_helpcenterState extends State<A_helpcenter> {
                     Container(
                       child: Padding(
                         padding: EdgeInsets.only(
-                            right: width / 20,
-                            left: width / 20),
+                            right: width / 20, left: width / 20),
                         child: Row(
                           children: [
                             Container(
@@ -121,8 +109,7 @@ class _A_helpcenterState extends State<A_helpcenter> {
                                 },
                                 icon: Icon(
                                   Icons.arrow_back,
-                                  color:
-                                      const Color.fromARGB(255, 121, 5, 245),
+                                  color: const Color.fromARGB(255, 121, 5, 245),
                                 ),
                               ),
                             ),
@@ -145,8 +132,8 @@ class _A_helpcenterState extends State<A_helpcenter> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          left: width / 15, right: width / 15),
+                      padding:
+                          EdgeInsets.only(left: width / 15, right: width / 15),
                       child: Container(
                         height: height / 22,
                         decoration: BoxDecoration(
@@ -194,39 +181,36 @@ class _A_helpcenterState extends State<A_helpcenter> {
                               ),
                               StreamBuilder<QuerySnapshot>(
                                   stream: FirebaseFirestore.instance
-                                      .collection(
-                                                                                    "faqs").where('category',isEqualTo: '${widget.mainname}')
-
+                                      .collection("faqs")
+                                      .where('category',
+                                          isEqualTo: '${widget.mainname}')
                                       .snapshots(),
                                   builder: (context, snapshot) {
-                                                           
-                                                           
-                                if (snapshot.hasError) {
-                              return Center(
-                                  child: Text('Error: ${snapshot.error}'));
-                                                              }
-                                                              if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
-                                                              }
-                                                              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                              return Center(child: Text("No questions available."));
-                                                              }
-                              
-                                                              final data = snapshot.data!.docs;
-                                                           
-                                                           
-                                                           
-                                                           
-                                                      double containerHeight = height / 5 * data.length;
-                               
-                                                           
-                                                           
-                                                           
-                                                           
-                              
+                                    if (snapshot.hasError) {
+                                      return Center(
+                                          child:
+                                              Text('Error: ${snapshot.error}'));
+                                    }
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                    if (!snapshot.hasData ||
+                                        snapshot.data!.docs.isEmpty) {
+                                      return Center(
+                                          child:
+                                              Text("No questions available."));
+                                    }
+
+                                    final data = snapshot.data!.docs;
+
+                                    double containerHeight =
+                                        height / 2 * data.length;
+
                                     return Container(
-                                                                      height: containerHeight.clamp(0, height / 2),
-            
+                                      height:
+                                          containerHeight.clamp(0, height / 3),
                                       child: ListView.builder(
                                           itemCount: data.length,
                                           itemBuilder: (context, index) {
@@ -234,36 +218,42 @@ class _A_helpcenterState extends State<A_helpcenter> {
                                               color: Color(0xffF9F9F9),
                                               shadowColor: Colors.transparent,
                                               borderOnForeground: false,
-                                              shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                              shape: BeveledRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
                                               surfaceTintColor:
                                                   Colors.transparent,
                                               child: ExpansionTile(
                                                   expandedCrossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .start,
+                                                      CrossAxisAlignment.start,
                                                   childrenPadding:
                                                       EdgeInsets.only(
-                                                          left: width / 25,bottom: height/60),
+                                                          left: width / 25,
+                                                          bottom: height / 60),
                                                   expandedAlignment:
                                                       Alignment.centerLeft,
-                                                      
                                                   children: [
                                                     Text(
-                                                        data[index]['answer'],style: TextStyle(color: Colors.black,fontSize: 10),)
+                                                      data[index]['answer'],
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 10),
+                                                    )
                                                   ],
                                                   collapsedBackgroundColor:
                                                       Color(0xffF9F9F9),
                                                   backgroundColor:
                                                       Color(0xffF9F9F9),
-                                                      
-                                                  shape:
-                                                      BeveledRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10)),
-                                                  title: Text(data[index]
-                                                      ['question'],style: TextStyle(color: Colors.black,fontSize: 11))),
+                                                  shape: BeveledRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  title: Text(
+                                                      data[index]['question'],
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 11))),
                                             );
                                           }),
                                     );

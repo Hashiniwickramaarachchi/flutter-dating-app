@@ -10,7 +10,7 @@ class DeleteAccountPage extends StatefulWidget {
 
   DeleteAccountPage({
     Key? key,
-    this.who = 'users',
+    required this.who,
     this.initiateDelete = false,
   }) : super(key: key);
 
@@ -40,19 +40,19 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Reauthenticate'),
+          title: const Text('Reauthenticate'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Enter your email'),
+                decoration: const InputDecoration(labelText: 'Enter your email'),
                 onChanged: (value) {
                   email = value;
                 },
               ),
               TextField(
                 obscureText: true,
-                decoration: InputDecoration(labelText: 'Enter your password'),
+                decoration: const InputDecoration(labelText: 'Enter your password'),
                 onChanged: (value) {
                   password = value;
                 },
@@ -62,7 +62,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         );
@@ -76,7 +76,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
   });
 
   // Small delay to ensure loading spinner displays before closing the bottom sheet
-  await Future.delayed(Duration(milliseconds: 100));
+  await Future.delayed(const Duration(milliseconds: 700));
 
   final currentUser = _auth.currentUser;
   final userEmail = currentUser?.email;
@@ -95,10 +95,13 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
 
   try {
 
-        await currentUser!.delete();
 
     // Delete the main user document
     await _firestore.collection(widget.who).doc(userEmail).delete();
+    await _firestore.collection('delete').doc(userEmail).set({
+      'email':userEmail
+    });
+
     print("Deleted main user document for $userEmail in '${widget.who}' collection.");
 
     // Fetch all documents in 'Favourite' collection
@@ -124,14 +127,13 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
     print("Deleted Firebase Authentication user for $userEmail.");
 
     await _auth.signOut();
-
     // Delay to ensure loading spinner displays briefly before navigating
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
 
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) {
-          return widget.who == "Ambassador" ? A_signin() : signin();
+          return widget.who == "Ambassador" ? const A_signin() : const signin();
         }),
         (route) => false, // Removes all previous routes
       );
@@ -142,12 +144,12 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Error"),
-          content: Text("Failed to delete account: ${e.toString()}"),
+          title: const Text("Error"),
+          content: const Text("Acount was deleted"),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         ),
@@ -177,8 +179,95 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
           surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
         ),
         body: _isDeleting
-            ? Center(child: CircularProgressIndicator())
-            : Center(child: Text("Account deletion completed")),
+            ? const Center(child: CircularProgressIndicator())
+            : Center(child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column
+              
+              (
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text("Logout and Relogin, At that time you can delete your account"),
+                  SizedBox(height: height/70,),
+                              GestureDetector(
+                onTap: () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false, // Prevents the dialog from closing when tapped outside
+                      builder: (context) {
+                        return const Center(
+              child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
+              
+                    try {
+                      await FirebaseAuth.instance.signOut();
+                      // Show logout success message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+              content: Text('Logout Successful'),
+              duration: Duration(seconds: 2),
+                        ),
+                      );
+                      // Wait for a brief moment to ensure the SnackBar is visible
+                      await Future.delayed(const Duration(seconds: 2));
+                      // Close the loading dialog
+                      Navigator.of(context).pop();
+                      // Navigate to splash screen
+                     
+                       // Replace with your splash scre
+                     Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => widget.who == "Ambassador" ? const A_signin() : const signin()), 
+                (Route<dynamic> route) => false,
+              );
+              
+                    } catch (e) {
+                      // Close the loading dialog
+                      Navigator.of(context).pop();
+                      // Handle logout errors if needed
+                      print('Error logging out: $e');
+                    }
+                  
+              
+                },
+                child: Padding(
+                      padding:  EdgeInsets.only(left: width/40,right: width/40),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(3.14), //
+                        child: Icon(
+                          Icons.logout,
+                          
+                              color: const Color(0xff565656),
+                          size: height / 30,
+                        ),
+                      ),
+                      SizedBox(
+                        width: width / 25,
+                      ),
+                      const Text(
+                        'Logout',
+                    
+                         style: TextStyle(
+                           color: Color(0xff565656),
+                           fontFamily: "defaultfontsbold",
+                           fontWeight: FontWeight.bold,
+                           fontSize: 18),
+                    
+                    
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+                ],
+              ),
+            )),
       ),
     );
   }

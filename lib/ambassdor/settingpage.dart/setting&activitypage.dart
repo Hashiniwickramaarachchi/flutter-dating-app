@@ -17,6 +17,7 @@ import 'package:datingapp/settingpage.dart/profileupdate.dart';
 import 'package:datingapp/settingpage.dart/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+// import 'package:share_plus/share_plus.dart';
 
 class A_settingactivity extends StatefulWidget {
   const A_settingactivity({super.key});
@@ -33,8 +34,10 @@ class _A_settingactivityState extends State<A_settingactivity> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final curentuser = FirebaseAuth.instance.currentUser!;
+
     return Scaffold(
-            appBar: AppBar(
+      appBar: AppBar(
         toolbarHeight: height / 400,
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         automaticallyImplyLeading: false,
@@ -44,9 +47,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
       backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.only(
-            bottom: height / 60,
-            right: width / 20,
-            left: width / 20),
+            bottom: height / 60, right: width / 20, left: width / 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -96,7 +97,8 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     ));
                   },
                   child: Padding(
-                    padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    padding:
+                        EdgeInsets.only(left: width / 40, right: width / 40),
                     child: Container(
                       color: Colors.transparent,
                       child: Row(
@@ -139,7 +141,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     width: width,
                     child: Divider(
                       height: 1,
-                                color: const Color(0xffCAC7C7),
+                      color: const Color(0xffCAC7C7),
                     ),
                   ),
                 ),
@@ -155,10 +157,10 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     ));
                   },
                   child: Padding(
-                    padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    padding:
+                        EdgeInsets.only(left: width / 40, right: width / 40),
                     child: Container(
-                                            color: Colors.transparent,
-
+                      color: Colors.transparent,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -166,7 +168,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                             children: [
                               Icon(
                                 Icons.settings,
-                            color: Color(0xff565656),
+                                color: Color(0xff565656),
                                 size: height / 30,
                               ),
                               SizedBox(
@@ -199,7 +201,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     width: width,
                     child: Divider(
                       height: 1,
-                                color: const Color(0xffCAC7C7),
+                      color: const Color(0xffCAC7C7),
                     ),
                   ),
                 ),
@@ -208,17 +210,17 @@ class _A_settingactivityState extends State<A_settingactivity> {
                 ),
                 GestureDetector(
                   onTap: () {
-                           Navigator.of(context).push(MaterialPageRoute(
-       builder: (context) {
-         return A_f_and_q();
-       },
-     ));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return A_f_and_q();
+                      },
+                    ));
                   },
                   child: Padding(
-                    padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    padding:
+                        EdgeInsets.only(left: width / 40, right: width / 40),
                     child: Container(
-                                            color: Colors.transparent,
-
+                      color: Colors.transparent,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -226,7 +228,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                             children: [
                               Icon(
                                 Icons.local_hospital,
-                              color: Color(0xff565656),
+                                color: Color(0xff565656),
                                 size: height / 30,
                               ),
                               SizedBox(
@@ -244,7 +246,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
-                              color: Color(0xff565656),
+                            color: Color(0xff565656),
                             size: height / 40,
                           ),
                         ],
@@ -259,7 +261,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     width: width,
                     child: Divider(
                       height: 1,
-                                color: const Color(0xffCAC7C7),
+                      color: const Color(0xffCAC7C7),
                     ),
                   ),
                 ),
@@ -268,15 +270,13 @@ class _A_settingactivityState extends State<A_settingactivity> {
                 ),
                 GestureDetector(
                   onTap: () {
-                       Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-     return invite();
-   },));
+                    // inviteFriends();
                   },
                   child: Padding(
-                      padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    padding:
+                        EdgeInsets.only(left: width / 40, right: width / 40),
                     child: Container(
-                                            color: Colors.transparent,
-
+                      color: Colors.transparent,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -284,7 +284,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                             children: [
                               Icon(
                                 Icons.group_add,
-                              color: Color(0xff565656),
+                                color: Color(0xff565656),
                                 size: height / 30,
                               ),
                               SizedBox(
@@ -302,7 +302,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
-                              color: Color(0xff565656),
+                            color: Color(0xff565656),
                             size: height / 40,
                           ),
                         ],
@@ -317,7 +317,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     width: width,
                     child: Divider(
                       height: 1,
-                                color: const Color(0xffCAC7C7),
+                      color: const Color(0xffCAC7C7),
                     ),
                   ),
                 ),
@@ -326,15 +326,19 @@ class _A_settingactivityState extends State<A_settingactivity> {
                 ),
                 GestureDetector(
                   onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-      return A_privacy();
-    },));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return privacy(
+                          who: 'Ambassdor',
+                        );
+                      },
+                    ));
                   },
                   child: Padding(
-                      padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    padding:
+                        EdgeInsets.only(left: width / 40, right: width / 40),
                     child: Container(
-                                            color: Colors.transparent,
-                  
+                      color: Colors.transparent,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -342,7 +346,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                             children: [
                               Icon(
                                 Icons.help,
-                              color: Color(0xff565656),
+                                color: Color(0xff565656),
                                 size: height / 30,
                               ),
                               SizedBox(
@@ -360,7 +364,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
-                              color: Color(0xff565656),
+                            color: Color(0xff565656),
                             size: height / 40,
                           ),
                         ],
@@ -375,22 +379,24 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     width: width,
                     child: Divider(
                       height: 1,
-                                color: const Color(0xffCAC7C7),
+                      color: const Color(0xffCAC7C7),
                     ),
                   ),
                 ),
-    
-                                  SizedBox(
+                SizedBox(
                   height: height / 30,
                 ),
                 GestureDetector(
                   onTap: () {
-                           Navigator.of(context).push(MaterialPageRoute(builder:(context) {
-         return A_FeedbackPage();
-       },));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return A_FeedbackPage();
+                      },
+                    ));
                   },
                   child: Padding(
-                      padding:  EdgeInsets.only(left: width/40,right: width/40),
+                    padding:
+                        EdgeInsets.only(left: width / 40, right: width / 40),
                     child: Container(
                       color: Colors.transparent,
                       child: Row(
@@ -400,7 +406,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                             children: [
                               Icon(
                                 Icons.help,
-                              color: Color(0xff565656),
+                                color: Color(0xff565656),
                                 size: height / 30,
                               ),
                               SizedBox(
@@ -412,13 +418,13 @@ class _A_settingactivityState extends State<A_settingactivity> {
                                     color: const Color(0xff565656),
                                     fontFamily: "defaultfontsbold",
                                     fontWeight: FontWeight.bold,
-                                    fontSize:18),
+                                    fontSize: 18),
                               ),
                             ],
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
-                              color: Color(0xff565656),
+                            color: Color(0xff565656),
                             size: height / 40,
                           ),
                         ],
@@ -433,7 +439,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     width: width,
                     child: Divider(
                       height: 1,
-                                color: const Color(0xffCAC7C7),
+                      color: const Color(0xffCAC7C7),
                     ),
                   ),
                 ),
@@ -442,72 +448,77 @@ class _A_settingactivityState extends State<A_settingactivity> {
             GestureDetector(
               onTap: () async {
                 // try {
-                  // await _onlineStatusService.setUserOffline();
-    // 
-                  // await FirebaseAuth.instance.signOut();
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                    // SnackBar(
-                      // content: Text('Logout Successful'),
-                      // duration: Duration(seconds: 2),
-                    // ),
-                  // );
-                  // Navigator.of(context).pushReplacement(
-                      // MaterialPageRoute(builder: (context) => A_signin()));
+                // await _onlineStatusService.setUserOffline();
+                //
+                // await FirebaseAuth.instance.signOut();
+                // ScaffoldMessenger.of(context).showSnackBar(
+                // SnackBar(
+                // content: Text('Logout Successful'),
+                // duration: Duration(seconds: 2),
+                // ),
+                // );
+                // Navigator.of(context).pushReplacement(
+                // MaterialPageRoute(builder: (context) => A_signin()));
                 // } catch (e) {
-                  // print('Error logging out: $e');
+                // print('Error logging out: $e');
                 // }
-      // Show loading dialog
-      showDialog(
-        context: context,
-        barrierDismissible: false, // Prevents the dialog from closing when tapped outside
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
+                // Show loading dialog
+                showDialog(
+                  context: context,
+                  barrierDismissible:
+                      false, // Prevents the dialog from closing when tapped outside
+                  builder: (context) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                );
 
-      try {
-        await FirebaseAuth.instance.signOut();
-        // Show logout success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Logout Successful'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        // Wait for a brief moment to ensure the SnackBar is visible
-        await Future.delayed(Duration(seconds: 2));
-        // Close the loading dialog
-        Navigator.of(context).pop();
-        // Navigate to splash screen
-       
-         // Replace with your splash scre
-       Navigator.of(context).pushAndRemoveUntil(
-  MaterialPageRoute(builder: (context) => A_signin()), 
-  (Route<dynamic> route) => false,
-);
+                try {
+                         await FirebaseFirestore.instance
+           .collection('Ambassdor')
+           .doc(curentuser.email!)
+           .update({'Logged': 'false'});
+                  await FirebaseAuth.instance.signOut();
+                  // Show logout success message
+           
+           
+           
+           
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Logout Successful'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                  // Wait for a brief moment to ensure the SnackBar is visible
+                  await Future.delayed(Duration(seconds: 2));
+                  // Close the loading dialog
+                  Navigator.of(context).pop();
+                  // Navigate to splash screen
 
-      } catch (e) {
-        // Close the loading dialog
-        Navigator.of(context).pop();
-        // Handle logout errors if needed
-        print('Error logging out: $e');
-      }
-    
-
+                  // Replace with your splash scre
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => A_signin()),
+                    (Route<dynamic> route) => false,
+                  );
+                } catch (e) {
+                  // Close the loading dialog
+                  Navigator.of(context).pop();
+                  // Handle logout errors if needed
+                  print('Error logging out: $e');
+                }
               },
               child: Padding(
-                    padding:  EdgeInsets.only(left: width/40,right: width/40),
+                padding: EdgeInsets.only(left: width / 40, right: width / 40),
                 child: Row(
                   children: [
                     Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationY(3.14), //
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(3.14), //
                       child: Icon(
                         Icons.logout,
-                        
-                            color: Color(0xff565656),
+                        color: Color(0xff565656),
                         size: height / 30,
                       ),
                     ),
@@ -516,14 +527,11 @@ class _A_settingactivityState extends State<A_settingactivity> {
                     ),
                     Text(
                       'Logout',
-                  
-                       style: TextStyle(
-                         color: const Color(0xff565656),
-                         fontFamily: "defaultfontsbold",
-                         fontWeight: FontWeight.bold,
-                         fontSize: 18),
-                  
-                  
+                      style: TextStyle(
+                          color: const Color(0xff565656),
+                          fontFamily: "defaultfontsbold",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
                     ),
                   ],
                 ),
@@ -534,4 +542,10 @@ class _A_settingactivityState extends State<A_settingactivity> {
       ),
     );
   }
+  // void inviteFriends() {
+  // const String appUrl = 'https://play.google.com';
+  // const String message = 'Join me on ApexLove, the premier dating app for meaningful connections! Download now: $appUrl';
+//
+  // Share.share(message);
+// }
 }

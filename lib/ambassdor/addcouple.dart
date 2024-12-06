@@ -197,8 +197,10 @@ class _CoupleAddingPageState extends State<CoupleAddingPage> {
        bottom: height / 47,
      ),                  child: DropdownButtonFormField<String>(
                   value: selectedgender,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  
+                  style: TextStyle(fontSize: 5),
                   decoration: InputDecoration(
+                    hintStyle: Theme.of(context).textTheme.headlineSmall,
                     border: UnderlineInputBorder(),
                     contentPadding:
                         EdgeInsets.only(left: width / 50, top: height / 90),
@@ -209,7 +211,7 @@ class _CoupleAddingPageState extends State<CoupleAddingPage> {
                       value: district,
                       child: Text(
                         district,
-                 
+              style:    Theme.of(context).textTheme.headlineSmall,
                  
                  
                  

@@ -158,7 +158,8 @@ class _A_showState extends State<A_show> {
               'images': data['images'],
               'height': data['height'],
               "languages": data['languages'],
-              'education': data['education']
+              'education': data['education'],
+              'description':data['description']
             };
             allUsers.add(userInfo); // Add user to the full list
 

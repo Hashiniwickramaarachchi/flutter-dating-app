@@ -47,7 +47,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       {}; // Store icon codePoints as integers
 
   List<String> languages = [
-    'None',
     "English",
     "Chinese",
     "Spanish",
@@ -245,7 +244,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                           ],
                         ),
                         SizedBox(height: 20,),
-                                            Text(
+                    Text(
                     'Description',
                     style: TextStyle(
                         color: const Color(0xff4D4D4D),
@@ -555,14 +554,14 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                               fontSize: 16),
                         ),
                         SizedBox(height: 10),
-                        // TextField(
-                        // controller: education,
-                        // style: Theme.of(context).textTheme.headlineSmall,
-                        // decoration: InputDecoration(
-                        // hintText: 'Enter Education',
-                        // border: OutlineInputBorder(),
-                        // ),
-                        // ),
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
                 
                         Container(
                           decoration: BoxDecoration(

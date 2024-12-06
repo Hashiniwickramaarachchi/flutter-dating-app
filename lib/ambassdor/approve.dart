@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/ambassdor/A_Mainscree.dart';
 import 'package:datingapp/ambassdor/ambassdorshow.dart';
 import 'package:datingapp/userchatpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,19 +51,18 @@ class _approveState extends State<approve> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                                                   appBar: AppBar(
-               toolbarHeight:height/400,
-               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-               automaticallyImplyLeading: false,
-             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-             surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-             ),
+      appBar: AppBar(
+        toolbarHeight: height / 400,
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+      ),
       body: Column(
         children: [
           Container(
             child: Padding(
-              padding: EdgeInsets.only(
-                  left: width / 20, right: width / 20),
+              padding: EdgeInsets.only(left: width / 20, right: width / 20),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +286,7 @@ class _approveState extends State<approve> {
                       ],
                     ),
                     // Description
-    
+
                     // Interests
                     Text(
                       'Interest',
@@ -340,7 +340,7 @@ class _approveState extends State<approve> {
                           fontFamily: "defaultfonts",
                           fontSize: height / 50),
                     ),
-    
+
                     SizedBox(height: height * 0.03),
                     // Gallery
                     Text(
@@ -396,8 +396,8 @@ class _approveState extends State<approve> {
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            height / 10)),
+                                        borderRadius:
+                                            BorderRadius.circular(height / 10)),
                                     backgroundColor: Color(0xffF5ECFF),
                                   ),
                                   onPressed: () async {
@@ -405,11 +405,10 @@ class _approveState extends State<approve> {
                                         FirebaseFirestore.instance;
                                     try {
                                       // Step 1: Get the document data from the 'test' collection
-                                      DocumentSnapshot testDoc =
-                                          await firestore
-                                              .collection('test')
-                                              .doc(widget.ID)
-                                              .get();
+                                      DocumentSnapshot testDoc = await firestore
+                                          .collection('test')
+                                          .doc(widget.ID)
+                                          .get();
                                       if (testDoc.exists) {
                                         await firestore
                                             .collection('test')
@@ -419,21 +418,19 @@ class _approveState extends State<approve> {
                                             .showSnackBar(SnackBar(
                                                 content: Text(
                                                     'User removed successfully!')));
-                                        Position position = await Geolocator
-                                            .getCurrentPosition(
+                                        Position position =
+                                            await Geolocator.getCurrentPosition(
                                                 desiredAccuracy:
                                                     LocationAccuracy.high);
                                         double latitude = position.latitude;
                                         double longitude = position.longitude;
                                         Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) {
-                                            return A_show(
-                                                userLatitude: latitude,
-                                                userLongitude: longitude,
-                                                useremail: curentuser.email!);
-                                          },
-                                        ));
+                                            .pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  A_MainScreen()),
+                                          (Route<dynamic> route) => false,
+                                        );
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
@@ -464,25 +461,24 @@ class _approveState extends State<approve> {
                                   backgroundColor: Color(0xff7905F5),
                                 ),
                                 onPressed: () async {
-                                  final firestore =
-                                      FirebaseFirestore.instance;
-    
+                                  final firestore = FirebaseFirestore.instance;
+
                                   try {
                                     // Step 1: Get the document data from the 'test' collection
                                     DocumentSnapshot testDoc = await firestore
                                         .collection('test')
                                         .doc(widget.ID)
                                         .get();
-    
+
                                     if (testDoc.exists) {
                                       // Step 2: Add the document data to the 'user' collection
                                       await firestore
-                                          .collection('users')
+                                          .collection('Partner')
                                           .doc(widget.ID)
                                           .set(testDoc.data()
                                               as Map<String, dynamic>);
                                       print(curentuser.email!);
-    
+
                                       // Step 3: Delete the document from the 'test' collection
                                       await firestore
                                           .collection('test')
@@ -493,8 +489,7 @@ class _approveState extends State<approve> {
                                           .doc(curentuser.email!)
                                           .update({
                                         'addedusers':
-                                         FieldValue.arrayUnion(
-                                            [widget.ID]),
+                                            FieldValue.arrayUnion([widget.ID]),
                                       });
                                       Position position =
                                           await Geolocator.getCurrentPosition(
@@ -504,18 +499,15 @@ class _approveState extends State<approve> {
                                       double longitude = position.longitude;
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        SnackBar(content: Text('User Added')),
+                                        SnackBar(
+                                            content: Text('partner Added')),
                                       );
-    
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) {
-                                          return A_show(
-                                              userLatitude: latitude,
-                                              userLongitude: longitude,
-                                              useremail: curentuser.email!);
-                                        },
-                                      ));
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                A_MainScreen()),
+                                        (Route<dynamic> route) => false,
+                                      );
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
@@ -523,8 +515,8 @@ class _approveState extends State<approve> {
                                                   "Document does not exist in the 'test' collection.")));
                                     }
                                   } catch (e) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
                                             content: Text(
                                                 "Error transferring document: $e")));
                                   }

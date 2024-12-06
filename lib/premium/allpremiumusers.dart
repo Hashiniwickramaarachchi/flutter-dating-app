@@ -107,40 +107,158 @@ class _allpremiumState extends State<allpremium> {
     });
   }
 
+  // Future<void> _getFilteredUsers() async {
+    // try {
+      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          // .collection('users')
+          // .get(); // Fetch all users to filter manually
+// 
+      // for (var doc in querySnapshot.docs) {
+        // var data = doc.data() as Map<String, dynamic>;
+// 
+        // if (data['profile'] == 'premium' && data['email'] != widget.useremail) {
+          // double userDistance = _calculateDistance(
+              // widget.userLatitude, widget.userLongitude, data['X'], data['Y']);
+// 
+          // Map<String, dynamic> userInfo = {
+            // 'name': data['name'],
+            // 'Age': data['Age'],
+            // 'distance': userDistance.toInt(),
+            // 'profile_pic': data['profile_pic'],
+            // 'X': data['X'],
+            // 'Y': data['Y'],
+            // 'Address': data['Address'],
+            // 'email': data['email'],
+            // 'Gender': data['Gender'],
+            // 'Icon': data['Icon'],
+            // 'Interest': data['Interest'],
+            // 'Phonenumber': data['Phonenumber'],
+            // 'images': data['images'],
+            // 'height': data['height'],
+            // "languages": data['languages'],
+            // 'education': data['education'],
+            // 'description': data['description']
+          // };
+          // allUsers.add(userInfo); // Add user to the full list
+// 
+          // favStatus[data['email']] = false;
+// 
+          // Uint8List markerIcon = await _getMarkerWithImage(data['profile_pic']);
+// 
+        // } else {
+          // print('No user');
+        // }
+      // }
+// 
+      // setState(() {
+        // filteredUsers = List.from(allUsers); // Initially show all users
+                // _isLoading = false; // Update loading state
+// 
+      // }); // Update the map with new markers
+    // } catch (e) {
+      // print('Error fetching filtered users: $e');
+      // setState(() {
+                // _isLoading = false;
+// 
+      // });
+    // }
+  // }
+
+// Future<void> _getFilteredUsers() async {
+  // try {
+    // DocumentSnapshot blockedUsersSnapshot = await FirebaseFirestore.instance
+        // .collection('Blocked USers')
+        // .doc(widget.useremail)
+        // .get();
+// 
+    // List<String> blockedEmails = [];
+    // if (blockedUsersSnapshot.exists) {
+      // final blockedData = blockedUsersSnapshot.data() as Map<String, dynamic>?;
+      // if (blockedData != null && blockedData['This Id blocked Users'] != null) {
+        // blockedEmails = List<String>.from(blockedData['This Id blocked Users']);
+      // }
+    // }
+// 
+    // QuerySnapshot querySnapshot =
+        // await FirebaseFirestore.instance.collection('users').get();
+// 
+    // for (var doc in querySnapshot.docs) {
+      // var data = doc.data() as Map<String, dynamic>;
+// 
+      // if (data['email'] != widget.useremail &&
+          // data['profile'] == 'premium' &&
+          // !blockedEmails.contains(data['email'])) {
+        // double userDistance = _calculateDistance(
+            // widget.userLatitude, widget.userLongitude, data['X'], data['Y']);
+// 
+        // Map<String, dynamic> userInfo = {
+          // 'name': data['name'],
+          // 'Age': data['Age'],
+          // 'distance': userDistance.toInt(),
+          // 'profile_pic': data['profile_pic'],
+          // 'X': data['X'],
+          // 'Y': data['Y'],
+          // 'Address': data['Address'],
+          // 'email': data['email'],
+          // 'Gender': data['Gender'],
+          // 'Icon': data['Icon'],
+          // 'Interest': data['Interest'],
+          // 'Phonenumber': data['Phonenumber'],
+          // 'images': data['images'],
+          // 'height': data['height'],
+          // 'languages': data['languages'],
+          // 'education': data['education'],
+          // 'description': data['description']
+        // };
+// 
+        // allUsers.add(userInfo); // Add user to the full list
+        // favStatus[data['email']] = false;
+// 
+       
+// 
+       
+       
+      // }
+    // }
+// 
+    // setState(() {
+      // filteredUsers = List.from(allUsers); // Initially show all users
+      // _isLoading = false; // Update loading state
+    // });
+  // } catch (e) {
+    // print('Error fetching filtered users: $e');
+    // setState(() {
+      // _isLoading = false;
+    // });
+  // }
+// }
+// 
   Future<void> _getFilteredUsers() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .get(); // Fetch all users to filter manually
+      // Fetch blocked users
+      final blockedSnapshot = await FirebaseFirestore.instance
+          .collection('Blocked USers')
+          .doc(widget.useremail)
+          .get();
+      List<String> blockedEmails = [];
+      if (blockedSnapshot.exists) {
+        final blockedData = blockedSnapshot.data() as Map?;
+        blockedEmails = List<String>.from(blockedData?['This Id blocked Users'] ?? []);
+      }
+
+      // Fetch all users with the premium profile
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
+      List<Map<String, dynamic>> tempUsers = [];
 
       for (var doc in querySnapshot.docs) {
         var data = doc.data() as Map<String, dynamic>;
 
-        // Check if all necessary fields exist
+        if (data['email'] != widget.useremail &&
+            data['profile'] == 'premium' &&
+            !blockedEmails.contains(data['email'])) {
 
-        // Add filtered user to the list
-        // filteredUsers.add({
-        // 'name': data['name'],
-        // 'Age': data['Age'],
-        // 'distance': userDistance.toInt(),
-        // 'profile_pic': data['profile_pic'],
-        // 'X': data['X'],
-        // 'Y': data['Y'],
-        // 'Address': data['Address'],
-        // 'email': data['email'],
-        // 'Gender': data['Gender'],
-        // 'Icon': data['Icon'],
-        // 'Interest': data['Interest'],
-        // 'Phonenumber': data['Phonenumber'],
-        // 'images': data['images'],
-        // 'height': data['height'],
-        // "languages": data['languages'],
-        // 'education': data['education']
-        // });
-
-        if (data['profile'] == 'premium' && data['email'] != widget.useremail) {
           double userDistance = _calculateDistance(
-              widget.userLatitude, widget.userLongitude, data['X'], data['Y']);
+            widget.userLatitude, widget.userLongitude, data['X'], data['Y']);
 
           Map<String, dynamic> userInfo = {
             'name': data['name'],
@@ -157,98 +275,25 @@ class _allpremiumState extends State<allpremium> {
             'Phonenumber': data['Phonenumber'],
             'images': data['images'],
             'height': data['height'],
-            "languages": data['languages'],
+            'languages': data['languages'],
             'education': data['education'],
             'description': data['description']
           };
-          allUsers.add(userInfo); // Add user to the full list
-
+          tempUsers.add(userInfo);
           favStatus[data['email']] = false;
-
-          // Get profile picture as marker with rounded border
-          Uint8List markerIcon = await _getMarkerWithImage(data['profile_pic']);
-
-          // Add marker to map
-        } else {
-          print('No user');
         }
       }
 
       setState(() {
-        filteredUsers = List.from(allUsers); // Initially show all users
-                _isLoading = false; // Update loading state
-
-      }); // Update the map with new markers
+        allUsers = tempUsers;
+        filteredUsers = List.from(allUsers);
+        _isLoading = false;
+      });
     } catch (e) {
       print('Error fetching filtered users: $e');
       setState(() {
-                _isLoading = false;
-
+        _isLoading = false;
       });
-    }
-  }
-
-  double _convertToDouble(dynamic value) {
-    if (value is int) {
-      return value.toDouble();
-    } else if (value is String) {
-      return double.tryParse(value) ?? 0;
-    }
-    return 0;
-  }
-
-  Future<Uint8List> _getMarkerWithImage(String imageUrl) async {
-    try {
-      final http.Response response = await http.get(Uri.parse(imageUrl));
-      if (response.statusCode == 200) {
-        Uint8List imageData = response.bodyBytes;
-
-        // Decode the image
-        ui.Codec codec = await ui.instantiateImageCodec(imageData);
-        ui.FrameInfo frameInfo = await codec.getNextFrame();
-        ui.Image image = frameInfo.image;
-
-        // Create a canvas to draw the rounded image with a border
-        final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-        final Canvas canvas = Canvas(pictureRecorder);
-        const double size = 150.0; // Adjust the size of the marker
-        const double borderSize = 10.0; // Adjust the size of the purple border
-
-        // Draw the purple border (circle)
-        final Paint borderPaint = Paint()
-          ..color = Color(0xff7905F5)
-          ..style = PaintingStyle.fill;
-        canvas.drawCircle(
-          Offset(size / 2, size / 2),
-          size / 2,
-          borderPaint,
-        );
-
-        // Draw the circular image inside the border
-        final Rect imageRect = Rect.fromLTWH(borderSize, borderSize,
-            size - borderSize * 2, size - borderSize * 2);
-        final ui.Path clipPath = ui.Path()..addOval(imageRect);
-        canvas.clipPath(clipPath);
-        canvas.drawImageRect(
-            image,
-            Rect.fromLTWH(
-                0, 0, image.width.toDouble(), image.height.toDouble()),
-            imageRect,
-            Paint());
-
-        // Convert canvas to image
-        final ui.Image markerAsImage = await pictureRecorder
-            .endRecording()
-            .toImage(size.toInt(), size.toInt());
-        final ByteData? byteData =
-            await markerAsImage.toByteData(format: ui.ImageByteFormat.png);
-        return byteData!.buffer.asUint8List();
-      } else {
-        throw Exception('Failed to load image');
-      }
-    } catch (e) {
-      print('Error loading image: $e');
-      return Uint8List(0); // Return an empty list on error
     }
   }
 

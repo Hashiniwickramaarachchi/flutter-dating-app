@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/accountdelectionpage.dart';
+import 'package:datingapp/block.dart';
 import 'package:datingapp/bootmnavbar.dart';
+import 'package:datingapp/deactivepage.dart';
 import 'package:datingapp/homepage.dart';
 import 'package:datingapp/premium/allpremiumusers.dart';
 import 'package:datingapp/settingpage.dart/setting&activitypage.dart';
@@ -73,8 +76,11 @@ class _profileState extends State<profile> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final curentuser = FirebaseAuth.instance.currentUser!;
-    return StreamBuilder<DocumentSnapshot>(
+   final User? curentuser = FirebaseAuth.instance.currentUser;
+   if (curentuser == null) {
+     // Handle unauthenticated user state (e.g., redirect to login page or sh
+     return Center(child: Text('No user is logged in.'));
+   }    return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection("users")
             .doc(curentuser.email!)
@@ -84,11 +90,53 @@ class _profileState extends State<profile> {
           // Check if data exists before casting to Map<String, dynamic>
           final userData = snapshot.data!.data() as Map<String, dynamic>?;
 
-          if (userData == null) {
-            return Center(
-              child: Text("User data not found."),
-            );
-          }
+     
+                 if (userData?['statusType'] == 'deactive') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => deactivepage()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+            if (userData?['statusType'] == 'block') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => block()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+
+            if (userData?['statusType'] == 'delete') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) {
+                      return DeleteAccountPage(
+                        initiateDelete: true,
+                        who: 'users',
+                      );
+                    },
+                  ));
+                }
+              });
+            }
+
+            if (userData == null) {
+              return Center(
+                child: Text("User data not found."),
+              );
+            }
+     
+     
+     
                 final profilePic = userData['profile_pic'] ?? '';
 
         
@@ -336,7 +384,8 @@ class _profileState extends State<profile> {
           } else {
             return CircularProgressIndicator();
           }
-        });
+        }
+        );
   }
 
   Widget _buildInterestChip(String email, BuildContext context, String label,

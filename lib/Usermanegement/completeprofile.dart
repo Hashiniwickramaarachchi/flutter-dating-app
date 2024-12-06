@@ -65,34 +65,31 @@ class _completeprofileState extends State<completeprofile> {
         TaskSnapshot snapshot = await uploadTask;
         String downloadUrl = await snapshot.ref.getDownloadURL();
 
-   if (phonenumber.text.length==10) {
-     
-        // Save the image URL in Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userEmail)
-            .update({
-          'profile_pic': downloadUrl,
-          'name': name.text.trim(),
-          'Phonenumber': phonenumber.text.trim()
-        });
+        if (phonenumber.text.length == 10) {
+          // Save the image URL in Firestore
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userEmail)
+              .update({
+            'profile_pic': downloadUrl,
+            'name': name.text.trim(),
+            'Phonenumber': phonenumber.text.trim()
+          });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Profile picture uploaded successfully!')),
-        );
-Navigator.of(context).pushAndRemoveUntil(
-  MaterialPageRoute(builder: (context) => MainScreen()), 
-  (Route<dynamic> route) => false,
-);
-
-        
-   }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-
-       SnackBar(content: Text('Check your Phonenumber again!!',style: TextStyle(color: Colors.red),)));
-
-   }
-
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Profile picture uploaded successfully!')),
+          );
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => MainScreen()),
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+            'Check your Phonenumber again!!',
+            style: TextStyle(color: Colors.red),
+          )));
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Fill the lines')),
@@ -102,8 +99,7 @@ Navigator.of(context).pushAndRemoveUntil(
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to upload image: $e')),
       );
-    } 
-    finally {
+    } finally {
       setState(() {
         _isLoading = false;
       });
@@ -116,20 +112,18 @@ Navigator.of(context).pushAndRemoveUntil(
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-                                               appBar: AppBar(
-     toolbarHeight:height/400,
-     foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-     automaticallyImplyLeading: false,
-   backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-   surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-   ),
+      appBar: AppBar(
+        toolbarHeight: height / 400,
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+      ),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Container(
         child: Padding(
           padding: EdgeInsets.only(
-              bottom: height / 60,
-              right: width / 30,
-              left: width / 30),
+              bottom: height / 60, right: width / 30, left: width / 30),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -228,8 +222,7 @@ Navigator.of(context).pushAndRemoveUntil(
                               padding: const EdgeInsets.all(6.0),
                               child: Icon(
                                 Icons.edit_sharp,
-                                color:
-                                    const Color.fromARGB(255, 255, 255, 255),
+                                color: const Color.fromARGB(255, 255, 255, 255),
                                 size: height / 50,
                               ),
                             ),
@@ -255,14 +248,14 @@ Navigator.of(context).pushAndRemoveUntil(
                         EdgeInsets.only(left: width / 50, top: height / 90),
                   ),
                 ),
-                                SizedBox(height: height / 47),
-
+                SizedBox(height: height / 47),
                 TextField(
                   controller: phonenumber,
                   maxLength: 10,
-                   buildCounter: (BuildContext context, {int? currentLength, bool? isFocused, int? maxLength}) {
-    return null; // Hides the counter
-  },
+                  buildCounter: (BuildContext context,
+                      {int? currentLength, bool? isFocused, int? maxLength}) {
+                    return null; // Hides the counter
+                  },
                   keyboardType: TextInputType.number,
                   style: Theme.of(context).textTheme.headlineSmall,
                   decoration: InputDecoration(
@@ -295,8 +288,7 @@ Navigator.of(context).pushAndRemoveUntil(
                         borderRadius: BorderRadius.circular(height / 10),
                       ),
                       child: Center(
-                        child:
-                         _isLoading
+                        child: _isLoading
                             ? CircularProgressIndicator(color: Colors.white)
                             : Text(
                                 "Complete Profile",

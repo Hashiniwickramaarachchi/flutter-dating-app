@@ -3,6 +3,7 @@ import 'package:datingapp/Usermanegement/signin.dart';
 import 'package:datingapp/Usermanegement/signup.dart';
 import 'package:datingapp/ambassdor/newuser/signup.dart';
 import 'package:datingapp/homepage.dart';
+import 'package:datingapp/premium/detailsadding.dart';
 import 'package:datingapp/premium/welcompremiuum.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,8 @@ class premiumbuy extends StatefulWidget {
 class _premiumbuyState extends State<premiumbuy> {
   bool ismonthly = false;
   bool isyearly = false;
-
+  String payemntversion = 'Monthly';
+  int amount=32;
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -38,7 +40,7 @@ class _premiumbuyState extends State<premiumbuy> {
               appBar: AppBar(
                 backgroundColor: const Color(0xffDFC1FF),
                 leading: Padding(
-                  padding:  EdgeInsets.only(left: width/20),
+                  padding: EdgeInsets.only(left: width / 20),
                   child: Container(
                       decoration: BoxDecoration(
                           shape: BoxShape.circle, color: Colors.white),
@@ -124,6 +126,9 @@ class _premiumbuyState extends State<premiumbuy> {
                                       setState(() {
                                         ismonthly = !ismonthly;
                                         isyearly = false;
+                                        payemntversion = 'Monthly';
+                                                                                amount=32;
+
                                       });
                                     },
                                     child: Container(
@@ -136,8 +141,8 @@ class _premiumbuyState extends State<premiumbuy> {
                                         border: Border.all(
                                           color: Color(0xff7905F5),
                                         ),
-                                        borderRadius: BorderRadius.circular(
-                                            height / 10),
+                                        borderRadius:
+                                            BorderRadius.circular(height / 10),
                                       ),
                                       child: Center(
                                         child: Padding(
@@ -146,8 +151,7 @@ class _premiumbuyState extends State<premiumbuy> {
                                               right: width / 30),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 "Monthly",
@@ -158,7 +162,10 @@ class _premiumbuyState extends State<premiumbuy> {
                                                   fontSize: 20,
                                                 ),
                                               ),
-                                              Text("\$32/Month",style: TextStyle(fontSize: 16),)
+                                              Text(
+                                                "\$32/Month",
+                                                style: TextStyle(fontSize: 16),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -177,6 +184,8 @@ class _premiumbuyState extends State<premiumbuy> {
                                       setState(() {
                                         isyearly = !isyearly;
                                         ismonthly = false;
+                                        payemntversion = 'Yearly';
+                                        amount=90;
                                       });
                                     },
                                     child: Container(
@@ -189,8 +198,8 @@ class _premiumbuyState extends State<premiumbuy> {
                                         border: Border.all(
                                           color: Color(0xff7905F5),
                                         ),
-                                        borderRadius: BorderRadius.circular(
-                                            height / 10),
+                                        borderRadius:
+                                            BorderRadius.circular(height / 10),
                                       ),
                                       child: Center(
                                         child: Padding(
@@ -199,8 +208,7 @@ class _premiumbuyState extends State<premiumbuy> {
                                               right: width / 30),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 "Yearly",
@@ -211,7 +219,10 @@ class _premiumbuyState extends State<premiumbuy> {
                                                   fontSize: 20,
                                                 ),
                                               ),
-                                              Text("\$90/Month",style: TextStyle(fontSize: 16),)
+                                              Text(
+                                                "\$90/Month",
+                                                style: TextStyle(fontSize: 16),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -223,58 +234,58 @@ class _premiumbuyState extends State<premiumbuy> {
                             ),
                             Padding(
                               padding: EdgeInsets.only(
-                                top: height/40,
+                                  top: height / 40,
                                   bottom: height / 40,
                                   left: width / 22,
                                   right: width / 22),
                               child: GestureDetector(
                                 onTap: () async {
-                                        if (userdataperson['profile']=='standard') {
-                                          
-                                        
-                                        
-                                  if (ismonthly == true ||
-                                      isyearly == true) {
-                                    try {
-                                      // Perform the async operation outside of setState
-                                      await FirebaseFirestore.instance
-                                          .collection('users')
-                                          .doc(userdataperson['email'])
-                                          .update({'profile': 'premium'});
-                                        
-                                      // Once the async operation is complete, update the state and navigate
-                                      setState(() {});
+                                  if (userdataperson['profile'] == 'standard') {
+                                    if (ismonthly == true || isyearly == true) {
+                                      try {
+                                        // await FirebaseFirestore.instance
+                                            // .collection(payemntversion)
+                                            // .doc(userdataperson['email'])
+                                            // .set({
+                                          // 'Buy Time':
+                                              // FieldValue.serverTimestamp(),
+                                          // "User": userdataperson['email']
+                                        // });
+
+                                        // await FirebaseFirestore.instance
+                                            // .collection('users')
+                                            // .doc(userdataperson['email'])
+                                            // .update({'profile': 'premium'});
+
+                                        // Once the async operation is complete, update the state and navigate
+                                        // setState(() {});
+                                        // ScaffoldMessenger.of(context)
+                                            // .showSnackBar(SnackBar(
+                                                // content: Text(
+                                                    // 'User upgraded to premium')));
+
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return detailsadding(Amount: amount, dbemail: userdataperson['email'], version: payemntversion,);
+                                        }));
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'Error updating profile: $e')));
+                                      }
+                                    } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'User upgraded to premium')));
-                                        
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) {
-                                        return wlcomepremium();
-                                      }));
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'Error updating profile: $e')));
+                                              content: Text('Select a Plan')));
                                     }
                                   } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            content:
-                                                Text('Select a Plan')));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'You already a premium member!!')));
                                   }
-                                        }else{
-                                        
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content:
-                                        Text('You already a premium member!!')));
-                                        
-                                        
-                                        }
                                 },
                                 child: Container(
                                   height: height / 15,
@@ -287,9 +298,8 @@ class _premiumbuyState extends State<premiumbuy> {
                                   child: Center(
                                     child: Text(
                                       "Continue",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
                                     ),
                                   ),
                                 ),

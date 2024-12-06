@@ -46,7 +46,6 @@ class _A_UpdateProfilePageState extends State<A_UpdateProfilePage> {
       {}; // Store icon codePoints as integers
 
   List<String> languages = [
-    "None",
     "English",
     "Chinese",
     "Spanish",
@@ -170,7 +169,7 @@ class _A_UpdateProfilePageState extends State<A_UpdateProfilePage> {
               education.text = userdataperson['education'] ?? '';
             }
   if (description.text.isEmpty) {
-    education.text = userdataperson['description'] ?? '';
+    description.text = userdataperson['description'] ?? '';
   }
             // education.text = education.text.toString() ?? userdataperson['education'];
             selectedAge = selectedAge ?? userdataperson['Age'].toString();

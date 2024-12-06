@@ -2,7 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/Usermanegement/addemail.dart';
 import 'package:datingapp/Usermanegement/gender.dart';
 import 'package:datingapp/Usermanegement/signin.dart';
+import 'package:datingapp/accountdelectionpage.dart';
+import 'package:datingapp/block.dart';
+import 'package:datingapp/deactivepage.dart';
+import 'package:datingapp/deleted.dart';
 import 'package:datingapp/mainscreen.dart';
+import 'package:datingapp/termandcondition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -153,16 +158,25 @@ class _signupState extends State<signup> {
                               fontFamily: "mulish",
                               color: Color(0xff4D4D4D)),
                         ),
-                        Text(
-                          'Terms and Conditions',
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              decorationColor: Color(0xff4D4D4D),
-                              decorationThickness: 2,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "mulish",
-                              color: Color(0xff4D4D4D)),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) {
+                                return termandcondition();
+                              },
+                            ));
+                          },
+                          child: Text(
+                            'Terms and Conditions',
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color(0xff4D4D4D),
+                                decorationThickness: 2,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "mulish",
+                                color: Color(0xff4D4D4D)),
+                          ),
                         ),
                       ],
                     ),
@@ -349,10 +363,12 @@ class _signupState extends State<signup> {
           'status': 'Online',
           'height': '0 cm',
           'created': FieldValue.serverTimestamp(),
-          "languages": ['None'],
+          "languages": [],
           'education': '',
           'profile': "standard",
-          "description": ''
+          "description": '',
+          'statusType': "active",
+          'Logged': 'true'
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -379,7 +395,8 @@ class _signupState extends State<signup> {
       ));
     }
   }
-    Future<User?> signInWithGoogle(BuildContext context) async {
+
+  Future<User?> signInWithGoogle(BuildContext context) async {
     try {
       // Sign out of Google Sign-In to ensure the sign-in screen shows up
       await GoogleSignIn().signOut();
@@ -402,19 +419,67 @@ class _signupState extends State<signup> {
       final User? user = userCredential.user;
 
       if (user != null) {
-        // Check Firestore for the user document
         final DocumentSnapshot userDoc = await FirebaseFirestore.instance
             .collection('users')
             .doc(user.email)
             .get();
- final DocumentSnapshot AmbassdorDoc = await FirebaseFirestore.instance
-     .collection('Ambassdor')
-     .doc(user.email)
-     .get();
+final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
+    .collection('delete')
+    .doc(user.email)
+    .get();
+       final DocumentSnapshot AmbassdorDoc = await FirebaseFirestore.instance
+         .collection('Ambassdor')
+         .doc(user.email)
+         .get();  
+        if (userDoc.exists) {
+          final data = userDoc.data() as Map<String, dynamic>?;
 
+          if (data != null && data['statusType'] == 'active') {
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.email)
+                .update({'Logged': 'true'});
+            // Allow login
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => MainScreen()),
+              (Route<dynamic> route) => false,
+            );
+          } else if (data!['statusType'] == 'block') {
+            await FirebaseAuth.instance.signOut();
 
-        if (!userDoc.exists && !AmbassdorDoc.exists) {
-              await FirebaseFirestore.instance
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => block()),
+              (Route<dynamic> route) => false,
+            );
+          } 
+                  else if (data!['statusType'] == 'delete') {
+ 
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) {
+        return DeleteAccountPage(
+          initiateDelete: true,
+          who: 'users',
+        );
+      },
+    ));
+ 
+ 
+        }
+          
+          
+          else {
+            // Account is deactivated
+            await FirebaseAuth.instance.signOut();
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => deactivepage()),
+              (Route<dynamic> route) => false,
+            );
+          }
+        }
+         else if(!userDoc.exists && !AmbassdorDoc.exists && !deleteDoc.exists) {
+          // Handle new user creation
+          await FirebaseFirestore.instance
               .collection('users')
               .doc(user.email)
               .set({
@@ -434,55 +499,39 @@ class _signupState extends State<signup> {
             'status': 'Online',
             'height': '0 cm',
             'created': FieldValue.serverTimestamp(),
-            "languages": ['None'],
+            "languages": [],
             'education': '',
             'profile': "standard",
-            "description": ''
+            "description": '',
+            'statusType': "active",
+            'Logged': 'true'
           });
+
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
               return gender();
             },
           ));
+        }else{
+              await FirebaseAuth.instance.signOut();
 
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("This Email Not Valid in the users Account",
+          style: TextStyle(color: Colors.white)),
+    ));
 
-
-
-
-
-
-
-
-
-
-        } else {
-          final userSnapshot =
-              await FirebaseFirestore.instance.collection('users').doc(user.email).get();
-          if (userSnapshot.exists) {
-            // Fetch the updated user document
-            final updatedUserDoc = await FirebaseFirestore.instance
-                .collection('users')
-                .doc(user.email)
-                .get();
-
-            final data = updatedUserDoc.data() as Map<String, dynamic>?;
-
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => MainScreen()),
-              (Route<dynamic> route) => false,
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Enter Valid Email for User Account",
-                  style: TextStyle(color: Colors.white)),
-            ));
-          }
         }
       }
 
       return user;
     } catch (e) {
       print('Error signing in with Google: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "An error occurred during sign-in. Please try again.",
+          style: TextStyle(color: Colors.white),
+        ),
+      ));
       return null;
     }
   }

@@ -28,32 +28,20 @@ class _technicaluserState extends State<technicaluser> {
     if (curentuser != null) {
       try {
         // Check if the document exists
-        DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-            .collection(widget.mainname)
-            .doc(userEmail)
-            .get();
 
-        if (docSnapshot.exists) {
-          // Update the existing document with the new question
-          await FirebaseFirestore.instance
-              .collection(widget.mainname)
-              .doc(userEmail)
-              .update({
-            'Question': FieldValue.arrayUnion([
-              _questionController.text.trim(),
-            ]),
-          });
-        } else {
-          // Create the document if it does not exist
-          await FirebaseFirestore.instance
-              .collection(widget.mainname)
-              .doc(userEmail)
-              .set({
-            'Question': [
-              _questionController.text.trim(),
-            ],
-          });
-        }
+        await FirebaseFirestore.instance
+            .collection('category')
+            .doc(userEmail)
+            .set({
+          '${widget.mainname}': FieldValue.arrayUnion([
+            {
+              'issue': _questionController.text.trim(),
+              'timestamp': DateTime.now().toUtc().toIso8601String(),
+              // Use current UTC time
+            }
+          ]),
+          'email': userEmail
+        }, SetOptions(merge: true));
 
         // Clear the text field after submission
         _questionController.clear();
@@ -186,8 +174,87 @@ class _technicaluserState extends State<technicaluser> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16),
                               ),
+                              StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection("faqs")
+                                      .where('category',
+                                          isEqualTo: '${widget.mainname}')
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return Center(
+                                          child:
+                                              Text('Error: ${snapshot.error}'));
+                                    }
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                    if (!snapshot.hasData ||
+                                        snapshot.data!.docs.isEmpty) {
+                                      return Center(
+                                          child:
+                                              Text("No questions available."));
+                                    }
+
+                                    final data = snapshot.data!.docs;
+
+                                    double containerHeight =
+                                        height / 5 * data.length;
+
+                                    return Container(
+                                      height:
+                                          containerHeight.clamp(0, height / 2),
+                                      child: ListView.builder(
+                                          itemCount: data.length,
+                                          itemBuilder: (context, index) {
+                                            return Card(
+                                              color: Color(0xffF9F9F9),
+                                              shadowColor: Colors.transparent,
+                                              borderOnForeground: false,
+                                              shape: BeveledRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              surfaceTintColor:
+                                                  Colors.transparent,
+                                              child: ExpansionTile(
+                                                  expandedCrossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  childrenPadding:
+                                                      EdgeInsets.only(
+                                                          left: width / 25,
+                                                          bottom: height / 60),
+                                                  expandedAlignment:
+                                                      Alignment.centerLeft,
+                                                  children: [
+                                                    Text(
+                                                      data[index]['answer'],
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 10),
+                                                    )
+                                                  ],
+                                                  collapsedBackgroundColor:
+                                                      Color(0xffF9F9F9),
+                                                  backgroundColor:
+                                                      Color(0xffF9F9F9),
+                                                  shape: BeveledRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  title: Text(
+                                                      data[index]['question'],
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 11))),
+                                            );
+                                          }),
+                                    );
+                                  }),
                               SizedBox(
-                                height: height / 60,
+                                height: height / 30,
                               ),
                               Text(
                                 "Your Question?",

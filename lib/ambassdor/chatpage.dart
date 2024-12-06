@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/accountdelectionpage.dart';
 import 'package:datingapp/ambassdor/bottombar.dart';
+import 'package:datingapp/block.dart';
 import 'package:datingapp/bootmnavbar.dart';
+import 'package:datingapp/deactivepage.dart';
 import 'package:datingapp/history.dart';
 import 'package:datingapp/userchatpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -97,16 +100,71 @@ class _A_ChatscreenState extends State<A_Chatscreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-  final currentUser = FirebaseAuth.instance.currentUser!;
-  return StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection("Ambassdor")
-          .doc(currentUser.email!)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final userdataperson =
-              snapshot.data!.data() as Map<String, dynamic>;
+        final User? currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      // Handle unauthenticated user state (e.g., redirect to login page o
+      return Center(child: Text('No user is logged in.'));
+    }
+
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("Ambassdor")
+            .doc(currentUser.email)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final userdataperson =
+                snapshot.data!.data() as Map<String, dynamic>?;
+            if (userdataperson?['statusType'] == 'deactive') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+               
+               
+               
+                   if (mounted) {
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => deactivepage()),
+        (Route<dynamic> route) => false,
+      );
+    }
+               
+               
+               
+              });
+            }
+            if (userdataperson?['statusType'] == 'block') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => block()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+
+            if (userdataperson?['statusType'] == 'delete') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) {
+                      return DeleteAccountPage(
+                        initiateDelete: true,
+                        who: 'Ambassdor',
+                      );
+                    },
+                  ));
+                }
+              });
+            }
+
+            if (userdataperson == null) {
+              return Center(
+                child: Text("User data not found."),
+              );
+            }
         return Scaffold(
           backgroundColor: Color.fromARGB(255, 121, 5, 245),
           appBar: AppBar(
@@ -292,147 +350,146 @@ class _A_ChatscreenState extends State<A_Chatscreen> {
                             // );
                           // },
                         // ),
-                      // ),
-    Container(
-      height: height / 7,
-      child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("users")
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-                child: Text('Error: ${snapshot.error}'));
-          }
-          if (snapshot.connectionState ==
-              ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator());
-          }
-          // Filter the data and exclude the current user
-          final data = snapshot.data!.docs.where((doc) {
-            return doc['email'] != currentUser.email &&
-                (searchQuery.isEmpty ||
-                    doc['name']
-                        .toLowerCase()
-                        .contains(searchQuery));
-          }).toList();
-          // Sort the data to show online users first
-          data.sort((a, b) {
-            final aStatus = usersStatusDetails[a['email']]
-                    ?['status'] ??
-                'offline';
-            final bStatus = usersStatusDetails[b['email']]
-                    ?['status'] ??
-                'offline';
-            return bStatus.compareTo(
-                aStatus); // 'online' comes before 'offline'
-          });
-          return ListView.builder(
-            itemCount: data.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final user = data[index];
-              final String userEmail = user['email'];
-              // Fetch the status for this specific user
-              bool isOnline = false;
-              String lastSeen = "Last seen: N/A";
-              lastSeenhistory = "Last seen: N/A";
-              if (usersStatusDetails
-                  .containsKey(userEmail)) {
-                final userStatus =
-                    usersStatusDetails[userEmail];
-                isOnline =
-                    userStatus['status'] == 'online';
-                if (isOnline) {
-                  lastSeen = "Online";
-                  lastSeenhistory = "Online";
-                  statecolour = const Color.fromARGB(
-                      255, 49, 255, 56);
-                } else {
-                  var lastSeenDate =
-                      DateTime.fromMillisecondsSinceEpoch(
-                              userStatus['lastSeen'])
-                          .toLocal();
-                  lastSeen =
-                      "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-                  lastSeenhistory = lastSeen;
-                  statecolour = Colors.white;
-                }
-              }
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatPage(
-                        chatPartnerEmail: user['email'],
-                        chatPartnername: user['name'],
-                        chatPartnerimage:
-                            user['profile_pic'],
-                        onlinecheck: lastSeen,
-                        statecolour: statecolour,
-                        who: 'ambassdor',
-                      ),
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding:
-                      EdgeInsets.only(right: width / 15),
-                  child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center,
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                user['profile_pic']),
-                            radius: 26,
-                          ),
-                          if (isOnline) // Conditionally show the green dot
-                            Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: Container(
-                                height: 12,
-                                width: 12,
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors
-                                        .transparent,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                      SizedBox(height: height / 150),
-                      Text(
-                        capitalizeFirstLetter(
-                            user['name']),
-                        style: TextStyle(
-                            color: const Color.fromARGB(
-                                255, 255, 255, 255),
-                            fontFamily: "defaultfonts",
-                            fontWeight: FontWeight.w500,
-                            fontSize: 11),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
-    ),
+                      // ),tSeenDate)}";
 
-                      
+                                               Container(
+                           height: height / 7,
+                           child: StreamBuilder<QuerySnapshot>(
+                             stream: FirebaseFirestore.instance
+                                 .collection("users")
+                                 .snapshots(),
+                             builder: (context, snapshot) {
+                               if (snapshot.hasError) {
+                                 return Center(
+                                     child: Text('Error: ${snapshot.error}'));
+                               }
+                               if (snapshot.connectionState ==
+                                   ConnectionState.waiting) {
+                                 return const Center(
+                                     child: CircularProgressIndicator());
+                               }
+                               // Filter the data and exclude the current user
+                               final data = snapshot.data!.docs.where((doc) {
+                                 return doc['email'] != currentUser.email &&
+                                     (searchQuery.isEmpty ||
+                                         doc['name']
+                                             .toLowerCase()
+                                             .contains(searchQuery));
+                               }).toList();
+                               // Sort the data to show online users first
+                               data.sort((a, b) {
+                                 final aStatus = usersStatusDetails[a['email']]
+                                         ?['status'] ??
+                                     'offline';
+                                 final bStatus = usersStatusDetails[b['email']]
+                                         ?['status'] ??
+                                     'offline';
+                                 return bStatus.compareTo(
+                                     aStatus); // 'online' comes before 'offline'
+                               });
+                               return ListView.builder(
+                                 itemCount: data.length,
+                                 scrollDirection: Axis.horizontal,
+                                 itemBuilder: (context, index) {
+                                   final user = data[index];
+                                   final String userEmail = user['email'];
+                                   // Fetch the status for this specific user
+                                   bool isOnline = false;
+                                   String lastSeen = "Last seen: N/A";
+                                   lastSeenhistory = "Last seen: N/A";
+                                   if (usersStatusDetails
+                                       .containsKey(userEmail)) {
+                                     final userStatus =
+                                         usersStatusDetails[userEmail];
+                                     isOnline =
+                                         userStatus['status'] == 'online';
+                                     if (isOnline) {
+                                       lastSeen = "Online";
+                                       lastSeenhistory = "Online";
+                                       statecolour = const Color.fromARGB(
+                                           255, 49, 255, 56);
+                                     } else {
+                                       var lastSeenDate =
+                                           DateTime.fromMillisecondsSinceEpoch(
+                                                   userStatus['lastSeen'])
+                                               .toLocal();
+                                       lastSeen =
+                                           "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                                       lastSeenhistory = lastSeen;
+                                       statecolour = Colors.white;
+                                     }
+                                   }
+                                   return GestureDetector(
+                                     onTap: () {
+                                       Navigator.push(
+                                         context,
+                                         MaterialPageRoute(
+                                           builder: (context) => ChatPage(
+                                             chatPartnerEmail: user['email'],
+                                             chatPartnername: user['name'],
+                                             chatPartnerimage:
+                                                 user['profile_pic'],
+                                             onlinecheck: lastSeen,
+                                             statecolour: statecolour,
+                                             who: 'user',
+                                           ),
+                                         ),
+                                       );
+                                     },
+                                     child: Padding(
+                                       padding:
+                                           EdgeInsets.only(right: width / 15),
+                                       child: Column(
+                                         crossAxisAlignment:
+                                             CrossAxisAlignment.center,
+                                         children: [
+                                           Stack(
+                                             children: [
+                                               CircleAvatar(
+                                                 backgroundImage: NetworkImage(
+                                                     user['profile_pic']),
+                                                 radius: 26,
+                                               ),
+                                               if (isOnline) // Conditionally show the green dot
+                                                 Positioned(
+                                                   right: 0,
+                                                   bottom: 0,
+                                                   child: Container(
+                                                     height: 12,
+                                                     width: 12,
+                                                     decoration: BoxDecoration(
+                                                       color: Colors.green,
+                                                       shape: BoxShape.circle,
+                                                       border: Border.all(
+                                                         color: Colors
+                                                             .transparent,
+                                                         width: 1.5,
+                                                       ),
+                                                     ),
+                                                   ),
+                                                 ),
+                                             ],
+                                           ),
+                                           SizedBox(height: height / 150),
+                                           Text(
+                                             capitalizeFirstLetter(
+                                                 user['name']),
+                                             style: TextStyle(
+                                                 color: const Color.fromARGB(
+                                                     255, 255, 255, 255),
+                                                 fontFamily: "defaultfonts",
+                                                 fontWeight: FontWeight.w500,
+                                                 fontSize: 11),
+                                           ),
+                                         ],
+                                       ),
+                                     ),
+                                   );
+                                 },
+                               );
+                             },
+                           ),
+                         ),
                     ],
                   ),
                 ),
@@ -449,8 +506,8 @@ class _A_ChatscreenState extends State<A_Chatscreen> {
                   ),
                   child: Padding(
                     padding:
-                        EdgeInsets.only(top: height / 30, bottom: height / 50),
-                    child: ChatHistoryPage(who: 'ambassdor',),
+                        EdgeInsets.only(top: height / 30, bottom: height / 10),
+                    child: ChatHistoryPage(who: 'Ambassdor',),
                   ),
                 ),
               ),

@@ -16,8 +16,14 @@ class _FeedbackPageState extends State<FeedbackPage> {
   double rating = 0;
   String feedbackType = 'General Feedback';
   String feedbackText = '';
-  List<String> feedbackTypes = ['General Feedback', 'Bug Report', 'Feature Request'];
- File? _screenshot;
+  List<String> feedbackTypes = [
+    'General Feedback',
+    'Bug Report',
+    'Feature Request'
+  ];
+  File? _screenshot;
+    bool isLoading = true; // Add loading state
+
   final picker = ImagePicker();
   final TextEditingController _feedbackController = TextEditingController();
 
@@ -26,8 +32,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
     super.initState();
     _loadUserRating(); // Load user's previous rating if available
   }
-
   Future<void> _loadUserRating() async {
+  try {
     final currentUser = FirebaseAuth.instance.currentUser!;
     final DocumentSnapshot ratingDoc = await FirebaseFirestore.instance
         .collection("Ratings")
@@ -36,11 +42,40 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
     if (ratingDoc.exists) {
       final data = ratingDoc.data() as Map<String, dynamic>;
+      final feedbacks = data['feedbacks'] as List<dynamic>?;
+
+      if (feedbacks != null && feedbacks.isNotEmpty) {
+        // Sort feedbacks by timestamp and get the latest one
+        feedbacks.sort((a, b) {
+          DateTime dateA = DateTime.parse(a['timestamp']);
+          DateTime dateB = DateTime.parse(b['timestamp']);
+          return dateB.compareTo(dateA); // Descending order
+        });
+
+        // Get the latest rating
+        final latestFeedback = feedbacks.first;
+        setState(() {
+          rating = latestFeedback['rating'] ?? 0;
+        });
+      } else {
+        setState(() {
+          rating = 0; // Default rating if no feedback exists
+        });
+      }
+    } else {
       setState(() {
-        rating = data['rating'] ?? 0;
+        rating = 0; // Default rating if no document exists
       });
     }
+  } catch (e) {
+    print("Error loading rating: $e");
+    setState(() {
+      rating = 0; // Default rating on error
+    });
   }
+}
+
+
   Future<void> _pickScreenshot() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -50,14 +85,14 @@ class _FeedbackPageState extends State<FeedbackPage> {
       });
     }
   }
-    Future<String?> _uploadScreenshot() async {
+
+  Future<String?> _uploadScreenshot() async {
     if (_screenshot == null) return null;
 
     try {
       final currentUser = FirebaseAuth.instance.currentUser!;
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child("screenshots/${currentUser.email!}_${DateTime.now().millisecondsSinceEpoch}.jpg");
+      final storageRef = FirebaseStorage.instance.ref().child(
+          "screenshots/${currentUser.email!}_${DateTime.now().millisecondsSinceEpoch}.jpg");
 
       final uploadTask = storageRef.putFile(_screenshot!);
       final snapshot = await uploadTask;
@@ -68,35 +103,52 @@ class _FeedbackPageState extends State<FeedbackPage> {
       return null;
     }
   }
-  Future<void> _submitFeedback() async {
-    final currentUser = FirebaseAuth.instance.currentUser!;
-    String? screenshotUrl;
+Future<void> _submitFeedback() async {
+  final currentUser = FirebaseAuth.instance.currentUser!;
+  String? screenshotUrl;
 
+  try {
     if (_screenshot != null) {
       screenshotUrl = await _uploadScreenshot();
     }
+
+    // Check and set default values for optional fields
+    final feedbackToSubmit = {
+      'feedbackType': feedbackType.isNotEmpty ? feedbackType : ' ',
+      'feedbackText': feedbackText.isNotEmpty ? feedbackText : '',
+      'screenshotUrl': screenshotUrl, // Can be null
+      'timestamp': DateTime.now().toUtc().toIso8601String(),
+      'rating': rating, // Ensure this is a valid value
+    };
+
+    // Update Firestore
     await FirebaseFirestore.instance
-    
         .collection("Ratings")
         .doc(currentUser.email!)
         .set({
-      'rating': rating,
-      'feedbackType': feedbackType,
-      'feedbackText': feedbackText,
-            'screenshotUrl': screenshotUrl,
+      'feedbacks': FieldValue.arrayUnion([feedbackToSubmit]),
+    }, SetOptions(merge: true));
 
-      'timestamp': FieldValue.serverTimestamp(),
-    });
+    // Show success message
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Feedback submitted successfully!")),
     );
 
-_feedbackController.clear();
-setState(() {
-  _screenshot=null;
-
-});
+    // Clear fields after submission
+    _feedbackController.clear();
+    setState(() {
+      _screenshot = null;
+      feedbackText = '';
+    });
+  } catch (e) {
+    // Handle errors and show feedback to the user
+    print("Error submitting feedback: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Failed to submit feedback. Please try again.")),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,19 +156,18 @@ setState(() {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-                                                   appBar: AppBar(
-               toolbarHeight:height/400,
-               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-               automaticallyImplyLeading: false,
-             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-             surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-             ),
+      appBar: AppBar(
+        toolbarHeight: height / 400,
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+      ),
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Padding(
-   padding: EdgeInsets.only(
-       right: width / 20,
-       left: width / 20),          child: Column(
+          padding: EdgeInsets.only(right: width / 20, left: width / 20),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
@@ -139,8 +190,7 @@ setState(() {
                         ),
                       ),
                     ),
-                                          SizedBox(width: width / 10),
-    
+                    SizedBox(width: width / 10),
                     Expanded(
                       child: Center(
                         child: Text(
@@ -167,24 +217,25 @@ setState(() {
                 ),
               ),
               SizedBox(height: height / 80),
-              RatingBar.builder(
-                initialRating: rating,
-                itemSize: height / 30,
-                glowColor: Colors.black,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: false,
-                itemCount: 5,
-                itemBuilder: (context, _) => Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ),
-                onRatingUpdate: (ratingValue) {
-                  setState(() {
-                    rating = ratingValue;
-                  });
-                },
-              ),
+                  RatingBar.builder(
+                      initialRating: rating, // Ensure this is updated via _loadUserRating
+                      itemSize: height / 30,
+                      glowColor: Colors.black,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: false,
+                      itemCount: 5,
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (ratingValue) {
+                        setState(() {
+                          rating = ratingValue;
+                        });
+                      },
+                    ),
+
               SizedBox(height: 20),
               Container(
                 height: height / 3,
@@ -218,7 +269,10 @@ setState(() {
                 items: feedbackTypes.map((String category) {
                   return DropdownMenuItem(
                     value: category,
-                    child: Text(category,style: TextStyle(color: Colors.black,fontSize: 11),),
+                    child: Text(
+                      category,
+                      style: TextStyle(color: Colors.black, fontSize: 11),
+                    ),
                   );
                 }).toList(),
                 onChanged: (newValue) {
@@ -235,7 +289,8 @@ setState(() {
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(color: Color(0xff8F9DA6)),
                   ),
-                  contentPadding: EdgeInsets.only(left: width / 50, top: height / 50),
+                  contentPadding:
+                      EdgeInsets.only(left: width / 50, top: height / 50),
                 ),
               ),
               SizedBox(height: 20),
@@ -252,7 +307,8 @@ setState(() {
                       padding: EdgeInsets.all(8.0),
                     ),
                     child: Padding(
-                      padding:  EdgeInsets.only(left: width/40,right: width/40),
+                      padding:
+                          EdgeInsets.only(left: width / 40, right: width / 40),
                       child: Text(
                         "Attach Screenshot",
                         style: TextStyle(
@@ -265,8 +321,8 @@ setState(() {
                   ),
                 ],
               ),
-
-                if (_screenshot != null) // Show a preview if a screenshot is selected
+              if (_screenshot !=
+                  null) // Show a preview if a screenshot is selected
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Image.file(_screenshot!, height: height / 5),
@@ -285,7 +341,9 @@ setState(() {
                     child: Text(
                       "Submit Feedback",
                       style: TextStyle(
-                          color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

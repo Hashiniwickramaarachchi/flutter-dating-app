@@ -24,7 +24,6 @@ import 'package:datingapp/homepage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
 class A_MainScreen extends StatefulWidget {
   final int initialIndex;
 
@@ -41,7 +40,8 @@ class _A_MainScreenState extends State<A_MainScreen> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    _pageController = PageController(initialPage: _selectedIndex); // Proper initialization
+    _pageController =
+        PageController(initialPage: _selectedIndex); // Proper initialization
   }
 
   @override
@@ -54,13 +54,12 @@ class _A_MainScreenState extends State<A_MainScreen> {
     setState(() {
       _selectedIndex = index;
       _pageController.jumpToPage(index);
-       // Navigate to the selected page
+      // Navigate to the selected page
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    
     final curentuser = FirebaseAuth.instance.currentUser;
     if (curentuser == null) {
       return Center(child: Text('No user is logged in.'));
@@ -73,18 +72,17 @@ class _A_MainScreenState extends State<A_MainScreen> {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-      final userdataperson =
-          snapshot.data!.data() as Map<String, dynamic>?;
-      if (userdataperson == null) {
-        return Center(
-          child: Text("User data not found."),
-        );
-      }
+          final userdataperson = snapshot.data!.data() as Map<String, dynamic>?;
+          if (userdataperson == null) {
+            return Center(
+              child: Text("User data not found."),
+            );
+          }
           return Scaffold(
             body: Stack(
               children: [
                 PageView(
-                    physics: NeverScrollableScrollPhysics(), // Disable swipe
+                  physics: NeverScrollableScrollPhysics(), // Disable swipe
 
                   controller: _pageController,
                   onPageChanged: (index) {
@@ -93,14 +91,12 @@ class _A_MainScreenState extends State<A_MainScreen> {
                     });
                   },
                   children: [
-showsigninresult(userLatitude: userdataperson["X"], userLongitude: userdataperson["Y"], useremail: userdataperson['email'])      ,            
-                  
-                  
-                  
-                  
+                    showsigninresult(
+                        userLatitude: userdataperson["X"],
+                        userLongitude: userdataperson["Y"],
+                        useremail: userdataperson['email']),
                     DashboardScreen(),
-                                      addpage(),
-
+                    addpage(),
                     A_Chatscreen(),
                     A_profile(),
                   ],
@@ -108,7 +104,7 @@ showsigninresult(userLatitude: userdataperson["X"], userLongitude: userdataperso
                 Positioned(
                   left: 30,
                   right: 30,
-                  bottom: MediaQuery.of(context).size.height/40,
+                  bottom: MediaQuery.of(context).size.height / 40,
                   child: A_BottomNavBar(
                     selectedIndex2: _selectedIndex,
                     onItemTapped: _onItemTapped,
@@ -141,32 +137,30 @@ class A_BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-                     alignment: AlignmentDirectional.topStart,
-   
+      alignment: AlignmentDirectional.topStart,
       children: [
-            Container(
-      height: 70,
-      decoration: BoxDecoration(
-          color: Colors.black, shape: BoxShape.circle),
-    ),
+        Container(
+          height: 70,
+          decoration:
+              BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+        ),
         Column(
-           mainAxisAlignment: MainAxisAlignment.start,
-   children: [
-     Container(
-       height: 20,
-       width: double.infinity,
-       decoration: BoxDecoration(
-         color: Colors.transparent,
-       ),
-     ),
-
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
             Container(
-            
+              height: 20,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+            ),
+            Container(
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
-                  BoxShadow(color: Colors.black26, spreadRadius: 0, blurRadius: 10),
+                  BoxShadow(
+                      color: Colors.black26, spreadRadius: 0, blurRadius: 10),
                 ],
               ),
               child: BottomNavigationBar(
@@ -180,20 +174,21 @@ class A_BottomNavBar extends StatelessWidget {
                 currentIndex: selectedIndex2,
                 onTap: onItemTapped,
                 items: [
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-                  BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
                   BottomNavigationBarItem(
-                    icon:    Container(
-                  decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: selectedIndex2==2
-                  ? Color(0xff7905F5)
-                  : Colors.white),
-                  child: Icon(Icons.add,
-              color: selectedIndex2 == 2
-                  ? Colors.white
-                  : Color(0xff7905F5))), 
-                      
+                      icon: Icon(Icons.home), label: 'Home'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.explore), label: 'Explore'),
+                  BottomNavigationBarItem(
+                      icon: Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: selectedIndex2 == 2
+                                  ? Color(0xff7905F5)
+                                  : Colors.white),
+                          child: Icon(Icons.add,
+                              color: selectedIndex2 == 2
+                                  ? Colors.white
+                                  : Color(0xff7905F5))),
                       label: 'Add'),
                   BottomNavigationBarItem(
                       icon: Icon(Icons.chat_bubble_outline), label: 'Messages'),
@@ -208,6 +203,7 @@ class A_BottomNavBar extends StatelessWidget {
     );
   }
 }
+
 class KeepAliveWidget extends StatefulWidget {
   final Widget child;
 

@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:datingapp/accountdelectionpage.dart';
 import 'package:datingapp/ambassdor/bottombar.dart';
 import 'package:datingapp/ambassdor/filterpage.dart';
 import 'package:datingapp/ambassdor/olduser/signinperson.dart';
 import 'package:datingapp/ambassdor/onlinecheck.dart';
 import 'package:datingapp/ambassdor/person.dart';
+import 'package:datingapp/block.dart';
 import 'package:datingapp/bootmnavbar.dart';
+import 'package:datingapp/deactivepage.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/person.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -167,7 +171,6 @@ class _showsigninresultState extends State<showsigninresult> {
 
         // Add marker to map
       }
-      
 
       setState(() {
         filteredUsers = List.from(allUsers); // Initially show all users
@@ -265,173 +268,245 @@ class _showsigninresultState extends State<showsigninresult> {
     final width = MediaQuery.of(context).size.width;
     print(widget.userLatitude);
     print(widget.useremail);
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        toolbarHeight: height / 400,
-        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: height / 70,
-          left: width / 20,
-          right: width / 20,
-        ),
-        child: Stack(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
+    final User? curentuser = FirebaseAuth.instance.currentUser;
+
+    if (curentuser == null) {
+      // Handle unauthenticated user state (e.g., redirect to login page or s
+      return Center(child: Text('No user is logged in.'));
+    }
+
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("Ambassdor")
+            .doc(curentuser.email)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final userdataperson =
+                snapshot.data!.data() as Map<String, dynamic>?;
+            if (userdataperson?['statusType'] == 'deactive') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => deactivepage()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+            if (userdataperson?['statusType'] == 'block') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => block()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+
+            if (userdataperson?['statusType'] == 'delete') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) {
+                      return DeleteAccountPage(
+                        initiateDelete: true,
+                        who: 'Ambassdor',
+                      );
+                    },
+                  ));
+                }
+              });
+            }
+
+            if (userdataperson == null) {
+              return Center(
+                child: Text("User data not found."),
+              );
+            }
+
+            return Scaffold(
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              appBar: AppBar(
+                toolbarHeight: height / 400,
+                foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                automaticallyImplyLeading: false,
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+              ),
+              body: Padding(
+                padding: EdgeInsets.only(
+                  top: height / 70,
+                  left: width / 20,
+                  right: width / 20,
+                ),
+                child: Stack(
                   children: [
-                    Expanded(
-                      child: Container(
-                        height: height / 18, // Set height as needed
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: TextField(
-                          controller: _searchController,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: width / 20,
-                                  vertical:
-                                      height / 60 // Adjust padding as needed
-                                  ),
-                              hintText: "Search",
-                              border: InputBorder.none,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff8F9DA6)),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: height / 18, // Set height as needed
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(10.0),
-                                  borderSide:
-                                      BorderSide(color: Color(0xff8F9DA6)))),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: width / 30,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(50),
-                              topRight: Radius.circular(50),
+                                ),
+                                child: TextField(
+                                  controller: _searchController,
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: width / 20,
+                                          vertical: height /
+                                              60 // Adjust padding as needed
+                                          ),
+                                      hintText: "Search",
+                                      border: InputBorder.none,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff8F9DA6)),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          borderSide: BorderSide(
+                                              color: Color(0xff8F9DA6)))),
+                                ),
+                              ),
                             ),
-                          ),
-                          backgroundColor: Colors.transparent,
-                          context: context,
-                          builder: (context) {
-                            return A_filterpage();
-                          },
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color(0xffEDEDED),
+                            SizedBox(
+                              width: width / 30,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(50),
+                                      topRight: Radius.circular(50),
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (context) {
+                                    return A_filterpage();
+                                  },
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xffEDEDED),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.tune,
+                                    color: Color.fromARGB(255, 121, 5, 245),
+                                    size: height / 30,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.tune,
-                            color: Color.fromARGB(255, 121, 5, 245),
-                            size: height / 30,
-                          ),
+                        SizedBox(
+                          height: height / 30,
                         ),
-                      ),
+                        isLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : Expanded(
+                                child: ListView.builder(
+                                itemCount: filteredUsers.length,
+                                itemBuilder: (context, index) {
+                                  final user = filteredUsers[index];
+                                  final String userEmail = user['email'];
+                                  bool isOnline = false;
+                                  String lastSeen = "Last seen: N/A";
+                                  lastSeenhistory = "Last seen: N/A";
+                                  if (usersStatusDetails
+                                      .containsKey(userEmail)) {
+                                    final userStatus =
+                                        usersStatusDetails[userEmail];
+                                    isOnline = userStatus['status'] == 'online';
+                                    if (isOnline) {
+                                      lastSeen = "Online";
+                                      lastSeenhistory = "Online";
+                                      statecolour = const Color.fromARGB(
+                                          255, 49, 255, 56);
+                                    } else {
+                                      var lastSeenDate =
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                                  userStatus['lastSeen'])
+                                              .toLocal();
+                                      lastSeen =
+                                          "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                                      lastSeenhistory = lastSeen;
+                                      statecolour = Colors.white;
+                                    }
+                                  }
+                                  return Padding(
+                                    padding:
+                                        EdgeInsets.only(bottom: height / 50),
+                                    child: Container(
+                                      height: height / 1.8,
+                                      width: double.infinity,
+                                      child: signinperson(
+                                        onlinecheck: lastSeen,
+                                        statecolour: statecolour,
+                                        profileimage: user['profile_pic'] ??
+                                            "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+                                        name: user['name']
+                                            .toString()
+                                            .toUpperCase(),
+                                        distance: 300,
+                                        location: user['Address'],
+                                        startLatitude: user["X"],
+                                        startLongitude: user["Y"],
+                                        endLatitude: widget.userLatitude,
+                                        endLongitude: widget.userLongitude,
+                                        age: int.parse(user['Age'].toString()),
+                                        height: user['height'],
+                                        labels: user['Interest'],
+                                        iconss: user["Icon"],
+                                        imagecollection: user['images'],
+                                        ID: user['email'],
+                                        useremail: widget.useremail,
+                                        gender: user['Gender'],
+                                        languages: user['languages'],
+                                        education: user['education'],
+                                        description: user['description'],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )),
+                        SizedBox(
+                          height: height / 10,
+                        )
+                      ],
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: height / 30,
-                ),
-                
-                   isLoading
-                ? Center(child: CircularProgressIndicator())
-              :  Expanded(
-                    child: ListView.builder(
-                  itemCount: filteredUsers.length,
-                  itemBuilder: (context, index) {
-                    final user = filteredUsers[index];
-                    final String userEmail = user['email'];
-                    bool isOnline = false;
-                    String lastSeen = "Last seen: N/A";
-                    lastSeenhistory = "Last seen: N/A";
-                    if (usersStatusDetails.containsKey(userEmail)) {
-                      final userStatus = usersStatusDetails[userEmail];
-                      isOnline = userStatus['status'] == 'online';
-                      if (isOnline) {
-                        lastSeen = "Online";
-                        lastSeenhistory = "Online";
-                        statecolour = const Color.fromARGB(255, 49, 255, 56);
-                      } else {
-                        var lastSeenDate = DateTime.fromMillisecondsSinceEpoch(
-                                userStatus['lastSeen'])
-                            .toLocal();
-                        lastSeen =
-                            "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-                        lastSeenhistory = lastSeen;
-                        statecolour = Colors.white;
-                      }
-                    }
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: height / 50),
-                      child: Container(
-                        height: height / 1.8,
-                        width: double.infinity,
-                        child: signinperson(
-                          onlinecheck: lastSeen,
-                          statecolour: statecolour,
-                          profileimage: user['profile_pic'] ??
-                              "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                          name: user['name'].toString().toUpperCase(),
-                          distance: 300,
-                          location: user['Address'],
-                          startLatitude: user["X"],
-                          startLongitude: user["Y"],
-                          endLatitude: widget.userLatitude,
-                          endLongitude: widget.userLongitude,
-                          age: user['Age'],
-                          height: user['height'],
-                          labels: user['Interest'],
-                          iconss: user["Icon"],
-                          imagecollection: user['images'],
-                          ID: user['email'],
-                          useremail: widget.useremail,
-                          gender: user['Gender'],
-                          languages: user['languages'],
-                          education: user['education'],
-                          description: user['description'],
-                        ),
-                      ),
-                    );
-                  },
-                )),
-              ],
-            ),
-            //  Positioned(
-            // left: 0,
-            // right: 0,
-            //  bottom: height / 60,
-            //  child: A_BottomNavBar(
-            //  selectedIndex2: 0, check: 'already',
-            //  ),
-            //  )
-          ],
-        ),
-      ),
-    );
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text("Error: ${snapshot.error}"),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
 }

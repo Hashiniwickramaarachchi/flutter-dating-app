@@ -79,37 +79,41 @@ class _A_settingsState extends State<A_settings> {
                       },
                     ));
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.person_2_outlined,
-                            color: Color(0xff565656),
-                            size: height / 30,
-                          ),
-                          SizedBox(
-                            width: width / 25,
-                          ),
-                          Text(
-                            'Personal information',
-                            style: TextStyle(
-                               color: const Color(0xff565656),
-         fontFamily: "defaultfontsbold",
-         fontWeight: FontWeight.bold,
-         fontSize: 18),
-                          
-                          
-                          ),
-                        ],
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Color(0xff565656),
-                        size: height / 40,
-                      ),
-                    ],
+                  child: Container(
+                                                                color: Colors.transparent,
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.person_2_outlined,
+                              color: Color(0xff565656),
+                              size: height / 30,
+                            ),
+                            SizedBox(
+                              width: width / 25,
+                            ),
+                            Text(
+                              'Personal information',
+                              style: TextStyle(
+                                 color: const Color(0xff565656),
+                             fontFamily: "defaultfontsbold",
+                             fontWeight: FontWeight.bold,
+                             fontSize: 18),
+                            
+                            
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Color(0xff565656),
+                          size: height / 40,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -134,35 +138,39 @@ class _A_settingsState extends State<A_settings> {
                       },
                     ));
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.shield_outlined,
-                        color: Color(0xff565656),
-                            size: height / 30,
-                          ),
-                          SizedBox(
-                            width: width / 25,
-                          ),
-                          Text(
-                            'Password and security',
-                            style: TextStyle(
-        color: const Color(0xff565656),
-        fontFamily: "defaultfontsbold",
-        fontWeight: FontWeight.bold,
-        fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                            color: Color(0xff565656),
-                        size: height / 40,
-                      ),
-                    ],
+                  child: Container(
+                                                                color: Colors.transparent,
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.shield_outlined,
+                          color: Color(0xff565656),
+                              size: height / 30,
+                            ),
+                            SizedBox(
+                              width: width / 25,
+                            ),
+                            Text(
+                              'Password and security',
+                              style: TextStyle(
+                            color: const Color(0xff565656),
+                            fontFamily: "defaultfontsbold",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                              color: Color(0xff565656),
+                          size: height / 40,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -200,35 +208,39 @@ class _A_settingsState extends State<A_settings> {
                      },
                    );
                  },
-                 child: Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     Row(
-                       children: [
-                         Icon(
-                           Icons.delete_outline,
-                           color: Color(0xffBF1506),
-                           size: height / 30,
-                         ),
-                         SizedBox(
-                           width: width / 25,
-                         ),
-                         Text(
-                           'Delete Account',
-                           style: TextStyle(
-                               color: const Color(0xffBF1506),
-                               fontFamily: "defaultfontsbold",
-                               fontWeight: FontWeight.bold,
-                               fontSize: 18),
-                         ),
-                       ],
-                     ),
-                     Icon(
-                       Icons.arrow_forward_ios,
-                       color: Color(0xffBF1506),
-                       size: height / 40,
-                     ),
-                   ],
+                 child: Container(
+                                                              color: Colors.transparent,
+
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Row(
+                         children: [
+                           Icon(
+                             Icons.delete_outline,
+                             color: Color(0xffBF1506),
+                             size: height / 30,
+                           ),
+                           SizedBox(
+                             width: width / 25,
+                           ),
+                           Text(
+                             'Delete Account',
+                             style: TextStyle(
+                                 color: const Color(0xffBF1506),
+                                 fontFamily: "defaultfontsbold",
+                                 fontWeight: FontWeight.bold,
+                                 fontSize: 18),
+                           ),
+                         ],
+                       ),
+                       Icon(
+                         Icons.arrow_forward_ios,
+                         color: Color(0xffBF1506),
+                         size: height / 40,
+                       ),
+                     ],
+                   ),
                  ),
                ),
                        Padding(

@@ -175,7 +175,7 @@ class _matchingfilterState extends State<matchingfilter> {
             // });
              Map<String, dynamic> userInfo = {
               'name': data['name'],
-              'Age': data['Age'],
+              'Age': int.parse(data['Age'].toString()),
               'distance': userDistance.toInt(),
               'profile_pic': data['profile_pic'],
               'X': data['X'],
@@ -511,7 +511,7 @@ Future<void> _updateMatchCountInFirebase() async {
                           startLongitude: user["Y"],
                           endLatitude: widget.userLatitude,
                           endLongitude: widget.userLongitude,
-                          age: user['Age'],
+                          age: int.parse(user['Age'].toString()),
                           height: user['height'],
                           labels: user['Interest'],
                           iconss: user["Icon"],
