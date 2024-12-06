@@ -149,7 +149,7 @@ class _matchingfilterState extends State<matchingfilter> {
   print(userDistance);       
           if (
             widget.useremail!=data['email'] &&
-              widget.Gender==data['Gender'] &&
+            
               matchesInterests &&
               userAge == widget.ageRange.start &&
               userDistance >= widget.distanceRange.start &&
