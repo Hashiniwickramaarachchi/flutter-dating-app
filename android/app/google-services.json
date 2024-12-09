@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "972396664960-bu3rqmqrbi39et62ckeo2bfdq9ae98hv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appexlove.app",
+            "certificate_hash": "a4f3ec29339003de0a4531b58eb023d45866fb56"
+          }
+        },
+        {
           "client_id": "972396664960-h8cjklq3hhv6a899iaoq5ovujbf16be3.apps.googleusercontent.com",
           "client_type": 3
         }

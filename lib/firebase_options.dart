@@ -66,7 +66,7 @@ class DefaultFirebaseOptions {
     projectId: 'appexlove-e7972',
     databaseURL: 'https://appexlove-e7972-default-rtdb.firebaseio.com',
     storageBucket: 'appexlove-e7972.appspot.com',
-    androidClientId: '972396664960-o23h6lpkvqjs6bblm08utchj1uicq9qb.apps.googleusercontent.com',
+    androidClientId: '972396664960-bu3rqmqrbi39et62ckeo2bfdq9ae98hv.apps.googleusercontent.com',
     iosClientId: '972396664960-nnoe5ivlco57pi7c21u3sd78s80hejfk.apps.googleusercontent.com',
     iosBundleId: 'com.appexlove.app',
   );
