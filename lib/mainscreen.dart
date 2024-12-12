@@ -105,7 +105,7 @@ class _MainScreenState extends State<MainScreen> {
                 Positioned(
                   left: 30,
                   right: 30,
-                  bottom: MediaQuery.of(context).size.height/40,
+                  bottom: 20,
                   child: BottomNavBar(
                     selectedIndex2: _selectedIndex,
                     onItemTapped: _onItemTapped,

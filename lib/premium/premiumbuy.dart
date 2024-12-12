@@ -127,7 +127,7 @@ class _premiumbuyState extends State<premiumbuy> {
                                         ismonthly = !ismonthly;
                                         isyearly = false;
                                         payemntversion = 'Monthly';
-                                                                                amount=32;
+                                                                                amount=9;
 
                                       });
                                     },
@@ -163,7 +163,7 @@ class _premiumbuyState extends State<premiumbuy> {
                                                 ),
                                               ),
                                               Text(
-                                                "\$32/Month",
+                                                "9 Euro/Month",
                                                 style: TextStyle(fontSize: 16),
                                               )
                                             ],
@@ -185,7 +185,7 @@ class _premiumbuyState extends State<premiumbuy> {
                                         isyearly = !isyearly;
                                         ismonthly = false;
                                         payemntversion = 'Yearly';
-                                        amount=90;
+                                        amount=99;
                                       });
                                     },
                                     child: Container(
@@ -220,7 +220,7 @@ class _premiumbuyState extends State<premiumbuy> {
                                                 ),
                                               ),
                                               Text(
-                                                "\$90/Month",
+                                                "99 Euro/Year",
                                                 style: TextStyle(fontSize: 16),
                                               )
                                             ],

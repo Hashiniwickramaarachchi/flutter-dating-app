@@ -369,7 +369,7 @@ right: width/20
                                       Positioned(
                                           left: 30,
                   right: 30,
-                         bottom: MediaQuery.of(context).size.height/40,
+                         bottom: 20,
                           child: A_BottomNavBar(
                             selectedIndex2: 0, onItemTapped: (int index) { 
                               if (index == 1) {
