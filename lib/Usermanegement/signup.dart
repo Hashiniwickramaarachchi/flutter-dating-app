@@ -368,7 +368,8 @@ class _signupState extends State<signup> {
           'profile': "standard",
           "description": '',
           'statusType': "active",
-          'Logged': 'true'
+          'Logged': 'true',
+          "subscriptionExpireAt":null
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -432,6 +433,28 @@ final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
          .doc(user.email)
          .get();  
         if (userDoc.exists) {
+
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(email.text.trim()).get();
+  var userData = userDoc.data() as Map<String, dynamic>?;
+
+  // Get the subscription expiration timestamp
+    Timestamp? subscriptionExpireAt = userData!['subscriptionExpireAt'];
+  
+  if (subscriptionExpireAt != null) {
+    // Get the current server time
+    Timestamp currentTime = Timestamp.now();
+
+    // Compare the expiration time with the current time
+ if (subscriptionExpireAt.compareTo(currentTime) < 0) {
+   await FirebaseFirestore.instance
+       .collection('users')
+       .doc(email.text.trim())
+       .update({'profile': 'standard'});
+
+    } else {
+      print('Subscription is still valid');
+    }
+  }     
           final data = userDoc.data() as Map<String, dynamic>?;
 
           if (data != null && data['statusType'] == 'active') {
@@ -504,7 +527,9 @@ final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
             'profile': "standard",
             "description": '',
             'statusType': "active",
-            'Logged': 'true'
+            'Logged': 'true',
+          "subscriptionExpireAt":null
+
           });
 
           Navigator.of(context).pushReplacement(MaterialPageRoute(

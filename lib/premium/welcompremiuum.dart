@@ -49,8 +49,7 @@ class _wlcomepremiumState extends State<wlcomepremium> {
                           height: height / 3.4,
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                  image: AssetImage(
-                                      "assetss/Vector (1).png"))),
+                                  image: AssetImage("assetss/Vector (1).png"))),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: height / 50),
@@ -80,36 +79,35 @@ class _wlcomepremiumState extends State<wlcomepremium> {
                             textAlign: TextAlign.center,
                           )),
                         ),
-                 
-                          Padding(
-                       padding:
-             EdgeInsets.only(top: height / 35, bottom: height / 30,left: width/25,right: width/25),
-                       child: 
-                       GestureDetector(
-                         onTap: () {
-       
-       Navigator.of(context).pushAndRemoveUntil(
-  MaterialPageRoute(builder: (context) => MainScreen()), 
-  (Route<dynamic> route) => false,
-);
-       
-                         },
-                         child: 
-                         Container(
-             height: height / 15,
-             width: width,
-             child: Center(
-                 child: Text(
-               "Go To Home",
-               style: Theme.of(context).textTheme.bodySmall,
-             )),
-             decoration: BoxDecoration(
-                 color: Color(0xff7905F5),
-                 borderRadius: BorderRadius.circular(height / 10)),
-                         ),
-                       ),
-                     ),
-                 
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: height / 35,
+                              bottom: height / 30,
+                              left: width / 25,
+                              right: width / 25),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => MainScreen()),
+                                (Route<dynamic> route) => false,
+                              );
+                            },
+                            child: Container(
+                              height: height / 15,
+                              width: width,
+                              child: Center(
+                                  child: Text(
+                                "Go To Home",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              )),
+                              decoration: BoxDecoration(
+                                  color: Color(0xff7905F5),
+                                  borderRadius:
+                                      BorderRadius.circular(height / 10)),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],

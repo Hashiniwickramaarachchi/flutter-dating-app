@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datingapp/mainscreen.dart';
 import 'package:datingapp/premium/welcompremiuum.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -43,7 +44,9 @@ class _PaymentPageState extends State<PaymentPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.contains('success')) {
+           if (request.url.contains('payment-status') &&
+                request.url.contains('OrderTrackingId') &&
+                request.url.contains('OrderMerchantReference')) {
               _handleSuccessUrl(request.url);
               return NavigationDecision.prevent;
             }
@@ -92,6 +95,8 @@ class _PaymentPageState extends State<PaymentPage> {
     // Extract query parameters
     final successOrderTrackingId = uri.queryParameters['OrderTrackingId'];
     final successOrderMerchantReference = uri.queryParameters['OrderMerchantReference'];
+  final userDoc = await FirebaseFirestore.instance.collection('users').doc(widget.dbemail).get();
+    if (userDoc.exists && userDoc.data()?['subscriptionExpireAt'] != null) {  
           try {
             await FirebaseFirestore.instance
                 .collection(widget.version)
@@ -128,12 +133,28 @@ class _PaymentPageState extends State<PaymentPage> {
       context,
       MaterialPageRoute(builder: (context) => wlcomepremium()),
     );
+    }else{
+   ScaffoldMessenger.of(context)
+       .showSnackBar(SnackBar(
+           content: Text(
+               'Payment Failed')));
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => MainScreen()),
+  );
+
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text('Payment'))),
+      appBar: AppBar(title: Center(child: Text('Payment')
+      
+      ),
+      automaticallyImplyLeading: false,
+      
+      ),
       body: redirectUrl == null
           ? Center(child: CircularProgressIndicator())
           : WebViewWidget(controller: _webViewController),

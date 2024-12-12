@@ -26,10 +26,15 @@ class _splashscreenState extends State<splashscreen> {
     Timer(const Duration(seconds: 1), () async {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
+
         final userSnapshot = await FirebaseFirestore.instance
             .collection('users')
             .doc(user.email!)
             .get();
+
+
+
+
         // Check if the chat partner is in the 'ambassador' collection
         final ambassadorSnapshot = await FirebaseFirestore.instance
             .collection('Ambassdor')
@@ -37,6 +42,31 @@ class _splashscreenState extends State<splashscreen> {
             .get();
         if (userSnapshot.exists) {
           // Print message if the chat partner is in the 'user' collection
+
+ DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.email!).get();
+  var userData = userDoc.data() as Map<String, dynamic>?;
+
+  // Get the subscription expiration timestamp
+    Timestamp? subscriptionExpireAt = userData!['subscriptionExpireAt'];
+  
+  if (subscriptionExpireAt != null) {
+    // Get the current server time
+    Timestamp currentTime = Timestamp.now();
+
+    // Compare the expiration time with the current time
+ if (subscriptionExpireAt.compareTo(currentTime) < 0) {
+   await FirebaseFirestore.instance
+       .collection('users')
+       .doc(user.email!)
+       .update({'profile': 'standard'});
+
+    } else {
+      print('Subscription is still valid');
+    }
+  }
+         
+
+
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
               return MainScreen();

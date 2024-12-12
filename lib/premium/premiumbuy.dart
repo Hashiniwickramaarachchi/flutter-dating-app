@@ -267,7 +267,7 @@ class _premiumbuyState extends State<premiumbuy> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) {
-                                          return detailsadding(Amount: amount, dbemail: userdataperson['email'], version: payemntversion,);
+                                          return detailsadding(Amount: amount, dbemail: userdataperson['email'], version: payemntversion,phonenumber:userdataperson['Phonenumber']);
                                         }));
                                       } catch (e) {
                                         ScaffoldMessenger.of(context)

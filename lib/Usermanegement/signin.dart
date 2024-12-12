@@ -333,6 +333,31 @@ class _signinState extends State<signin> {
           await _firestore.collection('users').doc(email.text.trim()).get();
       if (userSnapshot.exists) {
         final data = userSnapshot.data() as Map<String, dynamic>?;
+
+ DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(email.text.trim()).get();
+  var userData = userDoc.data() as Map<String, dynamic>?;
+
+  // Get the subscription expiration timestamp
+    Timestamp? subscriptionExpireAt = userData!['subscriptionExpireAt'];
+  
+  if (subscriptionExpireAt != null) {
+    // Get the current server time
+    Timestamp currentTime = Timestamp.now();
+
+    // Compare the expiration time with the current time
+ if (subscriptionExpireAt.compareTo(currentTime) < 0) {
+   await FirebaseFirestore.instance
+       .collection('users')
+       .doc(email.text.trim())
+       .update({'profile': 'standard'});
+
+    } else {
+      print('Subscription is still valid');
+    }
+  }
+         
+
+
         if (data!['statusType'] == 'active') {
           try {
             UserCredential userCredential =
@@ -457,7 +482,9 @@ class _signinState extends State<signin> {
             'profile': "standard",
             "description": '',
             'statusType': "active",
-            'Logged': 'true'
+            'Logged': 'true',
+          "subscriptionExpireAt":null
+
           });
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
@@ -469,6 +496,29 @@ class _signinState extends State<signin> {
               await _firestore.collection('users').doc(user.email).get();
           if (userSnapshot.exists) {
             // Fetch the updated user document
+
+
+             DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(email.text.trim()).get();
+  var userData = userDoc.data() as Map<String, dynamic>?;
+
+  // Get the subscription expiration timestamp
+    Timestamp? subscriptionExpireAt = userData!['subscriptionExpireAt'];
+  
+  if (subscriptionExpireAt != null) {
+    // Get the current server time
+    Timestamp currentTime = Timestamp.now();
+
+    // Compare the expiration time with the current time
+ if (subscriptionExpireAt.compareTo(currentTime) < 0) {
+   await FirebaseFirestore.instance
+       .collection('users')
+       .doc(email.text.trim())
+       .update({'profile': 'standard'});
+
+    } else {
+      print('Subscription is still valid');
+    }
+  }
             final updatedUserDoc = await FirebaseFirestore.instance
                 .collection('users')
                 .doc(user.email)

@@ -11,30 +11,25 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class detailsadding extends StatefulWidget {
-
-int Amount;
-String dbemail;
-String version;
-
-   detailsadding({
-    required this.dbemail,
-    required this.Amount,
-    required this.version,
-    super.key});
+  int Amount;
+  String dbemail;
+  String version;
+  String phonenumber;
+  detailsadding(
+      {required this.dbemail,
+      required this.Amount,
+      required this.version,
+      required this.phonenumber,
+      super.key});
 
   @override
   State<detailsadding> createState() => _detailsaddingState();
 }
 
 class _detailsaddingState extends State<detailsadding> {
-
   final firstname = TextEditingController();
-    final lastname = TextEditingController();
+  final lastname = TextEditingController();
   final middlename = TextEditingController();
-
-
-  final phonenumber = TextEditingController();
-  final email = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +39,13 @@ class _detailsaddingState extends State<detailsadding> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                                                   appBar: AppBar(
-               toolbarHeight:height/400,
-               foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-               automaticallyImplyLeading: false,
-             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-             surfaceTintColor:const Color.fromARGB(255, 255, 255, 255),
-             ),
+      appBar: AppBar(
+        toolbarHeight: height / 400,
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
+      ),
       body: Container(
         height: height,
         width: width,
@@ -104,7 +99,7 @@ class _detailsaddingState extends State<detailsadding> {
                 ],
               ),
               SizedBox(height: height / 60),
-    
+
               // detailsadding chip
               Padding(
                 padding: EdgeInsets.only(
@@ -121,8 +116,7 @@ class _detailsaddingState extends State<detailsadding> {
                   ),
                 ),
               ),
-    
-    
+
               Padding(
                 padding: EdgeInsets.only(
                   bottom: height / 47,
@@ -139,60 +133,21 @@ class _detailsaddingState extends State<detailsadding> {
                 ),
               ),
 
-                    Padding(
-        padding: EdgeInsets.only(
-          bottom: height / 47,
-        ),
-        child: TextField(
-          controller: lastname,
-          style: Theme.of(context).textTheme.headlineSmall,
-          decoration: InputDecoration(
-            border: UnderlineInputBorder(),
-            hintText: 'LastName',
-            contentPadding:
-                EdgeInsets.only(left: width / 50, top: height / 50),
-          ),
-        ),
-      ),
-
-               TextField(
-                 controller: phonenumber,
-                 maxLength: 10,
-                 buildCounter: (BuildContext context,
-                     {int? currentLength, bool? isFocused, int? maxLength}) {
-                   return null; // Hides the counter
-                 },
-                 keyboardType: TextInputType.number,
-                 style: Theme.of(context).textTheme.headlineSmall,
-                 decoration: InputDecoration(
-                   focusedBorder: UnderlineInputBorder(
-                     borderSide: BorderSide(color: Color(0xff8F9DA6)),
-                   ),
-                   enabledBorder: UnderlineInputBorder(
-                     borderSide: BorderSide(color: Color(0xff8F9DA6)),
-                   ),
-                   hintText: "Phone Number",
-                   contentPadding:
-                       EdgeInsets.only(left: width / 50, top: height / 90),
-                 ),
-               ),
-                   Padding(
-       padding: EdgeInsets.only(
-         bottom: height / 47,
-       ),
-       child: TextField(
-         controller: email,
-         keyboardType: TextInputType.emailAddress,
-         style: Theme.of(context).textTheme.headlineSmall,
-         decoration: InputDecoration(
-           border: UnderlineInputBorder(),
-           hintText: 'Email',
-           contentPadding:
-               EdgeInsets.only(left: width / 50, top: height / 50),
-         ),
-       ),
-     ),
-
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: height / 47,
+                ),
+                child: TextField(
+                  controller: lastname,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'LastName',
+                    contentPadding:
+                        EdgeInsets.only(left: width / 50, top: height / 50),
+                  ),
+                ),
+              ),
 
               Padding(
                 padding: EdgeInsets.only(
@@ -203,43 +158,28 @@ class _detailsaddingState extends State<detailsadding> {
                 child: GestureDetector(
                   onTap: () async {
                     if (firstname.text.isNotEmpty &&
-                    middlename.text.isNotEmpty &&
-                    lastname.text.isNotEmpty &&
-                    phonenumber.text.isNotEmpty &&
-                    email.text.isNotEmpty 
-                        
-                        ) {
-                    
-                    
-                    
-                    
-                    
-                      
+                        middlename.text.isNotEmpty &&
+                        lastname.text.isNotEmpty) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PaymentPage(firstname: firstname.text.trim(), lastname: lastname.text.trim(), middlename: middlename.text.trim(), number: phonenumber.text.trim(), amoount:widget.Amount, email: email.text.trim(), dbemail: widget.dbemail, version: widget.version,)
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                        ),
+                            builder: (context) => PaymentPage(
+                                  firstname: firstname.text.trim(),
+                                  lastname: lastname.text.trim(),
+                                  middlename: middlename.text.trim(),
+                                  number: widget.phonenumber,
+                                  amoount: widget.Amount,
+                                  email: widget.dbemail,
+                                  dbemail: widget.dbemail,
+                                  version: widget.version,
+                                )),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Fill the lines')),
                       );
                     }
-    
+
                     // return Singupcheck(currentUser);
                   },
                   child: Container(
