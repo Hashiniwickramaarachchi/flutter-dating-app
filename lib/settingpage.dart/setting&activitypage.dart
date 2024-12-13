@@ -11,7 +11,9 @@ import 'package:datingapp/settingpage.dart/profileupdate.dart';
 import 'package:datingapp/settingpage.dart/settings.dart';
 import 'package:datingapp/settingpage.dart/unblockpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class settingactivity extends StatefulWidget {
   const settingactivity({super.key});
@@ -23,7 +25,28 @@ class settingactivity extends StatefulWidget {
 class _settingactivityState extends State<settingactivity> {
   final OnlineStatusService _onlineStatusService =
       OnlineStatusService(); // Instantiate the service
-
+  String shareMessage = '';
+@override
+  void initState() {
+    super.initState();
+    _fetchRemoteConfigData();
+    
+  }
+ // Fetch data from Remote Config
+  Future<void> _fetchRemoteConfigData() async {
+    try {
+      final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
+      await remoteConfig.fetchAndActivate();
+      setState(() {
+        shareMessage = remoteConfig.getString('sharing_message');
+      });
+    } catch (e) {
+      print('Error fetching remote config: $e');
+      setState(() {
+        shareMessage = 'Check out this app!';
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -340,6 +363,8 @@ class _settingactivityState extends State<settingactivity> {
                         onTap: () async {
                           // _createAndShareDynamicLink();
                         // inviteFriends();
+                                      _shareApp();
+
                         },
                         child: Padding(
                           padding:
@@ -682,6 +707,16 @@ class _settingactivityState extends State<settingactivity> {
       }
     );
   }
+
+  void _shareApp() {
+    if (shareMessage.isNotEmpty) {
+      Share.share(shareMessage);
+    } else {
+      print("Sharing message is not available.");
+    }
+  }
+
+
   // void inviteFriends() {
   // const String appUrl = 'https://play.google.com';
   // const String message = 'Join me on ApexLove, the premier dating app for meaningful connections! Download now: $appUrl';

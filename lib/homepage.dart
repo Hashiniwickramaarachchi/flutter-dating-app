@@ -598,7 +598,7 @@ Expanded(
   ),
 ):
 
-                                  Expanded(child: 
+                                  Expanded(child: partnerData.isNotEmpty ?
                                   
                                                                          Padding(
                                          padding: EdgeInsets.only(
@@ -677,7 +677,12 @@ Expanded(
                                           
                                           
                                          ),
-                                       )
+                                       )    : Center(
+          child: Text(
+            'No partners available at the moment.',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        ),
                                   
                                   )
                         ],
