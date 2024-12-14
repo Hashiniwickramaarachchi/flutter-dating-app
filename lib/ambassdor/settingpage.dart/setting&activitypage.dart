@@ -18,7 +18,7 @@ import 'package:datingapp/settingpage.dart/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 // import 'package:share_plus/share_plus.dart';
 
 class A_settingactivity extends StatefulWidget {
@@ -294,7 +294,7 @@ class _A_settingactivityState extends State<A_settingactivity> {
                 GestureDetector(
                   onTap: () {
                     // inviteFriends();
-                                                          _shareApp();
+                                                          // _shareApp();
 
                   },
                   child: Padding(
@@ -567,13 +567,13 @@ class _A_settingactivityState extends State<A_settingactivity> {
       ),
     );
   }
-  void _shareApp() {
-    if (shareMessage.isNotEmpty) {
-      Share.share(shareMessage);
-    } else {
-      print("Sharing message is not available.");
-    }
-  }
+  // void _shareApp() {
+    // if (shareMessage.isNotEmpty) {
+      // Share.share(shareMessage);
+    // } else {
+      // print("Sharing message is not available.");
+    // }
+  // }
 
 
   // void inviteFriends() {

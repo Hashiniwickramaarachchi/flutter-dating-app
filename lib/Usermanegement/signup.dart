@@ -9,6 +9,7 @@ import 'package:datingapp/deleted.dart';
 import 'package:datingapp/mainscreen.dart';
 import 'package:datingapp/termandcondition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -369,7 +370,8 @@ class _signupState extends State<signup> {
           "description": '',
           'statusType': "active",
           'Logged': 'true',
-          "subscriptionExpireAt":null
+          "subscriptionExpireAt":null,
+          'deviceToken': await FirebaseMessaging.instance.getToken()
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -433,8 +435,12 @@ final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
          .doc(user.email)
          .get();  
         if (userDoc.exists) {
-
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(email.text.trim()).get();
+   await FirebaseFirestore.instance
+       .collection("users")
+       .doc(user.email)
+       .update(
+           {'deviceToken': await FirebaseMessaging.instance.getToken()});
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.email).get();
   var userData = userDoc.data() as Map<String, dynamic>?;
 
   // Get the subscription expiration timestamp
@@ -448,7 +454,7 @@ final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
  if (subscriptionExpireAt.compareTo(currentTime) < 0) {
    await FirebaseFirestore.instance
        .collection('users')
-       .doc(email.text.trim())
+       .doc(user.email)
        .update({'profile': 'standard'});
 
     } else {
@@ -528,7 +534,9 @@ final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
             "description": '',
             'statusType': "active",
             'Logged': 'true',
-          "subscriptionExpireAt":null
+          "subscriptionExpireAt":null,
+                    'deviceToken': await FirebaseMessaging.instance.getToken()
+
 
           });
 

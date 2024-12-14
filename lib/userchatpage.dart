@@ -117,11 +117,11 @@ final FocusNode _messageFocusNode = FocusNode();
           .doc(widget.chatPartnerEmail)
           .get();
       if (userSnapshot.exists) {
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(widget.chatPartnerEmail)
-            .update(
-                {'deviceToken': await FirebaseMessaging.instance.getToken()});
+    
+    
+    
+    
+    
 
         final userSnapshot =
             await _firestore.collection('users').doc(currentUser.email).get();
@@ -135,11 +135,11 @@ final FocusNode _messageFocusNode = FocusNode();
         }
       } else if (ambassadorSnapshot.exists) {
        
-               await FirebaseFirestore.instance
-            .collection("Ambassdor")
-            .doc(widget.chatPartnerEmail)
-            .update(
-                {'deviceToken': await FirebaseMessaging.instance.getToken()});
+         
+         
+         
+         
+         
 
         final ambassadorSnapshot =
             await _firestore.collection('Ambassdor').doc(currentUser.email).get();
@@ -210,11 +210,6 @@ final FocusNode _messageFocusNode = FocusNode();
           .add(imageMessageData);
 
      if (userSnapshot.exists) {
-       await FirebaseFirestore.instance
-           .collection("users")
-           .doc(widget.chatPartnerEmail)
-           .update(
-               {'deviceToken': await FirebaseMessaging.instance.getToken()});
        final userSnapshot =
            await _firestore.collection('users').doc(_auth.currentUser!.email).get();
        final deviceToken = userSnapshot.data()?['deviceToken'];
@@ -225,18 +220,13 @@ final FocusNode _messageFocusNode = FocusNode();
        }
      } else if (ambassadorSnapshot.exists) {
       
-              await FirebaseFirestore.instance
-           .collection("Ambassdor")
-           .doc(widget.chatPartnerEmail)
-           .update(
-               {'deviceToken': await FirebaseMessaging.instance.getToken()});
        final ambassadorSnapshot =
            await _firestore.collection('Ambassdor').doc(_auth.currentUser!.email).get();
        final deviceToken = ambassadorSnapshot.data()?['deviceToken'];
        print("asas ${ambassadorSnapshot.data()?['deviceToken']}");
        if (deviceToken != null) {
          await PushNotificationService.sendNotificationToUser(
-             deviceToken, context, widget.chatPartnerEmail);
+             deviceToken, context, widget.chatPartnerEmail,);
        }
       
       

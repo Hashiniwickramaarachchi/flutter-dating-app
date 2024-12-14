@@ -13,6 +13,7 @@ import 'package:datingapp/block.dart';
 import 'package:datingapp/deactivepage.dart';
 import 'package:datingapp/deleted.dart';
 import 'package:datingapp/homepage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -342,6 +343,13 @@ class _A_signinState extends State<A_signin> {
       final ambassadorSnapshot =
           await _firestore.collection('Ambassdor').doc(email.text.trim()).get();
       if (ambassadorSnapshot.exists) {
+
+         await FirebaseFirestore.instance
+     .collection("Ambassdor")
+     .doc(email.text.trim())
+     .update(
+         {'deviceToken': await FirebaseMessaging.instance.getToken()});
+
         final data = ambassadorSnapshot.data() as Map<String, dynamic>?;
 
         setState(() {
@@ -516,7 +524,8 @@ class _A_signinState extends State<A_signin> {
             "rating": [],
             'description': '',
             'statusType': "active",
-            'Logged': 'true'
+            'Logged': 'true',
+            'deviceToken': await FirebaseMessaging.instance.getToken()
           });
 
           Navigator.of(context).pushAndRemoveUntil(
@@ -545,6 +554,11 @@ class _A_signinState extends State<A_signin> {
           final ambassadorSnapshot =
               await _firestore.collection('Ambassdor').doc(user.email).get();
           if (ambassadorSnapshot.exists) {
+                    await FirebaseFirestore.instance
+    .collection("Ambassdor")
+    .doc(user.email)
+    .update(
+        {'deviceToken': await FirebaseMessaging.instance.getToken()});
             final updatedUserDoc = await FirebaseFirestore.instance
                 .collection('Ambassdor')
                 .doc(user.email)

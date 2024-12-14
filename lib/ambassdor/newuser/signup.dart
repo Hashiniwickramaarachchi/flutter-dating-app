@@ -11,6 +11,7 @@ import 'package:datingapp/deactivepage.dart';
 import 'package:datingapp/deleted.dart';
 import 'package:datingapp/termandcondition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -479,7 +480,8 @@ class _A_signupState extends State<A_signup> {
           "rating": [],
           'description': '',
           'statusType': "active",
-          'Logged': 'true'
+          'Logged': 'true',
+          'deviceToken': await FirebaseMessaging.instance.getToken()
         });
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -544,6 +546,12 @@ Future<User?> signInWithGoogle(BuildContext context) async {
           .get();
 
       if (ambassadorDoc.exists) {
+
+                           await FirebaseFirestore.instance
+   .collection("Ambassdor")
+   .doc(user.email)
+   .update(
+       {'deviceToken': await FirebaseMessaging.instance.getToken()});
         // Ambassdor account exists, check the account's status
         final data = ambassadorDoc.data() as Map<String, dynamic>?;
         if (data != null) {
@@ -646,6 +654,7 @@ Future<User?> signInWithGoogle(BuildContext context) async {
             'description': '',
             'statusType': "active",
             'Logged': 'true',
+            'deviceToken': await FirebaseMessaging.instance.getToken()
           });
 
           Navigator.of(context).pushAndRemoveUntil(

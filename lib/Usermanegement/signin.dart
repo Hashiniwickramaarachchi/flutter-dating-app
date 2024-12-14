@@ -8,6 +8,7 @@ import 'package:datingapp/deactivepage.dart';
 import 'package:datingapp/deleted.dart';
 import 'package:datingapp/homepage.dart';
 import 'package:datingapp/mainscreen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -332,6 +333,12 @@ class _signinState extends State<signin> {
       final userSnapshot =
           await _firestore.collection('users').doc(email.text.trim()).get();
       if (userSnapshot.exists) {
+
+           await FirebaseFirestore.instance
+       .collection("users")
+       .doc(email.text.trim())
+       .update(
+           {'deviceToken': await FirebaseMessaging.instance.getToken()});
         final data = userSnapshot.data() as Map<String, dynamic>?;
 
  DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(email.text.trim()).get();
@@ -483,7 +490,8 @@ class _signinState extends State<signin> {
             "description": '',
             'statusType': "active",
             'Logged': 'true',
-          "subscriptionExpireAt":null
+          "subscriptionExpireAt":null,
+          'deviceToken': await FirebaseMessaging.instance.getToken()
 
           });
           Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -496,9 +504,13 @@ class _signinState extends State<signin> {
               await _firestore.collection('users').doc(user.email).get();
           if (userSnapshot.exists) {
             // Fetch the updated user document
+         await FirebaseFirestore.instance
+     .collection("users")
+     .doc(user.email)
+     .update(
+         {'deviceToken': await FirebaseMessaging.instance.getToken()});
 
-
-             DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(email.text.trim()).get();
+             DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.email).get();
   var userData = userDoc.data() as Map<String, dynamic>?;
 
   // Get the subscription expiration timestamp
@@ -512,7 +524,7 @@ class _signinState extends State<signin> {
  if (subscriptionExpireAt.compareTo(currentTime) < 0) {
    await FirebaseFirestore.instance
        .collection('users')
-       .doc(email.text.trim())
+       .doc(user.email)
        .update({'profile': 'standard'});
 
     } else {
