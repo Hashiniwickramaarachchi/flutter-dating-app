@@ -138,85 +138,61 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import 'userchatpage.dart';
-
+import 'package:dio/dio.dart';
 class PushNotificationService {
-  // Fetch the access token using the service account JSON file
-  static Future<String> getAccessToken() async {
-    // Load the JSON key file from the assets folder
-    final String jsonString = await rootBundle.loadString('assetss/global-impulse-444705-n3-1e27f047f24e.json');
-    final Map<String, dynamic> serviceAccountJson = json.decode(jsonString);
 
-    // Define the required scopes for Firebase services
-    List<String> scopes = [
-      'https://www.googleapis.com/auth/firebase.database',
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/firebase.messaging',
-    ];
 
-    // Create an authenticated HTTP client using the service account
-    final http.Client client = await auth.clientViaServiceAccount(
-      auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
-      scopes,
-    );
 
-    // Obtain the access token
-    auth.AccessCredentials credentials = await auth.obtainAccessCredentialsViaServiceAccount(
-      auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
-      scopes,
-      client,
-    );
 
-    client.close();
-    return credentials.accessToken.data;
-  }
 
   // Send a push notification to a user
   static Future<void> sendNotificationToUser(
     String deviceToken,
     BuildContext context,
     String userID,
+    String message,
   ) async {
-    // Retrieve chat partner details using Provider
-    String chatPartnerName = Provider.of<ChatPage>(context, listen: false).chatPartnername.toString();
-    String chatPartnerImage = Provider.of<ChatPage>(context, listen: false).chatPartnerimage.toString();
+  
+  var headers = {
+    'Content-Type': 'application/json',
+  };
 
-    // Firebase Cloud Messaging endpoint
-    String endpointFirebaseCloudMessaging = 'https://fcm.googleapis.com/v1/projects/appexlove-e7972/messages:send';
+  var data = json.encode({
+    "notification": {
+      "title": userID,
+      "body": "message"
+    },
+    "token": deviceToken
+  });
 
-    // Prepare the notification message
-    final Map<String, dynamic> message = {
-      'message': {
-        'token': deviceToken,
-        'notification': {
-          'title': 'New Message',
-          'body': 'New Message From $chatPartnerName $chatPartnerImage',
-        },
-        'data': {
-          'UserID': userID,
-        },
-      },
-    };
+  var dio = Dio();
 
-    // Send the notification via HTTP POST
-    final http.Response response = await http.post(
-      Uri.parse(endpointFirebaseCloudMessaging),
-      headers: <String, String>{
-        "Content-Type": 'application/json',
-        'Authorization': 'Bearer ${await PushNotificationService.getAccessToken()}',
-      },
-      body: jsonEncode(message),
+  try {
+    var response = await dio.request(
+      'https://apexlovehost.com/api/notify',
+      options: Options(
+        method: 'POST',
+        headers: headers,
+      ),
+      data: data,
     );
 
-    // Handle the response
     if (response.statusCode == 200) {
-      print('Notification sent successfully');
+      print("Notification Sent: ${json.encode(response.data)}");
     } else {
-      print('Failed to send notification: ${response.body}');
+      print("Failed to send notification: ${response.statusMessage}");
     }
+  } catch (e) {
+    print("Error sending notification: $e");
   }
 }
 
-// Example usage
+
+
+    // Handle the response
+  
+}
+
 // void sendPushNotification(BuildContext context) async {
   // try {
     // String accessToken = await PushNotificationService.getAccessToken();

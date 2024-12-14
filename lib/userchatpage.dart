@@ -124,14 +124,14 @@ final FocusNode _messageFocusNode = FocusNode();
     
 
         final userSnapshot =
-            await _firestore.collection('users').doc(currentUser.email).get();
+            await _firestore.collection('users').doc(widget.chatPartnerEmail).get();
         final deviceToken = userSnapshot.data()?['deviceToken'];
 
         print("asas ${userSnapshot.data()?['deviceToken']}");
 
         if (deviceToken != null) {
           await PushNotificationService.sendNotificationToUser(
-              deviceToken, context, widget.chatPartnerEmail);
+              deviceToken, context, widget.chatPartnername,messageData.toString());
         }
       } else if (ambassadorSnapshot.exists) {
        
@@ -142,14 +142,14 @@ final FocusNode _messageFocusNode = FocusNode();
          
 
         final ambassadorSnapshot =
-            await _firestore.collection('Ambassdor').doc(currentUser.email).get();
+            await _firestore.collection('Ambassdor').doc(widget.chatPartnerEmail).get();
         final deviceToken = ambassadorSnapshot.data()?['deviceToken'];
 
         print("asas ${ambassadorSnapshot.data()?['deviceToken']}");
 
         if (deviceToken != null) {
           await PushNotificationService.sendNotificationToUser(
-              deviceToken, context, widget.chatPartnerEmail);
+              deviceToken, context, widget.chatPartnername,messageData.toString());
         }
        
        
@@ -211,22 +211,22 @@ final FocusNode _messageFocusNode = FocusNode();
 
      if (userSnapshot.exists) {
        final userSnapshot =
-           await _firestore.collection('users').doc(_auth.currentUser!.email).get();
+           await _firestore.collection('users').doc(widget.chatPartnerEmail).get();
        final deviceToken = userSnapshot.data()?['deviceToken'];
        print("asas ${userSnapshot.data()?['deviceToken']}");
        if (deviceToken != null) {
          await PushNotificationService.sendNotificationToUser(
-             deviceToken, context, widget.chatPartnerEmail);
+             deviceToken, context, widget.chatPartnername,imageMessageData.toString());
        }
      } else if (ambassadorSnapshot.exists) {
       
        final ambassadorSnapshot =
-           await _firestore.collection('Ambassdor').doc(_auth.currentUser!.email).get();
+           await _firestore.collection('Ambassdor').doc(widget.chatPartnerEmail).get();
        final deviceToken = ambassadorSnapshot.data()?['deviceToken'];
        print("asas ${ambassadorSnapshot.data()?['deviceToken']}");
        if (deviceToken != null) {
          await PushNotificationService.sendNotificationToUser(
-             deviceToken, context, widget.chatPartnerEmail,);
+             deviceToken, context, widget.chatPartnername,imageMessageData.toString());
        }
       
       
@@ -246,8 +246,6 @@ final FocusNode _messageFocusNode = FocusNode();
       });
     }
   });
-    // Listen for user scrolling
-
   }
 
   @override
