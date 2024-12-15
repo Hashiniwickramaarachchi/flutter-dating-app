@@ -552,12 +552,37 @@ class _ChatscreenState extends State<Chatscreen> {
                                           child: CircularProgressIndicator());
                                     }
 
+
+ return FutureBuilder(
+      future: Future.wait([
+        FirebaseFirestore.instance.collection('Favourite').doc(userdataperson['email']).collection('fav1').get(),
+        FirebaseFirestore.instance.collection('chats').doc(userdataperson['email']).collection('history').get(),
+      ]),
+      builder: (context, AsyncSnapshot<List<QuerySnapshot>> favChatSnapshot) {
+        if (favChatSnapshot.hasError) {
+          return Center(child: Text('Error: ${favChatSnapshot.error}'));
+        }
+        if (favChatSnapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        // Combine users from favourites and chats collections
+        final favouriteUsers = favChatSnapshot.data![0].docs
+            .map((doc) => doc['email'] as String)
+            .toSet();
+        final chatUsers = favChatSnapshot.data![1].docs
+            .map((doc) => doc.id as String)
+            .toSet();
+        final combinedUsers = favouriteUsers.union(chatUsers);
+
+
                                     // Filter users to exclude the current user and blocked users
                                     final data =
                                         snapshot.data!.docs.where((doc) {
                                       final userEmail = doc['email'];
                                       return userEmail != currentUser.email &&
                                           !blockedEmails.contains(userEmail) &&
+                                          combinedUsers.contains(userEmail) &&
                                           (searchQuery.isEmpty ||
                                               doc['name']
                                                   .toLowerCase()
@@ -698,6 +723,8 @@ class _ChatscreenState extends State<Chatscreen> {
                                       },
                                     );
                                   },
+                                );
+                                  }
                                 );
                               },
                             ),

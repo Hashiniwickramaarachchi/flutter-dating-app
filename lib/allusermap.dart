@@ -54,11 +54,11 @@ class _allusermapState extends State<allusermap> {
   Color statecolour = Colors.white;
   bool isLoading = true; // Track loading state
   int loadedUsers = 0; // Counter for loaded users
-  bool _isMapInitialized = false;
+  // bool _isMapInitialized = true;
   String buttonText = "Request Ambassador";
   bool isLoadingambassdor = false;
 
-  // Future<void> handleButtonPress() async {
+  // Future<void> handleBuEttonPress() async {
     // if (buttonText == "Your Ambassador") {
 
       // try {
@@ -255,6 +255,7 @@ class _allusermapState extends State<allusermap> {
     _getAllUsers(); // Fetch all users
     _addLoggedUserMarker();
     fetchUsersStatus();
+    // _checkIfLoadingComplete();
     // Call this when the app starts or the user logs in
     _checkUserExistsAndUpdateStatus();
   }
@@ -354,14 +355,14 @@ Future<void> _checkUserExistsAndUpdateStatusoffline() async {
     return distanceInKilometers;
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    if (!_controller.isCompleted) {
-      _controller.complete(controller);
-    }
-    setState(() {
-      _isMapInitialized = true; // Map is ready
-    });
-  }
+  // void _onMapCreated(GoogleMapController controller) {
+    // if (!_controller.isCompleted) {
+      // _controller.complete(controller);
+    // }
+    // setState(() {
+      // _isMapInitialized = true; // Map is ready
+    // });
+  // }
 
 Future<void> _getAllUsers() async {
   try {
@@ -481,7 +482,7 @@ Future<void> _getAllUsers() async {
 
       favStatus[data['email']] = false; // Initialize favorite status
       loadedUsers++; // Increment loaded users counter
-      _checkIfLoadingComplete();
+      // _checkIfLoadingComplete();
     }
   } catch (e) {
     print('Error fetching all users: $e');
@@ -593,13 +594,13 @@ Future<void> _getAllUsers() async {
     // }
   // }
 
-  void _checkIfLoadingComplete() {
-    if (0 < loadedUsers) {
-      setState(() {
-        isLoading = false; // Stop loading when all users are loaded
-      });
-    }
-  }
+  // void _checkIfLoadingComplete() {
+    // if (0 < loadedUsers) {
+      // setState(() {
+        // _isMapInitialized = false; // Stop loading when all users are loaded
+      // });
+    // }
+  // }
 
   Future<void> _addLoggedUserMarker() async {
     // Add marker for logged-in user's location with a purple pin
@@ -778,11 +779,11 @@ Future<void> _getAllUsers() async {
                       _controller.complete(controller);
                     },
                   ),
-                  if (!_isMapInitialized)
-                    Center(
-                      child:
-                          CircularProgressIndicator(), // Loading indicator until map is ready
-                    ),
+                 
+                 
+                 
+                 
+                 
 
                   Padding(
                     padding: EdgeInsets.only(bottom: height / 6),
