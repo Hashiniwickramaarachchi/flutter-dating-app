@@ -8,6 +8,7 @@ import 'package:datingapp/ambassdor/newuser/homepage.dart';
 import 'package:datingapp/ambassdor/olduser/showresultsignin.dart';
 import 'package:datingapp/homepage.dart';
 import 'package:datingapp/mainscreen.dart';
+import 'package:datingapp/notififation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,9 +21,14 @@ class splashscreen extends StatefulWidget {
 }
 
 class _splashscreenState extends State<splashscreen> {
+
+
+NotificationService notificationService = NotificationService();
+
   void initState() {
     super.initState();
     // Check if the user is logged in
+    notificationService.requestNotificationPermition();
     Timer(const Duration(seconds: 1), () async {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -90,6 +96,10 @@ class _splashscreenState extends State<splashscreen> {
       }
     });
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {

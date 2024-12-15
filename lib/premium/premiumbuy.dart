@@ -91,7 +91,7 @@ class _premiumbuyState extends State<premiumbuy> {
                                   bottom: height / 60),
                               child: Center(
                                   child: Text(
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut diam orci, rutrum id arcu in, cursus commodo ex.",
+                                "Unlock exclusive features with our Premium Plan. Enjoy seamless access, advanced tools, and priority support tailored for your needs. Upgrade now and experience the difference!",
                                 style: TextStyle(
                                     color: Color(0xff565656),
                                     fontWeight: FontWeight.bold,

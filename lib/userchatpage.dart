@@ -45,9 +45,11 @@ class _ChatPageState extends State<ChatPage> with AutomaticKeepAliveClientMixin 
      bool _hasScrolledToBottom = false;
 final FocusNode _messageFocusNode = FocusNode();
 
+
  bool _userIsScrolling = false;
   void _sendMessage() async {
-    final currentUser = _auth.currentUser!;
+        final currentUser = _auth.currentUser!;
+
     if (_messageController.text.isNotEmpty) {
       final messageData = {
         'sender': currentUser.email,
@@ -119,8 +121,11 @@ final FocusNode _messageFocusNode = FocusNode();
       if (userSnapshot.exists) {
     
     
-    
-    
+    final LoggeduserSnapshot =
+    await _firestore.collection("users").doc(_auth.currentUser!.email).get();
+        print(LoggeduserSnapshot.data()?['name']);
+
+      final loggedname = LoggeduserSnapshot.data()?['name'];
     
 
         final userSnapshot =
@@ -131,12 +136,14 @@ final FocusNode _messageFocusNode = FocusNode();
 
         if (deviceToken != null) {
           await PushNotificationService.sendNotificationToUser(
-              deviceToken, context, widget.chatPartnername,messageData.toString());
+              deviceToken, context,loggedname,messageData.toString());
         }
       } else if (ambassadorSnapshot.exists) {
        
          
-         
+        final LoggeduserSnapshot =
+    await _firestore.collection('Ambassdor').doc(_auth.currentUser!.email).get();
+      final loggedname = LoggeduserSnapshot.data()?['name']; 
          
          
          
@@ -149,7 +156,7 @@ final FocusNode _messageFocusNode = FocusNode();
 
         if (deviceToken != null) {
           await PushNotificationService.sendNotificationToUser(
-              deviceToken, context, widget.chatPartnername,messageData.toString());
+              deviceToken, context, loggedname,messageData.toString());
         }
        
        
@@ -210,23 +217,32 @@ final FocusNode _messageFocusNode = FocusNode();
           .add(imageMessageData);
 
      if (userSnapshot.exists) {
+      final LoggeduserSnapshot =
+    await _firestore.collection('users').doc(_auth.currentUser!.email).get();
+      final loggedname = LoggeduserSnapshot.data()?['name'];
        final userSnapshot =
            await _firestore.collection('users').doc(widget.chatPartnerEmail).get();
        final deviceToken = userSnapshot.data()?['deviceToken'];
        print("asas ${userSnapshot.data()?['deviceToken']}");
        if (deviceToken != null) {
          await PushNotificationService.sendNotificationToUser(
-             deviceToken, context, widget.chatPartnername,imageMessageData.toString());
+             deviceToken, context, loggedname,imageMessageData.toString());
        }
      } else if (ambassadorSnapshot.exists) {
       
+ final LoggeduserSnapshot =
+     await _firestore.collection('Ambassdor').doc(_auth.currentUser!.email).get();
+       final loggedname = LoggeduserSnapshot.data()?['name'];
+
+
        final ambassadorSnapshot =
+
            await _firestore.collection('Ambassdor').doc(widget.chatPartnerEmail).get();
        final deviceToken = ambassadorSnapshot.data()?['deviceToken'];
        print("asas ${ambassadorSnapshot.data()?['deviceToken']}");
        if (deviceToken != null) {
          await PushNotificationService.sendNotificationToUser(
-             deviceToken, context, widget.chatPartnername,imageMessageData.toString());
+             deviceToken, context, loggedname,imageMessageData.toString());
        }
       
       

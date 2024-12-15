@@ -31,6 +31,16 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+<key>NSUserTrackingUsageDescription</key>
+<string>We need your permission to send notifications.</string>
+<key>UIBackgroundModes</key>
+<array>
+  <string>remote-notification</string>
+</array>
+<key>FirebaseMessagingAutoInitEnabled</key>
+<false/>
+
+
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We need your location to provide better services, even when the app is in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

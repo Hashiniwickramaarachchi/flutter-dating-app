@@ -10,6 +10,7 @@ import 'package:datingapp/ambassdor/person.dart';
 import 'package:datingapp/block.dart';
 import 'package:datingapp/bootmnavbar.dart';
 import 'package:datingapp/deactivepage.dart';
+import 'package:datingapp/notififation.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/person.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,10 +54,12 @@ class _showsigninresultState extends State<showsigninresult> {
   String lastSeenhistory = "Last seen: N/A";
   Color statecolour = Colors.white;
   TextEditingController _searchController = TextEditingController();
+NotificationService notificationService = NotificationService();
 
   @override
   void initState() {
     super.initState();
+    notificationService.requestNotificationPermition();
     _getFilteredUsers();
     fetchUsersStatus();
     _searchController.addListener(_applySearchFilter);
