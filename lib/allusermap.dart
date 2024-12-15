@@ -45,120 +45,119 @@ class _allusermapState extends State<allusermap> {
   List<Map<String, dynamic>> filteredUsers = []; // List to hold users
   Map<String, bool> favStatus = {}; // Map to track favorite status by email
   final OnlineStatusService _onlineStatusService = OnlineStatusService();
-    final A_OnlineStatusService A_onlineStatusService = A_OnlineStatusService();
-
+  final A_OnlineStatusService A_onlineStatusService = A_OnlineStatusService();
 
   final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref();
   Map<String, dynamic> usersStatusDetails = {}; // Change from List to Map
   String lastSeenhistory = "Last seen: N/A";
   Color statecolour = Colors.white;
-  bool isLoading = true; // Track loading state
+  bool isLoading = false; // Track loading state
   int loadedUsers = 0; // Counter for loaded users
   bool _isMapInitialized = false;
   String buttonText = "Request Ambassador";
   bool isLoadingambassdor = false;
 
   // Future<void> handleButtonPress() async {
-    // if (buttonText == "Your Ambassador") {
+  // if (buttonText == "Your Ambassador") {
 
-      // try {
-        // final userEmail = widget.useremail;
+  // try {
+  // final userEmail = widget.useremail;
 
-        // DocumentSnapshot requestSnapshot = await FirebaseFirestore.instance
-            // .collection('requestedAmbassador')
-            // .doc(userEmail)
-            // .get();
+  // DocumentSnapshot requestSnapshot = await FirebaseFirestore.instance
+  // .collection('requestedAmbassador')
+  // .doc(userEmail)
+  // .get();
 
-        // if (requestSnapshot.exists) {
-          // final data = requestSnapshot.data() as Map<String, dynamic>;
-          // final ambassadorEmail = data['ambassadorEmail'];
+  // if (requestSnapshot.exists) {
+  // final data = requestSnapshot.data() as Map<String, dynamic>;
+  // final ambassadorEmail = data['ambassadorEmail'];
 
-          // if (ambassadorEmail.isNotEmpty) {
-            // DocumentSnapshot ambassadorSnapshot = await FirebaseFirestore
-                // .instance
-                // .collection('Ambassdor')
-                // .doc(ambassadorEmail)
-                // .get();
+  // if (ambassadorEmail.isNotEmpty) {
+  // DocumentSnapshot ambassadorSnapshot = await FirebaseFirestore
+  // .instance
+  // .collection('Ambassdor')
+  // .doc(ambassadorEmail)
+  // .get();
 
-            // if (ambassadorSnapshot.exists) {
-              // final ambassadorData =
-                  // ambassadorSnapshot.data() as Map<String, dynamic>;
+  // if (ambassadorSnapshot.exists) {
+  // final ambassadorData =
+  // ambassadorSnapshot.data() as Map<String, dynamic>;
 
-              // Navigator.of(context).push(MaterialPageRoute(
-                  // builder: (context) => ChatPage(
-                      // chatPartnerEmail: ambassadorEmail,
-                      // who: "Ambassdor",
-                      // chatPartnername: ambassadorData['name'],
-                      // chatPartnerimage: ambassadorData['profile_pic'],
-                      // onlinecheck: lastSeenhistory,
-                      // statecolour: statecolour)));
-              // return;
-            // }
-          // }
-        // }
-
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          // content: Text("No ambassador assigned yet."),
-        // ));
-      // } catch (e) {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          // content: Text("Error: ${e.toString()}"),
-        // ));
-      // } finally {
-        // setState(() {
-          // isLoading = false;
-        // });
-      // }
-
-      // return;
-    // }
-    // setState(() {
-      // isLoading = true;
-    // });
-
-    // try {
-      // final userEmail = widget.useremail;
-
-      // DocumentReference docRef = FirebaseFirestore.instance
-          // .collection('requestedAmbassador')
-          // .doc(userEmail);
-
-      // DocumentSnapshot docSnapshot = await docRef.get();
-
-      // if (!docSnapshot.exists) {
-        // await docRef.set({
-          // 'request': 'requested',
-          // 'ambassadorEmail': '', // Initially empty
-          // 'requestedDate': FieldValue.serverTimestamp(),
-          // 'email': userEmail, // User email
-        // });
-
-        // setState(() {
-          // buttonText = "Ambassador request is in queue";
-        // });
-      // } else {
-        // final data = docSnapshot.data() as Map<String, dynamic>;
-        // if (data['ambassadorEmail'] == '') {
-          // setState(() {
-            // buttonText = "Ambassador request is in queue";
-          // });
-        // } else {
-          // setState(() {
-            // buttonText = "Your Ambassador";
-          // });
-        // }
-      // }
-    // } catch (e) {
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        // content: Text("Error: ${e.toString()}"),
-      // ));
-    // } finally {
-      // setState(() {
-        // isLoading = false;
-      // });
-    // }
+  // Navigator.of(context).push(MaterialPageRoute(
+  // builder: (context) => ChatPage(
+  // chatPartnerEmail: ambassadorEmail,
+  // who: "Ambassdor",
+  // chatPartnername: ambassadorData['name'],
+  // chatPartnerimage: ambassadorData['profile_pic'],
+  // onlinecheck: lastSeenhistory,
+  // statecolour: statecolour)));
+  // return;
   // }
- Future<void> handleButtonPress() async {
+  // }
+  // }
+
+  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  // content: Text("No ambassador assigned yet."),
+  // ));
+  // } catch (e) {
+  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  // content: Text("Error: ${e.toString()}"),
+  // ));
+  // } finally {
+  // setState(() {
+  // isLoading = false;
+  // });
+  // }
+
+  // return;
+  // }
+  // setState(() {
+  // isLoading = true;
+  // });
+
+  // try {
+  // final userEmail = widget.useremail;
+
+  // DocumentReference docRef = FirebaseFirestore.instance
+  // .collection('requestedAmbassador')
+  // .doc(userEmail);
+
+  // DocumentSnapshot docSnapshot = await docRef.get();
+
+  // if (!docSnapshot.exists) {
+  // await docRef.set({
+  // 'request': 'requested',
+  // 'ambassadorEmail': '', // Initially empty
+  // 'requestedDate': FieldValue.serverTimestamp(),
+  // 'email': userEmail, // User email
+  // });
+
+  // setState(() {
+  // buttonText = "Ambassador request is in queue";
+  // });
+  // } else {
+  // final data = docSnapshot.data() as Map<String, dynamic>;
+  // if (data['ambassadorEmail'] == '') {
+  // setState(() {
+  // buttonText = "Ambassador request is in queue";
+  // });
+  // } else {
+  // setState(() {
+  // buttonText = "Your Ambassador";
+  // });
+  // }
+  // }
+  // } catch (e) {
+  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  // content: Text("Error: ${e.toString()}"),
+  // ));
+  // } finally {
+  // setState(() {
+  // isLoading = false;
+  // });
+  // }
+  // }
+  Future<void> handleButtonPress() async {
     setState(() {
       isLoadingambassdor = true;
     });
@@ -171,10 +170,10 @@ class _allusermapState extends State<allusermap> {
           .collection('requestedAmbassador')
           .doc(userEmail)
           .get();
-  DocumentSnapshot docSnapshot2 = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(userEmail)
-      .get();
+      DocumentSnapshot docSnapshot2 = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userEmail)
+          .get();
       if (!docSnapshot.exists) {
         // Create a new request document if it doesn't exist
         await FirebaseFirestore.instance
@@ -186,13 +185,12 @@ class _allusermapState extends State<allusermap> {
           'requestedDate': FieldValue.serverTimestamp(),
           'email': userEmail,
         });
-     await FirebaseFirestore.instance
-         .collection('users')
-         .doc(userEmail)
-         .update({
-    
-       'ambassadorEmail': '',
-     });
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userEmail)
+            .update({
+          'ambassadorEmail': '',
+        });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Request submitted successfully."),
         ));
@@ -231,7 +229,7 @@ class _allusermapState extends State<allusermap> {
             chatPartnername: ambassadorData['name'],
             chatPartnerimage: ambassadorData['profile_pic'],
             onlinecheck: lastSeenhistory, // Replace with real data if needed
-            statecolour: statecolour,    // Replace with real data if needed
+            statecolour: statecolour, // Replace with real data if needed
           ),
         ));
       } else {
@@ -249,6 +247,7 @@ class _allusermapState extends State<allusermap> {
       });
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -269,55 +268,50 @@ class _allusermapState extends State<allusermap> {
       // Ignore errors if already disposed
     });
     // Call this when the app is closed
-_checkUserExistsAndUpdateStatusoffline();
+    _checkUserExistsAndUpdateStatusoffline();
   }
 
+  Future<void> _checkUserExistsAndUpdateStatus() async {
+    final userEmail = widget.useremail; // Assuming you have the user email
 
+    try {
+      // Check if the document exists in the 'users' collection
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userEmail)
+          .get();
 
-Future<void> _checkUserExistsAndUpdateStatus() async {
-  final userEmail = widget.useremail; // Assuming you have the user email
-
-  try {
-    // Check if the document exists in the 'users' collection
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userEmail)
-        .get();
-
-    if (userDoc.exists) {
-      // User exists, update the online status
-      _onlineStatusService.updateUserStatus();
-    } else {
-      A_onlineStatusService.updateUserStatus();
+      if (userDoc.exists) {
+        // User exists, update the online status
+        _onlineStatusService.updateUserStatus();
+      } else {
+        A_onlineStatusService.updateUserStatus();
+      }
+    } catch (e) {
+      print("Error checking user existence: $e");
     }
-  } catch (e) {
-    print("Error checking user existence: $e");
   }
-}
 
+  Future<void> _checkUserExistsAndUpdateStatusoffline() async {
+    final userEmail = widget.useremail; // Assuming you have the user email
 
-Future<void> _checkUserExistsAndUpdateStatusoffline() async {
-  final userEmail = widget.useremail; // Assuming you have the user email
+    try {
+      // Check if the document exists in the 'users' collection
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userEmail)
+          .get();
 
-  try {
-    // Check if the document exists in the 'users' collection
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userEmail)
-        .get();
-
-    if (userDoc.exists) {
-      // User exists, update the online status
-      _onlineStatusService.setUserOffline();
-    } else {
-      A_onlineStatusService.setUserOffline();
+      if (userDoc.exists) {
+        // User exists, update the online status
+        _onlineStatusService.setUserOffline();
+      } else {
+        A_onlineStatusService.setUserOffline();
+      }
+    } catch (e) {
+      print("Error checking user existence: $e");
     }
-  } catch (e) {
-    print("Error checking user existence: $e");
   }
-}
-
-
 
   Future<void> fetchUsersStatus() async {
     DatabaseReference usersStatusRef = _databaseRef.child('status');
@@ -359,238 +353,237 @@ Future<void> _checkUserExistsAndUpdateStatusoffline() async {
       _controller.complete(controller);
     }
     setState(() {
-      _isMapInitialized = true; // Map is ready
+      // _isMapInitialized = true; // Map is ready
     });
   }
 
-Future<void> _getAllUsers() async {
-  try {
-    // Step 1: Fetch blocked users for the logged-in user
-    DocumentSnapshot blockedSnapshot = await FirebaseFirestore.instance
-        .collection("Blocked USers")
-        .doc(widget.useremail)
-        .get();
-
-    List<String> blockedEmails = [];
-    if (blockedSnapshot.exists) {
-      final blockedData = blockedSnapshot.data() as Map<String, dynamic>?;
-      if (blockedData != null &&
-          blockedData["This Id blocked Users"] != null) {
-        blockedEmails = List<String>.from(blockedData["This Id blocked Users"]);
-      }
-    }
-
-    // Step 2: Fetch all users
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .get(); // Fetch all users
-
-    for (var doc in querySnapshot.docs) {
-      var data = doc.data() as Map<String, dynamic>;
-
-      // Skip the logged-in user's marker and blocked users
-      if (data['email'] == widget.useremail ||
-          blockedEmails.contains(data['email'])) {
-        continue;
-      }
-
-      // Step 3: Get profile picture as marker with rounded border
-      Uint8List markerIcon = await _getMarkerWithImage(
-          data['profile_pic'], data['profile'] == 'premium');
-
-      // Step 4: Add marker to map
-       _markers.add(
-   Marker(
-     markerId: MarkerId(doc.id),
-     position: LatLng(data['X'], data['Y']),
-     icon: BitmapDescriptor.fromBytes(markerIcon),
-     onTap: () {
-       bool isOnline = false;
-       String lastSeen = "Last seen: N/A";
-       lastSeenhistory = "Last seen: N/A";
-       if (usersStatusDetails.containsKey(data['email'])) {
-         final userStatus = usersStatusDetails[data['email']];
-         isOnline = userStatus['status'] == 'online';
-         if (isOnline) {
-           lastSeen = "Online";
-           lastSeenhistory = "Online";
-           statecolour = const Color.fromARGB(255, 49, 255, 56);
-         } else {
-           var lastSeenDate = DateTime.fromMillisecondsSinceEpoch(
-                   userStatus['lastSeen'])
-               .toLocal();
-           lastSeen =
-               "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-           lastSeenhistory = lastSeen;
-           statecolour = Colors.white;
-         }
-       }
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                        viewpage(
-              address: data['Address'],
-              age: data['Age'],
-              languages: data['languages'],
-              education: data['education'],
-              distance: calculateDistance(data["X"], data["Y"],
-                      widget.userLatitude, widget.userLongitude)
-                  .toInt(),
-              height: data['height'],
-              image: data['profile_pic'] ??
-                  "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-              name: data['name'],
-              ID: data['email'],
-              iconss: data["Icon"],
-              labels: data['Interest'],
-              imagecollection: data['images'],
-              fav: favStatus[data['email']]!,
-              onlinecheck: lastSeen,
-              statecolour: statecolour,
-              useremail: widget.useremail,
-              description: data['description'],
-            )),
-  
-              
-            );
-          },
-        ),
-      );
-
-      // Step 5: Add the user to filteredUsers for display
+  Future<void> _getAllUsers() async {
+    try {
       setState(() {
-             filteredUsers.add({
-       'name': data['name'],
-       'age': data['Age'],
-       'profile_pic': data['profile_pic'],
-       'latitude': data['X'],
-       'longitude': data['Y'],
-       'location': data['Address'],
-       'email': data['email'],
-       "languages": data['languages'],
-       "education": data['education'],
-       "height": data['height'],
-       "iconss": data["Icon"],
-       "labels": data['Interest'],
-       'description': data['description'],
-       "imagecollection": data['images'],
-    
-});
+        _isMapInitialized = false; // Map is ready
       });
+      // Step 1: Fetch blocked users for the logged-in user
+      DocumentSnapshot blockedSnapshot = await FirebaseFirestore.instance
+          .collection("Blocked USers")
+          .doc(widget.useremail)
+          .get();
 
-      favStatus[data['email']] = false; // Initialize favorite status
-      loadedUsers++; // Increment loaded users counter
-      _checkIfLoadingComplete();
+      List<String> blockedEmails = [];
+      if (blockedSnapshot.exists) {
+        final blockedData = blockedSnapshot.data() as Map<String, dynamic>?;
+        if (blockedData != null &&
+            blockedData["This Id blocked Users"] != null) {
+          blockedEmails =
+              List<String>.from(blockedData["This Id blocked Users"]);
+        }
+      }
+
+      // Step 2: Fetch all users
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .get(); // Fetch all users
+
+      for (var doc in querySnapshot.docs) {
+        var data = doc.data() as Map<String, dynamic>;
+
+        // Skip the logged-in user's marker and blocked users
+        if (data['email'] == widget.useremail ||
+            blockedEmails.contains(data['email'])) {
+          continue;
+        }
+
+        // Step 3: Get profile picture as marker with rounded border
+        Uint8List markerIcon = await _getMarkerWithImage(
+            data['profile_pic'], data['profile'] == 'premium');
+
+        // Step 4: Add marker to map
+        _markers.add(
+          Marker(
+            markerId: MarkerId(doc.id),
+            position: LatLng(data['X'], data['Y']),
+            icon: BitmapDescriptor.fromBytes(markerIcon),
+            onTap: () {
+              bool isOnline = false;
+              String lastSeen = "Last seen: N/A";
+              lastSeenhistory = "Last seen: N/A";
+              if (usersStatusDetails.containsKey(data['email'])) {
+                final userStatus = usersStatusDetails[data['email']];
+                isOnline = userStatus['status'] == 'online';
+                if (isOnline) {
+                  lastSeen = "Online";
+                  lastSeenhistory = "Online";
+                  statecolour = const Color.fromARGB(255, 49, 255, 56);
+                } else {
+                  var lastSeenDate = DateTime.fromMillisecondsSinceEpoch(
+                          userStatus['lastSeen'])
+                      .toLocal();
+                  lastSeen =
+                      "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                  lastSeenhistory = lastSeen;
+                  statecolour = Colors.white;
+                }
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => viewpage(
+                          address: data['Address'],
+                          age: data['Age'],
+                          languages: data['languages'],
+                          education: data['education'],
+                          distance: calculateDistance(data["X"], data["Y"],
+                                  widget.userLatitude, widget.userLongitude)
+                              .toInt(),
+                          height: data['height'],
+                          image: data['profile_pic'] ??
+                              "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+                          name: data['name'],
+                          ID: data['email'],
+                          iconss: data["Icon"],
+                          labels: data['Interest'],
+                          imagecollection: data['images'],
+                          fav: favStatus[data['email']]!,
+                          onlinecheck: lastSeen,
+                          statecolour: statecolour,
+                          useremail: widget.useremail,
+                          description: data['description'],
+                        )),
+              );
+            },
+          ),
+        );
+
+        // Step 5: Add the user to filteredUsers for display
+        setState(() {
+          _isMapInitialized = true;
+          filteredUsers.add({
+            'name': data['name'],
+            'age': data['Age'],
+            'profile_pic': data['profile_pic'],
+            'latitude': data['X'],
+            'longitude': data['Y'],
+            'location': data['Address'],
+            'email': data['email'],
+            "languages": data['languages'],
+            "education": data['education'],
+            "height": data['height'],
+            "iconss": data["Icon"],
+            "labels": data['Interest'],
+            'description': data['description'],
+            "imagecollection": data['images'],
+          });
+        });
+
+        favStatus[data['email']] = false; // Initialize favorite status
+        loadedUsers++; // Increment loaded users counter
+        _checkIfLoadingComplete();
+      }
+    } catch (e) {
+      print('Error fetching all users: $e');
     }
-  } catch (e) {
-    print('Error fetching all users: $e');
   }
-}
-
-
 
   // Future<void> _getAllUsers() async {
-    // try {
-      // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          // .collection('users')
-          // .get(); // Fetch all users
+  // try {
+  // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  // .collection('users')
+  // .get(); // Fetch all users
 
-      // for (var doc in querySnapshot.docs) {
-        // var data = doc.data() as Map<String, dynamic>;
+  // for (var doc in querySnapshot.docs) {
+  // var data = doc.data() as Map<String, dynamic>;
 
-        // if (data['email'] == widget.useremail) continue;
+  // if (data['email'] == widget.useremail) continue;
 
-        // Uint8List markerIcon = await _getMarkerWithImage(
-            // data['profile_pic'], data['profile'] == 'premium');
+  // Uint8List markerIcon = await _getMarkerWithImage(
+  // data['profile_pic'], data['profile'] == 'premium');
 
-        // _markers.add(
-          // Marker(
-            // markerId: MarkerId(doc.id),
-            // position: LatLng(data['X'], data['Y']),
-            // icon: BitmapDescriptor.fromBytes(markerIcon),
-            // onTap: () {
-              // bool isOnline = false;
-              // String lastSeen = "Last seen: N/A";
-              // lastSeenhistory = "Last seen: N/A";
-              // if (usersStatusDetails.containsKey(data['email'])) {
-                // final userStatus = usersStatusDetails[data['email']];
-                // isOnline = userStatus['status'] == 'online';
-                // if (isOnline) {
-                  // lastSeen = "Online";
-                  // lastSeenhistory = "Online";
-                  // statecolour = const Color.fromARGB(255, 49, 255, 56);
-                // } else {
-                  // var lastSeenDate = DateTime.fromMillisecondsSinceEpoch(
-                          // userStatus['lastSeen'])
-                      // .toLocal();
-                  // lastSeen =
-                      // "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-                  // lastSeenhistory = lastSeen;
-                  // statecolour = Colors.white;
-                // }
-              // }
-              // Navigator.push(
-                // context,
-                // MaterialPageRoute(
-                    // builder: (context) =>
-                    // viewpage(
-                          // address: data['Address'],
-                          // age: data['Age'],
-                          // languages: data['languages'],
-                          // education: data['education'],
-                          // distance: calculateDistance(data["X"], data["Y"],
-                                  // widget.userLatitude, widget.userLongitude)
-                              // .toInt(),
-                          // height: data['height'],
-                          // image: data['profile_pic'] ??
-                              // "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                          // name: data['name'],
-                          // ID: data['email'],
-                          // iconss: data["Icon"],
-                          // labels: data['Interest'],
-                          // imagecollection: data['images'],
-                          // fav: favStatus[data['email']]!,
-                          // onlinecheck: lastSeen,
-                          // statecolour: statecolour,
-                          // useremail: widget.useremail,
-                          // description: data['description'],
-                        // )),
-              // );
-            // },
-          // ),
-        // );
+  // _markers.add(
+  // Marker(
+  // markerId: MarkerId(doc.id),
+  // position: LatLng(data['X'], data['Y']),
+  // icon: BitmapDescriptor.fromBytes(markerIcon),
+  // onTap: () {
+  // bool isOnline = false;
+  // String lastSeen = "Last seen: N/A";
+  // lastSeenhistory = "Last seen: N/A";
+  // if (usersStatusDetails.containsKey(data['email'])) {
+  // final userStatus = usersStatusDetails[data['email']];
+  // isOnline = userStatus['status'] == 'online';
+  // if (isOnline) {
+  // lastSeen = "Online";
+  // lastSeenhistory = "Online";
+  // statecolour = const Color.fromARGB(255, 49, 255, 56);
+  // } else {
+  // var lastSeenDate = DateTime.fromMillisecondsSinceEpoch(
+  // userStatus['lastSeen'])
+  // .toLocal();
+  // lastSeen =
+  // "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+  // lastSeenhistory = lastSeen;
+  // statecolour = Colors.white;
+  // }
+  // }
+  // Navigator.push(
+  // context,
+  // MaterialPageRoute(
+  // builder: (context) =>
+  // viewpage(
+  // address: data['Address'],
+  // age: data['Age'],
+  // languages: data['languages'],
+  // education: data['education'],
+  // distance: calculateDistance(data["X"], data["Y"],
+  // widget.userLatitude, widget.userLongitude)
+  // .toInt(),
+  // height: data['height'],
+  // image: data['profile_pic'] ??
+  // "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
+  // name: data['name'],
+  // ID: data['email'],
+  // iconss: data["Icon"],
+  // labels: data['Interest'],
+  // imagecollection: data['images'],
+  // fav: favStatus[data['email']]!,
+  // onlinecheck: lastSeen,
+  // statecolour: statecolour,
+  // useremail: widget.useremail,
+  // description: data['description'],
+  // )),
+  // );
+  // },
+  // ),
+  // );
 // setState(() {
-  // 
+  //
 
-        // filteredUsers.add({
-          // 'name': data['name'],
-          // 'age': data['Age'],
-          // 'profile_pic': data['profile_pic'],
-          // 'latitude': data['X'],
-          // 'longitude': data['Y'],
-          // 'location': data['Address'],
-          // 'email': data['email'],
-          // "languages": data['languages'],
-          // "education": data['education'],
-          // "height": data['height'],
-          // "iconss": data["Icon"],
-          // "labels": data['Interest'],
-          // 'description': data['description'],
-          // "imagecollection": data['images'],
-        // });
+  // filteredUsers.add({
+  // 'name': data['name'],
+  // 'age': data['Age'],
+  // 'profile_pic': data['profile_pic'],
+  // 'latitude': data['X'],
+  // 'longitude': data['Y'],
+  // 'location': data['Address'],
+  // 'email': data['email'],
+  // "languages": data['languages'],
+  // "education": data['education'],
+  // "height": data['height'],
+  // "iconss": data["Icon"],
+  // "labels": data['Interest'],
+  // 'description': data['description'],
+  // "imagecollection": data['images'],
+  // });
 // });
-        // favStatus[data['email']] = false; // Initialize favorite status
-        // loadedUsers++; // Increment loaded users counter
-        // _checkIfLoadingComplete();
-      // }
+  // favStatus[data['email']] = false; // Initialize favorite status
+  // loadedUsers++; // Increment loaded users counter
+  // _checkIfLoadingComplete();
+  // }
 
-      // setState(() {
+  // setState(() {
 
-      // }); // Update the map with new markers
-    // } catch (e) {
-      // print('Error fetching all users: $e');
-    // }
+  // }); // Update the map with new markers
+  // } catch (e) {
+  // print('Error fetching all users: $e');
+  // }
   // }
 
   void _checkIfLoadingComplete() {
@@ -706,11 +699,11 @@ Future<void> _getAllUsers() async {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-   final User? curentuser = FirebaseAuth.instance.currentUser;
-   if (curentuser == null) {
-     // Handle unauthenticated user state (e.g., redirect to login page or show an
-     return Center(child: Text('No user is logged in.'));
-   }
+    final User? curentuser = FirebaseAuth.instance.currentUser;
+    if (curentuser == null) {
+      // Handle unauthenticated user state (e.g., redirect to login page or show an
+      return Center(child: Text('No user is logged in.'));
+    }
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection("users")
@@ -720,29 +713,30 @@ Future<void> _getAllUsers() async {
           if (snapshot.hasData) {
             final userdataperson =
                 snapshot.data!.data() as Map<String, dynamic>?;
-      
-               if (userdataperson?['statusType'] == 'deactive') {
-           WidgetsBinding.instance.addPostFrameCallback((_) async {
-             if (mounted) {
-               await FirebaseAuth.instance.signOut();
-               Navigator.of(context).pushAndRemoveUntil(
-                 MaterialPageRoute(builder: (context) => deactivepage()),
-                 (Route<dynamic> route) => false,
-               );
-             }
-           });
-         }       
-         if (userdataperson?['statusType'] == 'block') {
-           WidgetsBinding.instance.addPostFrameCallback((_) async {
-             if (mounted) {
-               await FirebaseAuth.instance.signOut();
-               Navigator.of(context).pushAndRemoveUntil(
-                 MaterialPageRoute(builder: (context) => block()),
-                 (Route<dynamic> route) => false,
-               );
-             }
-           });
-         }            if (userdataperson?['statusType'] == 'delete') {
+
+            if (userdataperson?['statusType'] == 'deactive') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => deactivepage()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+            if (userdataperson?['statusType'] == 'block') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => block()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+            if (userdataperson?['statusType'] == 'delete') {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
                 if (mounted) {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -756,14 +750,11 @@ Future<void> _getAllUsers() async {
                 }
               });
             }
-         if (userdataperson == null) {
-           return Center(
-             child: Text("User data not found."),
-           );
-         }
-      
-      
-      
+            if (userdataperson == null) {
+              return Center(
+                child: Text("User data not found."),
+              );
+            }
 
             return Scaffold(
               body: Stack(
@@ -775,7 +766,9 @@ Future<void> _getAllUsers() async {
                     ),
                     markers: _markers,
                     onMapCreated: (GoogleMapController controller) {
+                      print('map created');
                       _controller.complete(controller);
+                      _onMapCreated(controller);
                     },
                   ),
                   if (!_isMapInitialized)
@@ -1013,128 +1006,129 @@ Future<void> _getAllUsers() async {
                   ),
                   if (userdataperson['profile'] == 'premium') ...[
                     // Padding(
-                      // padding: EdgeInsets.only(left: 20, top: 80),
-                      // child: ElevatedButton(
-                          // style: ElevatedButton.styleFrom(
-                            // shape: RoundedRectangleBorder(
-                                // borderRadius:
-                                    // BorderRadius.all(Radius.circular(30))),
-                            // backgroundColor: Color(0xff7905F5),
-                          // ),
-                          // onPressed: isLoadingambassdor
-                              // ? null
-                              // : () {
-                                  // handleButtonPress();
-                                // },
-                          // child: Padding(
-                            // padding: EdgeInsets.only(top: 10, bottom: 10),
-                            // child: isLoading
-                                // ? CircularProgressIndicator(color: Colors.white)
-                                // : Text(buttonText,
-                                    // style: TextStyle(
-                                        // color: Colors.white,
-                                        // fontSize: 15,
-                                        // fontFamily: "button")),
-                          // )),
-StreamBuilder<DocumentSnapshot>(
-  stream: FirebaseFirestore.instance
-      .collection('users')
-      .doc(curentuser.email!)
-      .snapshots(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return CircularProgressIndicator();
-    }
+                    // padding: EdgeInsets.only(left: 20, top: 80),
+                    // child: ElevatedButton(
+                    // style: ElevatedButton.styleFrom(
+                    // shape: RoundedRectangleBorder(
+                    // borderRadius:
+                    // BorderRadius.all(Radius.circular(30))),
+                    // backgroundColor: Color(0xff7905F5),
+                    // ),
+                    // onPressed: isLoadingambassdor
+                    // ? null
+                    // : () {
+                    // handleButtonPress();
+                    // },
+                    // child: Padding(
+                    // padding: EdgeInsets.only(top: 10, bottom: 10),
+                    // child: isLoading
+                    // ? CircularProgressIndicator(color: Colors.white)
+                    // : Text(buttonText,
+                    // style: TextStyle(
+                    // color: Colors.white,
+                    // fontSize: 15,
+                    // fontFamily: "button")),
+                    // )),
+                    StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(curentuser.email!)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
 
-    if (snapshot.hasError) {
-      return Text("Error: ${snapshot.error}");
-    }
+                        if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        }
 
-    String buttonText = "Request Ambassador";
-    String? ambassadorEmail;
+                        String buttonText = "Request Ambassador";
+                        String? ambassadorEmail;
 
-    if (snapshot.hasData && snapshot.data!.exists) {
-      final data = snapshot.data!.data() as Map<String, dynamic>;
-      
-      // Check if 'ambassadorEmail' attribute is included
-      if (data.containsKey('ambassadorEmail')) {
-        ambassadorEmail = data['ambassadorEmail'] ?? '';
-      bool isOnline = false;
-      String lastSeen = "Last seen: N/A";
-      lastSeenhistory = "Last seen: N/A";
-      if (usersStatusDetails
-          .containsKey(ambassadorEmail)) {
-        final userStatus =
-            usersStatusDetails[ambassadorEmail];
-        isOnline =
-            userStatus['status'] == 'online';
-        if (isOnline) {
-          lastSeen = "Online";
-          lastSeenhistory = "Online";
-          statecolour = const Color.fromARGB(
-              255, 49, 255, 56);
-        } else {
-          var lastSeenDate =
-              DateTime.fromMillisecondsSinceEpoch(
-                      userStatus['lastSeen'])
-                  .toLocal();
-          lastSeen =
-              "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-          lastSeenhistory = lastSeen;
-          statecolour = Colors.white;
-        }
-      }
-        // Fetch the status for this specific user
+                        if (snapshot.hasData && snapshot.data!.exists) {
+                          final data =
+                              snapshot.data!.data() as Map<String, dynamic>;
 
-        // Update button text based on 'ambassadorEmail'
+                          // Check if 'ambassadorEmail' attribute is included
+                          if (data.containsKey('ambassadorEmail')) {
+                            ambassadorEmail = data['ambassadorEmail'] ?? '';
+                            bool isOnline = false;
+                            String lastSeen = "Last seen: N/A";
+                            lastSeenhistory = "Last seen: N/A";
+                            if (usersStatusDetails
+                                .containsKey(ambassadorEmail)) {
+                              final userStatus =
+                                  usersStatusDetails[ambassadorEmail];
+                              isOnline = userStatus['status'] == 'online';
+                              if (isOnline) {
+                                lastSeen = "Online";
+                                lastSeenhistory = "Online";
+                                statecolour =
+                                    const Color.fromARGB(255, 49, 255, 56);
+                              } else {
+                                var lastSeenDate =
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                            userStatus['lastSeen'])
+                                        .toLocal();
+                                lastSeen =
+                                    "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                                lastSeenhistory = lastSeen;
+                                statecolour = Colors.white;
+                              }
+                            }
+                            // Fetch the status for this specific user
 
-        buttonText = ambassadorEmail!.isEmpty
-            ? "Ambassador request is in queue"
-            : "Your Ambassador";
-      } else {
-        buttonText = "Request Ambassador";
-      }
-    }
+                            // Update button text based on 'ambassadorEmail'
 
-    return Padding(
-      padding: EdgeInsets.only(left: 20, top: 80),
-      child: 
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          backgroundColor: Color(0xff7905F5),
-        ),
-        onPressed: isLoading
-            ? null
-            : () async {
-                if (buttonText == "Your Ambassador" &&
-                    ambassadorEmail != null) {
-                  await navigateToChatPage(ambassadorEmail);
-                } else if (buttonText == "Request Ambassador") {
-                  await handleButtonPress();
-                }
-              },
-        child: Padding(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
-          child: isLoading
-              ? CircularProgressIndicator(color: Colors.white)
-              : 
-              Text(
-                  buttonText,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontFamily: "button",
-                  ),
-                ),
-        ),
-      ),
-    );
-  },
-)
+                            buttonText = ambassadorEmail!.isEmpty
+                                ? "Ambassador request is in queue"
+                                : "Your Ambassador";
+                          } else {
+                            buttonText = "Request Ambassador";
+                          }
+                        }
 
+                        return Padding(
+                          padding: EdgeInsets.only(left: 20, top: 80),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                              ),
+                              backgroundColor: Color(0xff7905F5),
+                            ),
+                            onPressed: isLoading
+                                ? null
+                                : () async {
+                                    if (buttonText == "Your Ambassador" &&
+                                        ambassadorEmail != null) {
+                                      await navigateToChatPage(ambassadorEmail);
+                                    } else if (buttonText ==
+                                        "Request Ambassador") {
+                                      await handleButtonPress();
+                                    }
+                                  },
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              child: isLoading
+                                  ? CircularProgressIndicator(
+                                      color: Colors.white)
+                                  : Text(
+                                      buttonText,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontFamily: "button",
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        );
+                      },
+                    )
                   ],
 
                   // Positioned(
