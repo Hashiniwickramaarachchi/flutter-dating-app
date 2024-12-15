@@ -37,7 +37,7 @@ class _A_UpdateProfilePageState extends State<A_UpdateProfilePage> {
     {'icon': Icons.directions_car, 'label': 'Cars'},
   ];
 
-  List<String> ageList = List.generate(100, (index) => (index + 1).toString());
+  List<String> ageList = List.generate(100, (index) => (index + 18).toString());
          List<String> heightList = ["0 cm"] + List.generate(100, (index) => "${100 + index} cm");
 
 

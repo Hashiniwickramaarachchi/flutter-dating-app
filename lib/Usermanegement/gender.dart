@@ -15,7 +15,7 @@ class gender extends StatefulWidget {
 
 class _genderState extends State<gender> {
   String _selectedIconIndex = "Not Selected";
-  var year = 0;
+  var year = 18;
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +175,7 @@ class _genderState extends State<gender> {
                ),
                Center(
                  child: NumberPicker(
-                   minValue: 0,
+                   minValue: 18,
                    maxValue: 100,
                    value: year,
                    zeroPad: false,
@@ -217,7 +217,7 @@ class _genderState extends State<gender> {
          
                      try {
                        // Update Firestore only if there are fields to update
-                       if (year != 0 &&
+                       if (year != 17 &&
                            _selectedIconIndex != "Not Selected") {
                          await FirebaseFirestore.instance
                              .collection('users')
