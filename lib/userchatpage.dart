@@ -57,6 +57,7 @@ final FocusNode _messageFocusNode = FocusNode();
         'message': _messageController.text,
         'isImage': false,
         'timestamp': FieldValue.serverTimestamp(),
+
       };
 
       await FirebaseFirestore.instance
@@ -98,15 +99,24 @@ final FocusNode _messageFocusNode = FocusNode();
           .collection('history')
           .doc(widget.chatPartnerEmail)
           .collection('messages')
-          .add(messageData);
-
+.add({
+      ...messageData, // S
+      'isRead': true, 
+      });
+      
       await _firestore
           .collection('chats')
           .doc(widget.chatPartnerEmail)
           .collection('history')
           .doc(currentUser.email)
           .collection('messages')
-          .add(messageData);
+.add({
+      ...messageData, // S
+      'isRead': false, 
+      });
+      
+
+      
 
       _messageController.clear();
 
@@ -198,6 +208,7 @@ final FocusNode _messageFocusNode = FocusNode();
         'message': downloadUrl,
         'isImage': true,
         'timestamp': FieldValue.serverTimestamp(),
+
       };
 
       await _firestore
@@ -206,16 +217,20 @@ final FocusNode _messageFocusNode = FocusNode();
           .collection('history')
           .doc(widget.chatPartnerEmail)
           .collection('messages')
-          .add(imageMessageData);
-
+.add({
+      ...imageMessageData, // S
+      'isRead': true, 
+      });
       await _firestore
           .collection('chats')
           .doc(widget.chatPartnerEmail)
           .collection('history')
           .doc(_auth.currentUser!.email)
           .collection('messages')
-          .add(imageMessageData);
-
+.add({
+      ...imageMessageData, // S
+      'isRead': false, 
+      });
      if (userSnapshot.exists) {
       final LoggeduserSnapshot =
     await _firestore.collection('users').doc(_auth.currentUser!.email).get();

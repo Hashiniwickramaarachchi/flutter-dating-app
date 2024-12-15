@@ -3,6 +3,7 @@ import 'package:datingapp/Usermanegement/signup.dart';
 import 'package:datingapp/ambassdor/newuser/dashbordnew.dart';
 import 'package:datingapp/ambassdor/newuser/homepage.dart';
 import 'package:datingapp/ambassdor/newuser/signup.dart';
+import 'package:datingapp/notififation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,17 @@ class A_landingpage extends StatefulWidget {
 }
 
 class _A_landingpageState extends State<A_landingpage> {
+
+NotificationService notificationService = NotificationService();
+
+@override
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    notificationService.requestNotificationPermition();
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
