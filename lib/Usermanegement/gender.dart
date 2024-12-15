@@ -176,7 +176,7 @@ class _genderState extends State<gender> {
                Center(
                  child: NumberPicker(
                    minValue: 18,
-                   maxValue: 100,
+                   maxValue: 99,
                    value: year,
                    zeroPad: false,
                    infiniteLoop: true,
