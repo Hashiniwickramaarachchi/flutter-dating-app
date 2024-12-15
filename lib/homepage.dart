@@ -6,6 +6,7 @@ import 'package:datingapp/bootmnavbar.dart';
 import 'package:datingapp/deactivepage.dart';
 import 'package:datingapp/filterpage.dart';
 import 'package:datingapp/mainscreen.dart';
+import 'package:datingapp/notififation.dart';
 import 'package:datingapp/onlinecheck.dart';
 import 'package:datingapp/person.dart'; // Make sure this import is added
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,9 +39,11 @@ class _homepageState extends State<homepage> {
   bool _isFirstText = true;
   List<Map<String, dynamic>> partnerData = []; // List to store user data
 
+NotificationService notificationService = NotificationService();
   @override
   void initState() {
     super.initState();
+    notificationService.requestNotificationPermition();
     _loadSwipeData();
 fetchpartnerData();
     fetchUsersStatus();

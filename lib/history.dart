@@ -251,12 +251,26 @@ return FutureBuilder<DocumentSnapshot>(
                                         ? 'Image'
                                         : lastMessage['message'] ?? ''),
                                 style: TextStyle(
-                                  color: const Color(0xff979292),
+                                  color: (lastMessage != null && !(lastMessage['isRead'] ?? true))
+        ? Colors.black
+        : const Color(0xff979292), // Use black for unread messages
                                   fontFamily: "defaultfontsbold",
                                   fontSize: 14,
                                 ),
                               ),
-                              onTap: () {
+                              onTap: () async{
+                                 final unreadMessages = await _firestore
+      .collection('chats')
+      .doc(currentUser.email)
+      .collection('history')
+      .doc(chatPartnerEmail)
+      .collection('messages')
+      .where('isRead', isEqualTo: false)
+      .get();
+
+  for (var doc in unreadMessages.docs) {
+    await doc.reference.update({'isRead': true});
+  }
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => ChatPage(
