@@ -70,7 +70,7 @@ class _wlcomepremiumState extends State<wlcomepremium> {
                               bottom: height / 60),
                           child: Center(
                               child: Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut diam orci, rutrum id arcu in, cursus commodo ex.",
+                            "Enjoy exclusive benefits and enhanced features designed just for you. Start exploring premium content and make the most of your experience today.",
                             style: TextStyle(
                                 color: Color(0xff565656),
                                 fontWeight: FontWeight.bold,
