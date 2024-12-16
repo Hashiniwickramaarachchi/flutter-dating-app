@@ -435,7 +435,7 @@ Expanded(
         .get(),
     builder: (context, blockedSnapshot) {
       if (blockedSnapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
+        // return Center(child: CircularProgressIndicator());
       }
       if (blockedSnapshot.hasError) {
         return Center(child: Text('Error fetching blocked users: ${blockedSnapshot.error}'));
@@ -477,18 +477,21 @@ Expanded(
                 .doc(curentuser.email)
                 .get(),
             builder: (context, userProfileSnapshot) {
-              if (userProfileSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
+           
+           
 
-              if (userProfileSnapshot.hasError) {
-                return Center(child: Text('Error fetching user profile: ${userProfileSnapshot.error}'));
-              }
+             if (userProfileSnapshot.hasError) {
+          return Center(child: Text('Error fetching user profile: ${userProfileSnapshot.error}'));
+        }
+        if (userProfileSnapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+              
 
-              final userProfile = userProfileSnapshot.data!.data() as Map<String, dynamic>;
-              final swipeCount = userProfile?['swipeCount'] ?? 0;
-              final lastSwipeTime = userProfile?['lastSwipeTime']?.toDate();
-              final isPremium = userProfile?['profile'] == 'premium';
+        final userProfile = userProfileSnapshot.data?.data() as Map<String, dynamic>? ?? {};
+              final swipeCount = userProfile['swipeCount'] ?? 0;
+              final lastSwipeTime = userProfile['lastSwipeTime']?.toDate();
+              final isPremium = userProfile['profile'] == 'premium';
 
               // Calculate time difference
               final now = DateTime.now();

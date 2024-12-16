@@ -323,9 +323,9 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                             .connectionState ==
                                                         ConnectionState
                                                             .waiting) {
-                                                      return Center(
-                                                          child:
-                                                              CircularProgressIndicator());
+                                                   
+                                                   
+                                                   
                                                     }
 
                                                     List<String> blockedEmails =
@@ -533,9 +533,9 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                 if (blockedSnapshot
                                                         .connectionState ==
                                                     ConnectionState.waiting) {
-                                                  return Center(
-                                                      child:
-                                                          CircularProgressIndicator());
+                                               
+                                               
+                                               
                                                 }
 
                                                 List<String> blockedEmails = [];
@@ -732,9 +732,9 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                 if (blockedSnapshot
                                                         .connectionState ==
                                                     ConnectionState.waiting) {
-                                                  return Center(
-                                                      child:
-                                                          CircularProgressIndicator());
+                                                 
+                                                 
+                                                 
                                                 }
 
                                                 // Retrieve blocked users list

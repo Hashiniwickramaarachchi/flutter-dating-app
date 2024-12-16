@@ -38,7 +38,7 @@ class _A_UpdateProfilePageState extends State<A_UpdateProfilePage> {
   ];
 
   List<String> ageList = List.generate(100, (index) => (index + 18).toString());
-         List<String> heightList = ["0 cm"] + List.generate(100, (index) => "${100 + index} cm");
+         List<String> heightList = ["0 cm"] + List.generate(200, (index) => "${1 + index} cm");
 
 
   final Set<String> _selectedInterestIndices = {}; // Store multiple selections

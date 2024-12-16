@@ -62,7 +62,7 @@ class _privacyState extends State<privacy> {
       print('Error fetching remote config: $e');
       // Optionally, set a default URL if fetching fails
       setState(() {
-        privacyPolicyUrl = 'https://default-url.com/privacy-policy';
+        privacyPolicyUrl = 'https://appexlove.com/privacy-policy';
       });
     }
   }

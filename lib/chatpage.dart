@@ -511,8 +511,8 @@ class _ChatscreenState extends State<Chatscreen> {
                               builder: (context, blockedSnapshot) {
                                 if (blockedSnapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
+                                  // return const Center(
+                                      // child: CircularProgressIndicator());
                                 }
 
                                 if (blockedSnapshot.hasError) {
@@ -548,8 +548,8 @@ class _ChatscreenState extends State<Chatscreen> {
                                     }
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
-                                      return const Center(
-                                          child: CircularProgressIndicator());
+                                      // return const Center(
+                                          // child: CircularProgressIndicator());
                                     }
 
 

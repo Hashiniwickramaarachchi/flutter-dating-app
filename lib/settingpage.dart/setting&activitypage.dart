@@ -13,7 +13,7 @@ import 'package:datingapp/settingpage.dart/unblockpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 
 class settingactivity extends StatefulWidget {
   const settingactivity({super.key});
@@ -363,7 +363,7 @@ class _settingactivityState extends State<settingactivity> {
                         onTap: () async {
                           // _createAndShareDynamicLink();
                         // inviteFriends();
-                                      _shareApp();
+                                      // _shareApp();
 
                         },
                         child: Padding(
@@ -708,13 +708,13 @@ class _settingactivityState extends State<settingactivity> {
     );
   }
 
-  void _shareApp() {
-    if (shareMessage.isNotEmpty) {
-      Share.share(shareMessage);
-    } else {
-      print("Sharing message is not available.");
-    }
-  }
+  // void _shareApp() {
+    // if (shareMessage.isNotEmpty) {
+      // Share.share(shareMessage);
+    // } else {
+      // print("Sharing message is not available.");
+    // }
+  // }
 
 
   // void inviteFriends() {

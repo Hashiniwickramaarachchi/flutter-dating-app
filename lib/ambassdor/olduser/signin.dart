@@ -505,7 +505,7 @@ class _A_signinState extends State<A_signin> {
             'name': user.displayName,
             'email': user.email,
             'Address': '',
-            'Age': 10,
+            'Age': 18,
             'Gender': '',
             'Icon': [],
             'Interest': [],

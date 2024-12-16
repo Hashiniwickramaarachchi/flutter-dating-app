@@ -106,7 +106,6 @@ class _OnlineUsersPageState extends State<OnlineUsersPage> {
             .get(),
         builder: (context, blockedSnapshot) {
           if (blockedSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
           }
 
           List<String> blockedEmails = [];

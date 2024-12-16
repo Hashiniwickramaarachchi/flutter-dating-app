@@ -38,7 +38,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   ];
 
   List<String> ageList = List.generate(100, (index) => (index + 18).toString());
-       List<String> heightList = ["0 cm"] + List.generate(100, (index) => "${100 + index} cm");
+       List<String> heightList = ["0 cm"] + List.generate(200, (index) => "${1 + index} cm");
 
   
 
