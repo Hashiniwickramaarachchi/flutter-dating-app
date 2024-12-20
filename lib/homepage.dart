@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/accountdelectionpage.dart';
@@ -39,64 +40,67 @@ class _homepageState extends State<homepage> {
   bool _isFirstText = true;
   List<Map<String, dynamic>> partnerData = []; // List to store user data
 
-NotificationService notificationService = NotificationService();
+  NotificationService notificationService = NotificationService();
   @override
   void initState() {
     super.initState();
     notificationService.requestNotificationPermition();
     _loadSwipeData();
-fetchpartnerData();
+    fetchpartnerData();
     fetchUsersStatus();
     _onlineStatusService.updateUserStatus();
   }
-Future<void> fetchpartnerData() async {
-  final currentUser = FirebaseAuth.instance.currentUser!;
-  final ambassadorSnapshot = await FirebaseFirestore.instance
-      .collection("users")
-      .doc(currentUser.email)
-      .get();
 
-  if (ambassadorSnapshot.exists) {
-    final data = ambassadorSnapshot.data() as Map<String, dynamic>;
-
-    // Fetch the added users' emails
-    final List<dynamic> addedUsersEmails = data['partners'] ?? [];
-
-    // Fetch the list of blocked users
-    final blockedSnapshot = await FirebaseFirestore.instance
-        .collection("Blocked USers")
+  Future<void> fetchpartnerData() async {
+    final currentUser = FirebaseAuth.instance.currentUser!;
+    final ambassadorSnapshot = await FirebaseFirestore.instance
+        .collection("users")
         .doc(currentUser.email)
         .get();
 
-    List<String> blockedEmails = [];
-    if (blockedSnapshot.exists) {
-      final blockedData = blockedSnapshot.data() as Map<String, dynamic>?;
-      if (blockedData != null && blockedData["This Id blocked Users"] != null) {
-        blockedEmails = List<String>.from(blockedData["This Id blocked Users"]);
-      }
-    }
+    if (ambassadorSnapshot.exists) {
+      final data = ambassadorSnapshot.data() as Map<String, dynamic>;
 
-    // Add users to the data list only if they are not blocked and are not the current user
-    for (var email in addedUsersEmails) {
-      // Skip if the user is blocked or if it's the current user's email
-      if (blockedEmails.contains(email) || email == currentUser.email) {
-        continue;
-      }
+      // Fetch the added users' emails
+      final List<dynamic> addedUsersEmails = data['partners'] ?? [];
 
-      final userSnapshot = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(email)
+      // Fetch the list of blocked users
+      final blockedSnapshot = await FirebaseFirestore.instance
+          .collection("Blocked USers")
+          .doc(currentUser.email)
           .get();
-      
-      if (userSnapshot.exists) {
-        // Add to usersData if the user is not blocked and is not the current user
-        partnerData.add(userSnapshot.data() as Map<String, dynamic>);
-      }
-    }
 
-    setState(() {});
+      List<String> blockedEmails = [];
+      if (blockedSnapshot.exists) {
+        final blockedData = blockedSnapshot.data() as Map<String, dynamic>?;
+        if (blockedData != null &&
+            blockedData["This Id blocked Users"] != null) {
+          blockedEmails =
+              List<String>.from(blockedData["This Id blocked Users"]);
+        }
+      }
+
+      // Add users to the data list only if they are not blocked and are not the current user
+      for (var email in addedUsersEmails) {
+        // Skip if the user is blocked or if it's the current user's email
+        if (blockedEmails.contains(email) || email == currentUser.email) {
+          continue;
+        }
+
+        final userSnapshot = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(email)
+            .get();
+
+        if (userSnapshot.exists) {
+          // Add to usersData if the user is not blocked and is not the current user
+          partnerData.add(userSnapshot.data() as Map<String, dynamic>);
+        }
+      }
+
+      setState(() {});
+    }
   }
-}
 
   @override
   void dispose() {
@@ -154,8 +158,6 @@ Future<void> fetchpartnerData() async {
       "lastSwipeTime": lastSwipeTime,
     });
   }
-
-
 
   void _onSwipe(int newIndex) {
     // Debugging to track swipes
@@ -266,28 +268,30 @@ Future<void> fetchpartnerData() async {
             final userdataperson =
                 snapshot.data!.data() as Map<String, dynamic>;
 
-             if (userdataperson['statusType'] == 'deactive') {
-  WidgetsBinding.instance.addPostFrameCallback((_) async{
-    if (mounted) {
+            if (userdataperson['statusType'] == 'deactive') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
                   await FirebaseAuth.instance.signOut();
 
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => deactivepage()),
-        (Route<dynamic> route) => false,
-      );
-    }
-  });
-}         if (userdataperson?['statusType'] == 'block') {
-           WidgetsBinding.instance.addPostFrameCallback((_) async {
-             if (mounted) {
-               await FirebaseAuth.instance.signOut();
-               Navigator.of(context).pushAndRemoveUntil(
-                 MaterialPageRoute(builder: (context) => block()),
-                 (Route<dynamic> route) => false,
-               );
-             }
-           });
-         }              if (userdataperson?['statusType'] == 'delete') {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => deactivepage()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+            if (userdataperson?['statusType'] == 'block') {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (mounted) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => block()),
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              });
+            }
+            if (userdataperson?['statusType'] == 'delete') {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
                 if (mounted) {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -300,7 +304,7 @@ Future<void> fetchpartnerData() async {
                   ));
                 }
               });
-            }        
+            }
             return Scaffold(
               appBar: AppBar(
                 toolbarHeight: height / 400,
@@ -393,7 +397,7 @@ Future<void> fetchpartnerData() async {
                           ),
                           if (userdataperson['profile'] == 'premium') ...[
                             Padding(
-                              padding:  EdgeInsets.only(top: 20),
+                              padding: EdgeInsets.only(top: 20),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -404,14 +408,15 @@ Future<void> fetchpartnerData() async {
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    
                                     _isFirstText = !_isFirstText;
                                   });
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 10, bottom: 10),
                                   child: Text(
-                                    _isFirstText ? "Ambassador Suggestions  >" : "<  Back To Home",
+                                    _isFirstText
+                                        ? "Ambassador Suggestions  >"
+                                        : "<  Back To Home",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
@@ -425,272 +430,351 @@ Future<void> fetchpartnerData() async {
                           SizedBox(
                             height: height / 40,
                           ),
-                         
-                         _isFirstText ?
-Expanded(
-  child: FutureBuilder<DocumentSnapshot>(
-    future: FirebaseFirestore.instance
-        .collection("Blocked Users")
-        .doc(curentuser.email)
-        .get(),
-    builder: (context, blockedSnapshot) {
-      if (blockedSnapshot.connectionState == ConnectionState.waiting) {
-        // return Center(child: CircularProgressIndicator());
-      }
-      if (blockedSnapshot.hasError) {
-        return Center(child: Text('Error fetching blocked users: ${blockedSnapshot.error}'));
-      }
+                          _isFirstText
+                              ? Expanded(
+                                  child: FutureBuilder<DocumentSnapshot>(
+                                    future: FirebaseFirestore.instance
+                                        .collection("Blocked Users")
+                                        .doc(curentuser.email)
+                                        .get(),
+                                    builder: (context, blockedSnapshot) {
+                                      if (blockedSnapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        // return Center(child: CircularProgressIndicator());
+                                      }
+                                      if (blockedSnapshot.hasError) {
+                                        return Center(
+                                            child: Text(
+                                                'Error fetching blocked users: ${blockedSnapshot.error}'));
+                                      }
 
-      // List to store blocked emails
-      List<String> blockedEmails = [];
-      if (blockedSnapshot.data != null) {
-        final blockedData = blockedSnapshot.data!.data() as Map<String, dynamic>?;
-        if (blockedData != null && blockedData["This Id blocked Users"] != null) {
-          blockedEmails = List<String>.from(blockedData["This Id blocked Users"]);
-        }
-      }
+                                      // List to store blocked emails
+                                      List<String> blockedEmails = [];
+                                      if (blockedSnapshot.data != null) {
+                                        final blockedData =
+                                            blockedSnapshot.data!.data()
+                                                as Map<String, dynamic>?;
+                                        if (blockedData != null &&
+                                            blockedData[
+                                                    "This Id blocked Users"] !=
+                                                null) {
+                                          blockedEmails = List<String>.from(
+                                              blockedData[
+                                                  "This Id blocked Users"]);
+                                        }
+                                      }
 
-      return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("users").snapshots(),
-        builder: (context, userSnapshot) {
-          if (userSnapshot.hasError) {
-            return Center(child: Text('Error: ${userSnapshot.error}'));
-          }
-          if (userSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+                                      return StreamBuilder<QuerySnapshot>(
+                                        stream: FirebaseFirestore.instance
+                                            .collection("users")
+                                            .snapshots(),
+                                        builder: (context, userSnapshot) {
+                                          if (userSnapshot.hasError) {
+                                            return Center(
+                                                child: Text(
+                                                    'Error: ${userSnapshot.error}'));
+                                          }
+                                          if (userSnapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          }
 
-          // Get user data from Firestore
-          final data = userSnapshot.data!.docs.where((doc) {
-            final email = doc['email'] as String;
-            return email != curentuser.email && !blockedEmails.contains(email);
-          }).toList();
+                                          // Get user data from Firestore
+                                          final data = userSnapshot.data!.docs
+                                              .where((doc) {
+                                            final email =
+                                                doc['email'] as String;
+                                            return email != curentuser.email &&
+                                                !blockedEmails.contains(email);
+                                          }).toList();
 
-          if (data.isEmpty) {
-            return Center(child: Text("No users available"));
-          }
+                                          if (data.isEmpty) {
+                                            return Center(
+                                                child:
+                                                    Text("No users available"));
+                                          }
 
-          // Manage swipe limits and timing
-          return FutureBuilder<DocumentSnapshot>(
-            future: FirebaseFirestore.instance
-                .collection('users')
-                .doc(curentuser.email)
-                .get(),
-            builder: (context, userProfileSnapshot) {
-           
-           
+                                          // Manage swipe limits and timing
+                                          return FutureBuilder<
+                                              DocumentSnapshot>(
+                                            future: FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(curentuser.email)
+                                                .get(),
+                                            builder:
+                                                (context, userProfileSnapshot) {
+                                              if (userProfileSnapshot
+                                                  .hasError) {
+                                                return Center(
+                                                    child: Text(
+                                                        'Error fetching user profile: ${userProfileSnapshot.error}'));
+                                              }
+                                              if (userProfileSnapshot
+                                                      .connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              }
 
-             if (userProfileSnapshot.hasError) {
-          return Center(child: Text('Error fetching user profile: ${userProfileSnapshot.error}'));
-        }
-        if (userProfileSnapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-              
+                                              final userProfile =
+                                                  userProfileSnapshot.data
+                                                              ?.data()
+                                                          as Map<String,
+                                                              dynamic>? ??
+                                                      {};
+                                              final swipeCount =
+                                                  userProfile['swipeCount'] ??
+                                                      0;
+                                              final lastSwipeTime =
+                                                  userProfile['lastSwipeTime']
+                                                      ?.toDate();
+                                              final isPremium =
+                                                  userProfile['profile'] ==
+                                                      'premium';
 
-        final userProfile = userProfileSnapshot.data?.data() as Map<String, dynamic>? ?? {};
-              final swipeCount = userProfile['swipeCount'] ?? 0;
-              final lastSwipeTime = userProfile['lastSwipeTime']?.toDate();
-              final isPremium = userProfile['profile'] == 'premium';
+                                              // Calculate time difference
+                                              final now = DateTime.now();
+                                              final isTimeExceeded =
+                                                  lastSwipeTime != null &&
+                                                      now
+                                                              .difference(
+                                                                  lastSwipeTime)
+                                                              .inHours >=
+                                                          24;
 
-              // Calculate time difference
-              final now = DateTime.now();
-              final isTimeExceeded = lastSwipeTime != null && now.difference(lastSwipeTime).inHours >= 24;
+                                              // Handle swipe limit (5 cards per day for non-premium users)
+                                              if (!isPremium &&
+                                                  swipeCount >= 5 &&
+                                                  !isTimeExceeded) {
+                                                return Center(
+                                                    child: Text(
+                                                        "Swipe limit reached. Please try again in 24 hours."));
+                                              }
 
-              // Handle swipe limit (5 cards per day for non-premium users)
-              if (!isPremium && swipeCount >= 5 && !isTimeExceeded) {
-                
-                return Center(child: Text("Swipe limit reached. Please try again in 24 hours."));
-                
-              }
+                                              // Handle swipe logic when user is allowed to swipe
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: height / 8),
+                                                child: Swiper(
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final user = data[index];
+                                                    final String userEmail =
+                                                        user['email'];
+                                                    bool isOnline = false;
+                                                    String lastSeen =
+                                                        "Last seen: N/A";
+                                                    Color stateColor =
+                                                        Colors.white;
 
-              // Handle swipe logic when user is allowed to swipe
-              return Padding(
-                padding: EdgeInsets.only(bottom: height / 8),
-                child: Swiper(
-                  itemBuilder: (context, index) {
-                    final user = data[index];
-                    final String userEmail = user['email'];
-                    bool isOnline = false;
-                    String lastSeen = "Last seen: N/A";
-                    Color stateColor = Colors.white;
+                                                    if (usersStatusDetails
+                                                        .containsKey(
+                                                            userEmail)) {
+                                                      final userStatus =
+                                                          usersStatusDetails[
+                                                              userEmail];
+                                                      isOnline = userStatus[
+                                                              'status'] ==
+                                                          'online';
+                                                      if (isOnline) {
+                                                        lastSeen = "Online";
+                                                        stateColor = const Color
+                                                            .fromARGB(
+                                                            255, 49, 255, 56);
+                                                      } else {
+                                                        var lastSeenDate = DateTime
+                                                                .fromMillisecondsSinceEpoch(
+                                                                    userStatus[
+                                                                        'lastSeen'])
+                                                            .toLocal();
+                                                        lastSeen =
+                                                            "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                                                        stateColor =
+                                                            Colors.white;
+                                                      }
+                                                    }
 
-                    if (usersStatusDetails.containsKey(userEmail)) {
-                      final userStatus = usersStatusDetails[userEmail];
-                      isOnline = userStatus['status'] == 'online';
-                      if (isOnline) {
-                        lastSeen = "Online";
-                        stateColor = const Color.fromARGB(255, 49, 255, 56);
-                      } else {
-                        var lastSeenDate = DateTime.fromMillisecondsSinceEpoch(userStatus['lastSeen']).toLocal();
-                        lastSeen = "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-                        stateColor = Colors.white;
-                      }
-                    }
+                                                    // Return the user card UI
+                                                    return person(
+                                                      onlinecheck: lastSeen,
+                                                      statecolour: stateColor,
+                                                      profileimage: user[
+                                                              'profile_pic'] ??
+                                                          "https://img.freepik.com/premium-vector/data-loading-icon",
+                                                      name: user['name']
+                                                          .toString()
+                                                          .toUpperCase(),
+                                                      distance: 300,
+                                                      location: user['Address'],
+                                                      startLatitude: user["X"],
+                                                      startLongitude: user["Y"],
+                                                      endLatitude:
+                                                          userdataperson["X"],
+                                                      endLongitude:
+                                                          userdataperson["Y"],
+                                                      age: int.parse(user['Age']
+                                                          .toString()),
+                                                      height: user['height'],
+                                                      labels: user['Interest'],
+                                                      iconss: user["Icon"],
+                                                      imagecollection:
+                                                          user['images'],
+                                                      ID: user.id,
+                                                      useremail: userdataperson[
+                                                          'email'],
+                                                      languages:
+                                                          user['languages'],
+                                                      education:
+                                                          user['education'],
+                                                      description:
+                                                          user['description'],
+                                                    );
+                                                  },
+                                                  itemCount: data.length,
+                                                  itemWidth: width - 30,
+                                                  itemHeight: height / 1.5,
+                                                  layout: SwiperLayout.TINDER,
+                                                  loop: false,
+                                                  autoplay: false,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  index: currentIndex,
+                                                  axisDirection:
+                                                      AxisDirection.right,
+                                                  onIndexChanged:
+                                                      (index) async {
+                                                    if (!isPremium) {
+                                                      // Increment swipe count locally
+                                                      final updatedSwipeCount =
+                                                          swipeCount + 1;
 
-                    // Return the user card UI
-                    return person(
-                      onlinecheck: lastSeen,
-                      statecolour: stateColor,
-                      profileimage: user['profile_pic'] ?? "https://img.freepik.com/premium-vector/data-loading-icon",
-                      name: user['name'].toString().toUpperCase(),
-                      distance: 300,
-                      location: user['Address'],
-                      startLatitude: user["X"],
-                      startLongitude: user["Y"],
-                      endLatitude: userdataperson["X"],
-                      endLongitude: userdataperson["Y"],
-                      age:   int.parse(user['Age'].toString()),
-                      height: user['height'],
-                      labels: user['Interest'],
-                      iconss: user["Icon"],
-                      imagecollection: user['images'],
-                      ID: user.id,
-                      useremail: userdataperson['email'],
-                      languages: user['languages'],
-                      education: user['education'],
-                      description: user['description'],
-                    );
-                  },
-                  itemCount: data.length,
-                  itemWidth: width - 30,
-                  itemHeight: height / 1.5,
-                  layout: SwiperLayout.TINDER,
-                  loop: false,
-                  autoplay: false,
-                  scrollDirection: Axis.horizontal,
-                  index: currentIndex,
-                  axisDirection: AxisDirection.right,
-              
-              
-              
-              
-              onIndexChanged: (index) async {
-  if (!isPremium) {
-    // Increment swipe count locally
-    final updatedSwipeCount = swipeCount + 1;
+                                                      // Update Firestore asynchronously without waiting
+                                                      FirebaseFirestore.instance
+                                                          .collection('users')
+                                                          .doc(curentuser.email)
+                                                          .update({
+                                                        'swipeCount':
+                                                            updatedSwipeCount,
+                                                        'lastSwipeTime':
+                                                            DateTime.now(),
+                                                      }).catchError((error) {
+                                                        // Optionally log error or show a message if needed
+                                                        print(
+                                                            'Error updating swipe count: $error');
+                                                      });
+                                                    }
 
-    // Update Firestore asynchronously without waiting
-    FirebaseFirestore.instance.collection('users').doc(curentuser.email).update({
-      'swipeCount': updatedSwipeCount,
-      'lastSwipeTime': DateTime.now(),
-    }).catchError((error) {
-      // Optionally log error or show a message if needed
-      print('Error updating swipe count: $error');
-    });
-  }
-
-  // Update current index state
-  setState(() {
-    currentIndex = index;
-  });
-},
-
-              
-              
-              
-
-              
-              
-              
-              
-                ),
-              );
-            },
-          );
-        },
-      );
-    },
-  ),
-):
-
-                                  Expanded(child: partnerData.isNotEmpty ?
-                                  
-                                                                         Padding(
-                                         padding: EdgeInsets.only(
-                                             bottom: height / 8),
-                                         child: Swiper(
-                                           itemBuilder: (context, index) {
-                                             final user = partnerData[index];
-                                             final String userEmail =
-                                                 user['email'];
-                                             bool isOnline = false;
-                                             String lastSeen =
-                                                 "Last seen: N/A";
-                                             Color stateColor = Colors.white;
-                                             if (usersStatusDetails
-                                                 .containsKey(userEmail)) {
-                                               final userStatus =
-                                                   usersStatusDetails[
-                                                       userEmail];
-                                               isOnline =
-                                                   userStatus['status'] ==
-                                                       'online';
-                                               if (isOnline) {
-                                                 lastSeen = "Online";
-                                                 stateColor =
-                                                     const Color.fromARGB(
-                                                         255, 49, 255, 56);
-                                               } else {
-                                                 var lastSeenDate = DateTime
-                                                     .fromMillisecondsSinceEpoch(
-                                                   userStatus['lastSeen'],
-                                                 ).toLocal();
-                                                 lastSeen =
-                                                     "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
-                                                 stateColor = Colors.white;
-                                               }
-                                             }
-                                             return person(
-                                               onlinecheck: lastSeen,
-                                               statecolour: stateColor,
-                                               profileimage: user[
-                                                       'profile_pic'] ??
-                                  "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-219.jpg?w=740",
-                                               name: user['name']
-                                                   .toString()
-                                                   .toUpperCase(),
-                                               distance: 300,
-                                               location: user['Address'],
-                                               startLatitude: user["X"],
-                                               startLongitude: user["Y"],
-                                               endLatitude:
-                                                   userdataperson["X"],
-                                               endLongitude:
-                                                   userdataperson["Y"],
-                                               age:  int.parse(user['Age'].toString()),
-                                               height: user['height'],
-                                               labels: user['Interest'],
-                                               iconss: user["Icon"],
-                                               imagecollection: user['images'],
-                                               ID: user['email'],
-                                               useremail:
-                                                   userdataperson['email'],
-                                               languages: user['languages'],
-                                               education: user['education'],
-                                               description:
-                                                   user['description'],
-                                             );
-                                           },
-                                           itemCount: partnerData.length,
-                                           itemWidth: width - 30,
-                                           itemHeight: height / 1.5,
-                                           layout: SwiperLayout.TINDER,
-                                           loop: false,
-                                           autoplay: false,
-                                           scrollDirection: Axis.horizontal,
-                                           axisDirection: AxisDirection.right,
-                                          
-                                          
-                                         ),
-                                       )    : Center(
-          child: Text(
-            'No partners available at the moment.',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
-        ),
-                                  
-                                  )
+                                                    // Update current index state
+                                                    setState(() {
+                                                      currentIndex = index;
+                                                    });
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                )
+                              : Expanded(
+                                  child: partnerData.isNotEmpty
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: height / 8),
+                                          child: Swiper(
+                                            itemBuilder: (context, index) {
+                                              final user = partnerData[index];
+                                              final String userEmail =
+                                                  user['email'];
+                                              bool isOnline = false;
+                                              String lastSeen =
+                                                  "Last seen: N/A";
+                                              Color stateColor = Colors.white;
+                                              if (usersStatusDetails
+                                                  .containsKey(userEmail)) {
+                                                final userStatus =
+                                                    usersStatusDetails[
+                                                        userEmail];
+                                                isOnline =
+                                                    userStatus['status'] ==
+                                                        'online';
+                                                if (isOnline) {
+                                                  lastSeen = "Online";
+                                                  stateColor =
+                                                      const Color.fromARGB(
+                                                          255, 49, 255, 56);
+                                                } else {
+                                                  var lastSeenDate = DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                    userStatus['lastSeen'],
+                                                  ).toLocal();
+                                                  lastSeen =
+                                                      "Last seen: ${DateFormat('MMM d, yyyy h:mm a').format(lastSeenDate)}";
+                                                  stateColor = Colors.white;
+                                                }
+                                              }
+                                              return person(
+                                                onlinecheck: lastSeen,
+                                                statecolour: stateColor,
+                                                profileimage: 
+                                            CachedNetworkImage(
+                  imageUrl: user['profile_pic'] ??
+                      "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-2",
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ).toString(),
+                                            
+                                            
+                                                name: user['name']
+                                                    .toString()
+                                                    .toUpperCase(),
+                                                distance: 300,
+                                                location: user['Address'],
+                                                startLatitude: user["X"],
+                                                startLongitude: user["Y"],
+                                                endLatitude:
+                                                    userdataperson["X"],
+                                                endLongitude:
+                                                    userdataperson["Y"],
+                                                age: int.parse(
+                                                    user['Age'].toString()),
+                                                height: user['height'],
+                                                labels: user['Interest'],
+                                                iconss: user["Icon"],
+                                                imagecollection: user['images'],
+                                                ID: user['email'],
+                                                useremail:
+                                                    userdataperson['email'],
+                                                languages: user['languages'],
+                                                education: user['education'],
+                                                description:
+                                                    user['description'],
+                                              );
+                                            },
+                                            itemCount: partnerData.length,
+                                            itemWidth: width - 30,
+                                            itemHeight: height / 1.5,
+                                            layout: SwiperLayout.TINDER,
+                                            loop: false,
+                                            autoplay: false,
+                                            scrollDirection: Axis.horizontal,
+                                            axisDirection: AxisDirection.right,
+                                          ),
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            'No partners available at the moment.',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey),
+                                          ),
+                                        ),
+                                )
                         ],
                       ),
                     ),

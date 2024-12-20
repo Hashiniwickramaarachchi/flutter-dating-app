@@ -16,6 +16,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class signin extends StatefulWidget {
   const signin({super.key});
@@ -199,11 +200,11 @@ class _signinState extends State<signin> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      left: width / 10, right: width / 10, top: height / 90),
+                      left: width / 5, right: width / 5, top: height / 90),
                   child: Row(
                     children: [
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: height / 30,
@@ -227,36 +228,30 @@ class _signinState extends State<signin> {
                         ),
                       ),
                       Expanded(
-                        flex: 1,
+                        flex: 2,
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: height / 30,
                               bottom: height / 30,
                               left: height / 55,
                               right: height / 55),
-                          child: Container(
-                            child: Image(image: AssetImage("images/Group.png")),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(height / 3),
-                                border: Border.all(color: Color(0xffCAC7C7))),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: height / 30,
-                              bottom: height / 30,
-                              left: height / 55,
-                              right: height / 55),
-                          child: Container(
-                            child: Image(
-                                image: AssetImage(
-                                    "images/logos_microsoft-icon.png")),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(height / 3),
-                                border: Border.all(color: Color(0xffCAC7C7))),
+                          child: GestureDetector(
+                            onTap: () async {
+                              final user = await signInWithApple(context);
+                              if (user != null) {
+                                print("Signed in as: ${user.email}");
+                              } else {
+                                print("Apple Sign-In canceled or failed");
+                              }
+                            },
+                            child: Container(
+                              child:
+                                  Image(image: AssetImage("images/Group.png")),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(height / 3),
+                                  border: Border.all(color: Color(0xffCAC7C7))),
+                            ),
                           ),
                         ),
                       ),
@@ -333,37 +328,36 @@ class _signinState extends State<signin> {
       final userSnapshot =
           await _firestore.collection('users').doc(email.text.trim()).get();
       if (userSnapshot.exists) {
-
-           await FirebaseFirestore.instance
-       .collection("users")
-       .doc(email.text.trim())
-       .update(
-           {'deviceToken': await FirebaseMessaging.instance.getToken()});
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(email.text.trim())
+            .update(
+                {'deviceToken': await FirebaseMessaging.instance.getToken()});
         final data = userSnapshot.data() as Map<String, dynamic>?;
 
- DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(email.text.trim()).get();
-  var userData = userDoc.data() as Map<String, dynamic>?;
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(email.text.trim())
+            .get();
+        var userData = userDoc.data() as Map<String, dynamic>?;
 
-  // Get the subscription expiration timestamp
-    Timestamp? subscriptionExpireAt = userData!['subscriptionExpireAt'];
-  
-  if (subscriptionExpireAt != null) {
-    // Get the current server time
-    Timestamp currentTime = Timestamp.now();
+        // Get the subscription expiration timestamp
+        Timestamp? subscriptionExpireAt = userData!['subscriptionExpireAt'];
 
-    // Compare the expiration time with the current time
- if (subscriptionExpireAt.compareTo(currentTime) < 0) {
-   await FirebaseFirestore.instance
-       .collection('users')
-       .doc(email.text.trim())
-       .update({'profile': 'standard'});
+        if (subscriptionExpireAt != null) {
+          // Get the current server time
+          Timestamp currentTime = Timestamp.now();
 
-    } else {
-      print('Subscription is still valid');
-    }
-  }
-         
-
+          // Compare the expiration time with the current time
+          if (subscriptionExpireAt.compareTo(currentTime) < 0) {
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(email.text.trim())
+                .update({'profile': 'standard'});
+          } else {
+            print('Subscription is still valid');
+          }
+        }
 
         if (data!['statusType'] == 'active') {
           try {
@@ -490,9 +484,8 @@ class _signinState extends State<signin> {
             "description": '',
             'statusType': "active",
             'Logged': 'true',
-          "subscriptionExpireAt":null,
-          'deviceToken': await FirebaseMessaging.instance.getToken()
-
+            "subscriptionExpireAt": null,
+            'deviceToken': await FirebaseMessaging.instance.getToken()
           });
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) {
@@ -504,33 +497,36 @@ class _signinState extends State<signin> {
               await _firestore.collection('users').doc(user.email).get();
           if (userSnapshot.exists) {
             // Fetch the updated user document
-         await FirebaseFirestore.instance
-     .collection("users")
-     .doc(user.email)
-     .update(
-         {'deviceToken': await FirebaseMessaging.instance.getToken()});
+            await FirebaseFirestore.instance
+                .collection("users")
+                .doc(user.email)
+                .update({
+              'deviceToken': await FirebaseMessaging.instance.getToken()
+            });
 
-             DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.email).get();
-  var userData = userDoc.data() as Map<String, dynamic>?;
+            DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.email)
+                .get();
+            var userData = userDoc.data() as Map<String, dynamic>?;
 
-  // Get the subscription expiration timestamp
-    Timestamp? subscriptionExpireAt = userData!['subscriptionExpireAt'];
-  
-  if (subscriptionExpireAt != null) {
-    // Get the current server time
-    Timestamp currentTime = Timestamp.now();
+            // Get the subscription expiration timestamp
+            Timestamp? subscriptionExpireAt = userData!['subscriptionExpireAt'];
 
-    // Compare the expiration time with the current time
- if (subscriptionExpireAt.compareTo(currentTime) < 0) {
-   await FirebaseFirestore.instance
-       .collection('users')
-       .doc(user.email)
-       .update({'profile': 'standard'});
+            if (subscriptionExpireAt != null) {
+              // Get the current server time
+              Timestamp currentTime = Timestamp.now();
 
-    } else {
-      print('Subscription is still valid');
-    }
-  }
+              // Compare the expiration time with the current time
+              if (subscriptionExpireAt.compareTo(currentTime) < 0) {
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user.email)
+                    .update({'profile': 'standard'});
+              } else {
+                print('Subscription is still valid');
+              }
+            }
             final updatedUserDoc = await FirebaseFirestore.instance
                 .collection('users')
                 .doc(user.email)
@@ -571,7 +567,7 @@ class _signinState extends State<signin> {
               );
             }
           } else {
-                          await FirebaseAuth.instance.signOut();
+            await FirebaseAuth.instance.signOut();
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text("Enter Valid Email for User Account",
@@ -584,6 +580,150 @@ class _signinState extends State<signin> {
       return user;
     } catch (e) {
       print('Error signing in with Google: $e');
+      return null;
+    }
+  }
+
+  Future<User?> signInWithApple(BuildContext context) async {
+    try {
+      // Initiate Apple Sign-In
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      // Create Firebase Auth Credential
+      final AuthCredential credential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      // Sign in with Firebase
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = userCredential.user;
+      if (user == null) return null;
+
+      final String? email = user.email;
+      final String? displayName = user.displayName ?? appleCredential.givenName;
+
+      // Firestore References
+      final userDoc = FirebaseFirestore.instance.collection('users').doc(email);
+      final ambassadorDoc =
+          FirebaseFirestore.instance.collection('Ambassdor').doc(email);
+      final deleteDoc =
+          FirebaseFirestore.instance.collection('delete').doc(email);
+
+      // Fetch existing user data
+      final userSnapshot = await userDoc.get();
+      final ambassadorSnapshot = await ambassadorDoc.get();
+      final deleteSnapshot = await deleteDoc.get();
+
+      if (!userSnapshot.exists &&
+          !ambassadorSnapshot.exists &&
+          !deleteSnapshot.exists) {
+        // Create new user document
+        await userDoc.set({
+          'name': displayName ?? 'Unknown User',
+          'email': email,
+          'Address': '',
+          'Age': 0,
+          'Gender': '',
+          'Icon': [],
+          'Interest': [],
+          'Phonenumber': '',
+          'X': 0.0,
+          'Y': 0.0,
+          'images': [],
+          'profile_pic': '',
+          'lastSeen': FieldValue.serverTimestamp(),
+          'status': 'Online',
+          'height': '0 cm',
+          'created': FieldValue.serverTimestamp(),
+          'languages': [],
+          'education': '',
+          'profile': "standard",
+          'description': '',
+          'statusType': "active",
+          'Logged': 'true',
+          'subscriptionExpireAt': null,
+          'deviceToken': await FirebaseMessaging.instance.getToken(),
+        });
+
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) =>
+              gender(), // Replace with your gender page widget
+        ));
+      } else if (userSnapshot.exists) {
+        // Update user token
+        await userDoc.update(
+            {'deviceToken': await FirebaseMessaging.instance.getToken()});
+
+        // Check subscription status
+        final userData = userSnapshot.data() as Map<String, dynamic>?;
+        final Timestamp? subscriptionExpireAt =
+            userData?['subscriptionExpireAt'];
+        if (subscriptionExpireAt != null &&
+            subscriptionExpireAt.compareTo(Timestamp.now()) < 0) {
+          await userDoc.update({'profile': 'standard'});
+        }
+
+        // Determine user status type
+        final updatedSnapshot = await userDoc.get();
+        final updatedData = updatedSnapshot.data() as Map<String, dynamic>?;
+        final String statusType = updatedData?['statusType'] ?? 'active';
+
+        switch (statusType) {
+          case 'active':
+            await userDoc.update({'Logged': 'true'});
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MainScreen()), // Replace with your main screen widget
+              (route) => false,
+            );
+            break;
+          case 'block':
+            await FirebaseAuth.instance.signOut();
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      block()), // Replace with your block page widget
+              (route) => false,
+            );
+            break;
+          case 'delete':
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => DeleteAccountPage(
+                initiateDelete: true,
+                who: 'users',
+              ), // Replace with your delete account widget
+            ));
+            break;
+          default:
+            await FirebaseAuth.instance.signOut();
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      deactivepage()), // Replace with your deactivation page widget
+              (route) => false,
+            );
+            break;
+        }
+      } else {
+        await FirebaseAuth.instance.signOut();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Enter a valid email for User Account"),
+          ),
+        );
+      }
+
+      return user;
+    } catch (e) {
+      print('Error during Apple Sign-In: $e');
       return null;
     }
   }

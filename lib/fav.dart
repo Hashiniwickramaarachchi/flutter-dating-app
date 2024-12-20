@@ -307,7 +307,9 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                     child:
                                                         CircularProgressIndicator());
                                               }
+
                                               final data = snapshot.data!.docs;
+        // return BlockedUsersFilter(data: data, curentuser: curentuser);
 
                                               return FutureBuilder<
                                                       DocumentSnapshot>(
@@ -349,8 +351,6 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                                 'This Id blocked Users']);
                                                       }
                                                     }
-
-                                                    // Filter out blocked users
                                                     final filteredData =
                                                         data.where((doc) {
                                                       final userEmail =
@@ -385,7 +385,6 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                             data[index];
                                                         final String userEmail =
                                                             user['email'];
-                                                        // Fetch the status for this specific user
                                                         bool isOnline = false;
                                                         String lastSeen =
                                                             "Last seen: N/A";
@@ -491,8 +490,10 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
                                                       },
                                                     );
                                                   });
-                                            }),
+                                          }),
                                       ),
+
+
                                       OnlineUsersPage(),
                                       Padding(
                                         padding: EdgeInsets.only(
@@ -914,4 +915,94 @@ class _favState extends State<fav> with SingleTickerProviderStateMixin {
           }
         });
   }
+
 }
+
+// class BlockedUsersFilter extends StatelessWidget {
+  // final List<DocumentSnapshot> data;
+  // final User curentuser;
+// 
+  // const BlockedUsersFilter({required this.data, required this.curentuser});
+// 
+  // @override
+  // Widget build(BuildContext context) {
+    // return FutureBuilder<DocumentSnapshot>(
+      // future: FirebaseFirestore.instance
+          // .collection('Blocked USers')
+          // .doc(curentuser.email!)
+          // .get(),
+      // builder: (context, blockedSnapshot) {
+        // if (blockedSnapshot.connectionState == ConnectionState.waiting) {
+          // return Center(child: CircularProgressIndicator());
+        // }
+// 
+        // List<String> blockedEmails = [];
+        // if (blockedSnapshot.hasData && blockedSnapshot.data!.exists) {
+          // final blockedData = blockedSnapshot.data!.data() as Map<String, dynamic>?;
+          // blockedEmails = blockedData?['This Id blocked Users'] != null
+              // ? List<String>.from(blockedData!['This Id blocked Users'])
+              // : [];
+        // }
+// 
+        // final filteredData = data.where((doc) {
+          // final userEmail = doc['email'];
+          // return !blockedEmails.contains(userEmail);
+        // }).toList();
+// 
+        // if (filteredData.isEmpty) {
+          // return Center(child: Text('No favorite users to display'));
+        // }
+// 
+        // return UsersGrid(data: filteredData);
+      // },
+    // );
+  // }
+// }
+// class UsersGrid extends StatelessWidget {
+  // final List<DocumentSnapshot> data;
+// 
+  // const UsersGrid({required this.data});
+// 
+  // @override
+  // Widget build(BuildContext context) {
+    // return GridView.builder(
+      // physics: const ScrollPhysics(),
+      // shrinkWrap: true,
+      // itemCount: data.length,
+      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        // crossAxisCount: 2,
+        // crossAxisSpacing: 10.0,
+        // mainAxisSpacing: 10.0,
+        // childAspectRatio: 0.8,
+      // ),
+      // itemBuilder: (context, index) {
+        // final user = data[index];
+        // return Container(
+          // child: favcontainer(
+            // profileimage: user['profile_pic'] ?? "default_image_url",
+            // name: user['name'],
+            // distance: 0, // Replace with your calculation
+            // location: user['Address'],
+            // startLatitude: user["X"],
+            // startLongitude: user["Y"],
+            // endLatitude: 0, // Replace with current user latitude
+            // endLongitude: 0, // Replace with current user longitude
+            // age: user['Age'],
+            // height: user['height'] ?? "",
+            // labels: user['Interest'],
+            // iconss: user["Icon"],
+            // imagecollection: user['images'],
+            // ID: user.id,
+            // useremail: "current_user_email",
+            // onlinecheck: "Online", // Replace with actual logic
+            // statecolour: Colors.green, // Replace with your color logic
+            // education: user['education'],
+            // languages: user['languages'],
+            // description: user['description'],
+          // ),
+        // );
+      // },
+    // );
+  // }
+// }
+// 

@@ -417,13 +417,6 @@ final FocusNode _messageFocusNode = FocusNode();
                                     style: TextStyle(color: Colors.red),
                                   )));
                                 }
-                                break;
-                              case 2:
-                                print("Option 2 selected");
-                                break;
-                              case 3:
-                                print("Option 3 selected");
-                                break;
                             }
                           },
                           itemBuilder: (BuildContext context) =>
@@ -451,54 +444,54 @@ final FocusNode _messageFocusNode = FocusNode();
                                     )
                                   ],
                                 )),
-                            PopupMenuItem<int>(
-                              value: 2,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    Icons.call_outlined,
-                                    color: Color(0xff565656),
-                                    size: 25,
-                                  ),
-                                  SizedBox(
-                                    width: width / 30,
-                                  ),
-                                  Text(
-                                    "Voice Call",
-                                    style: TextStyle(
-                                      color: Color(0xff565656),
-                                      fontSize: 18,
-                                      fontFamily: "defaultfontsbold",
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem<int>(
-                              value: 3,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    Icons.video_call_outlined,
-                                    color: Color(0xff565656),
-                                    size: 25,
-                                  ),
-                                  SizedBox(
-                                    width: width / 30,
-                                  ),
-                                  Text(
-                                    "Video Call",
-                                    style: TextStyle(
-                                      color: Color(0xff565656),
-                                      fontSize: 18,
-                                      fontFamily: "defaultfontsbold",
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                            // PopupMenuItem<int>(
+                              // value: 2,
+                              // child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                // children: [
+                                  // Icon(
+                                    // Icons.call_outlined,
+                                    // color: Color(0xff565656),
+                                    // size: 25,
+                                  // ),
+                                  // SizedBox(
+                                    // width: width / 30,
+                                  // ),
+                                  // Text(
+                                    // "Voice Call",
+                                    // style: TextStyle(
+                                      // color: Color(0xff565656),
+                                      // fontSize: 18,
+                                      // fontFamily: "defaultfontsbold",
+                                    // ),
+                                  // )
+                                // ],
+                              // ),
+                            // ),
+                            // PopupMenuItem<int>(
+                              // value: 3,
+                              // child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                // children: [
+                                  // Icon(
+                                    // Icons.video_call_outlined,
+                                    // color: Color(0xff565656),
+                                    // size: 25,
+                                  // ),
+                                  // SizedBox(
+                                    // width: width / 30,
+                                  // ),
+                                  // Text(
+                                    // "Video Call",
+                                    // style: TextStyle(
+                                      // color: Color(0xff565656),
+                                      // fontSize: 18,
+                                      // fontFamily: "defaultfontsbold",
+                                    // ),
+                                  // )
+                                // ],
+                              // ),
+                            // ),
                           ],
                         ),
                       ),

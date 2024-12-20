@@ -1044,7 +1044,6 @@ StreamBuilder<DocumentSnapshot>(
       .snapshots(),
   builder: (context, snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
-      return CircularProgressIndicator();
     }
 
     if (snapshot.hasError) {

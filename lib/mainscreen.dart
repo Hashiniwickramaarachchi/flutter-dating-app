@@ -98,7 +98,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                     
-                    fav(),
+                    KeepAliveWidget(child: fav()),
                     Chatscreen(),
                     profile(),
                   ],

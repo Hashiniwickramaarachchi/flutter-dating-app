@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class signup extends StatefulWidget {
   const signup({super.key});
@@ -231,7 +232,7 @@ class _signupState extends State<signup> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: width / 10, right: width / 10),
+                  padding: EdgeInsets.only(left: width / 5, right: width / 5),
                   child: Row(
                     children: [
                       Expanded(
@@ -264,28 +265,21 @@ class _signupState extends State<signup> {
                               top: height / 30,
                               left: height / 55,
                               right: height / 55),
-                          child: Container(
-                            child: Image(image: AssetImage("images/Group.png")),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(height / 3),
-                                border: Border.all(color: Color(0xffCAC7C7))),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: height / 30,
-                              left: height / 55,
-                              right: height / 55),
-                          child: Container(
-                            child: Image(
-                                image: AssetImage(
-                                    "images/logos_microsoft-icon.png")),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(height / 3),
-                                border: Border.all(color: Color(0xffCAC7C7))),
+                          child: GestureDetector(
+                            onTap: () async{
+                                  final user = await signInWithApple(context);
+            if (user != null) {
+              print("Signed in as: ${user.email}");
+            } else {
+              print("Apple Sign-In canceled or failed");
+            }
+                            },
+                            child: Container(
+                              child: Image(image: AssetImage("images/Group.png")),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(height / 3),
+                                  border: Border.all(color: Color(0xffCAC7C7))),
+                            ),
                           ),
                         ),
                       ),
@@ -568,4 +562,134 @@ final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
       return null;
     }
   }
+    Future<User?> signInWithApple(BuildContext context) async {
+  try {
+    // Initiate Apple Sign-In
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    // Create Firebase Auth Credential
+    final AuthCredential credential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      accessToken: appleCredential.authorizationCode,
+    );
+
+    // Sign in with Firebase
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    final User? user = userCredential.user;
+    if (user == null) return null;
+
+    final String? email = user.email;
+    final String? displayName = user.displayName ?? appleCredential.givenName;
+
+    // Firestore References
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(email);
+    final ambassadorDoc =
+        FirebaseFirestore.instance.collection('Ambassdor').doc(email);
+    final deleteDoc = FirebaseFirestore.instance.collection('delete').doc(email);
+
+    // Fetch existing user data
+    final userSnapshot = await userDoc.get();
+    final ambassadorSnapshot = await ambassadorDoc.get();
+    final deleteSnapshot = await deleteDoc.get();
+
+    if (!userSnapshot.exists && !ambassadorSnapshot.exists && !deleteSnapshot.exists) {
+      // Create new user document
+      await userDoc.set({
+        'name': displayName ?? 'Unknown User',
+        'email': email,
+        'Address': '',
+        'Age': 0,
+        'Gender': '',
+        'Icon': [],
+        'Interest': [],
+        'Phonenumber': '',
+        'X': 0.0,
+        'Y': 0.0,
+        'images': [],
+        'profile_pic': '',
+        'lastSeen': FieldValue.serverTimestamp(),
+        'status': 'Online',
+        'height': '0 cm',
+        'created': FieldValue.serverTimestamp(),
+        'languages': [],
+        'education': '',
+        'profile': "standard",
+        'description': '',
+        'statusType': "active",
+        'Logged': 'true',
+        'subscriptionExpireAt': null,
+        'deviceToken': await FirebaseMessaging.instance.getToken(),
+      });
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => gender(), // Replace with your gender page widget
+      ));
+    } else if (userSnapshot.exists) {
+      // Update user token
+      await userDoc.update({'deviceToken': await FirebaseMessaging.instance.getToken()});
+
+      // Check subscription status
+      final userData = userSnapshot.data() as Map<String, dynamic>?;
+      final Timestamp? subscriptionExpireAt = userData?['subscriptionExpireAt'];
+      if (subscriptionExpireAt != null && subscriptionExpireAt.compareTo(Timestamp.now()) < 0) {
+        await userDoc.update({'profile': 'standard'});
+      }
+
+      // Determine user status type
+      final updatedSnapshot = await userDoc.get();
+      final updatedData = updatedSnapshot.data() as Map<String, dynamic>?;
+      final String statusType = updatedData?['statusType'] ?? 'active';
+
+      switch (statusType) {
+        case 'active':
+          await userDoc.update({'Logged': 'true'});
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => MainScreen()), // Replace with your main screen widget
+            (route) => false,
+          );
+          break;
+        case 'block':
+          await FirebaseAuth.instance.signOut();
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => block()), // Replace with your block page widget
+            (route) => false,
+          );
+          break;
+        case 'delete':
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => DeleteAccountPage(
+              initiateDelete: true,
+              who: 'users',
+            ), // Replace with your delete account widget
+          ));
+          break;
+        default:
+          await FirebaseAuth.instance.signOut();
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => deactivepage()), // Replace with your deactivation page widget
+            (route) => false,
+          );
+          break;
+      }
+    } else {
+      await FirebaseAuth.instance.signOut();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Enter a valid email for User Account"),
+        ),
+      );
+    }
+
+    return user;
+  } catch (e) {
+    print('Error during Apple Sign-In: $e');
+    return null;
+  }
+}
 }

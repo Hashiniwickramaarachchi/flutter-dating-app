@@ -182,48 +182,48 @@ class _completeprofileState extends State<completeprofile> {
                     padding: EdgeInsets.only(top: height / 20),
                     child: Stack(
                       children: [
-                        GestureDetector(
-                          onTap: () => _pickImage(),
-                          child: Container(
-                            height: height / 6,
-                            width: width / 3,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: const Color(0xffEDEDED),
-                            ),
-                            child: _image == null
-                                ? Icon(
-                                    Icons.person,
-                                    color: const Color(0xff565656),
-                                    size: height / 15,
-                                  )
-                                : Container(
-                                    height: height / 6,
-                                    width: width / 3,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image: FileImage(File(_image!.path)),
-                                        fit: BoxFit.cover,
-                                      ),
+                        Container(
+                          height: height / 6,
+                          width: width / 3,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xffEDEDED),
+                          ),
+                          child: _image == null
+                              ? Icon(
+                                  Icons.person,
+                                  color: const Color(0xff565656),
+                                  size: height / 15,
+                                )
+                              : Container(
+                                  height: height / 6,
+                                  width: width / 3,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: FileImage(File(_image!.path)),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                          ),
+                                ),
                         ),
                         Positioned(
                           top: height / 8,
                           left: width / 4,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: const Color(0xff7D7676),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Icon(
-                                Icons.edit_sharp,
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                size: height / 50,
+                          child: GestureDetector(
+                          onTap: () => _pickImage(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xff7D7676),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Icon(
+                                  Icons.edit_sharp,
+                                  color: const Color.fromARGB(255, 255, 255, 255),
+                                  size: height / 50,
+                                ),
                               ),
                             ),
                           ),
@@ -232,6 +232,18 @@ class _completeprofileState extends State<completeprofile> {
                     ),
                   ),
                 ),
+        Center(
+    child: Text(
+      "Select your image",
+      style: TextStyle(
+        color: Colors.grey,
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+      ),
+      textAlign: TextAlign.center,
+    ),
+  ),
+        
                 SizedBox(height: height / 20),
                 TextField(
                   controller: name,

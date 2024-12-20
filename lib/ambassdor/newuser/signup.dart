@@ -18,6 +18,7 @@ import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class A_signup extends StatefulWidget {
   const A_signup({super.key});
@@ -241,7 +242,7 @@ class _A_signupState extends State<A_signup> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: width / 10, right: width / 10),
+                  padding: EdgeInsets.only(left: width / 5, right: width / 5),
                   child: Row(
                     children: [
                       Expanded(
@@ -274,28 +275,21 @@ class _A_signupState extends State<A_signup> {
                               top: height / 30,
                               left: height / 55,
                               right: height / 55),
-                          child: Container(
-                            child: Image(image: AssetImage("images/Group.png")),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(height / 3),
-                                border: Border.all(color: Color(0xffCAC7C7))),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: height / 30,
-                              left: height / 55,
-                              right: height / 55),
-                          child: Container(
-                            child: Image(
-                                image: AssetImage(
-                                    "images/logos_microsoft-icon.png")),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(height / 3),
-                                border: Border.all(color: Color(0xffCAC7C7))),
+                          child: GestureDetector(
+                            onTap: () async{
+                                  final user = await signInWithApple(context);
+    if (user != null) {
+      print("Signed in as: ${user.email}");
+    } else {
+      print("Apple Sign-In canceled or failed");
+    }
+                            },
+                            child: Container(
+                              child: Image(image: AssetImage("images/Group.png")),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(height / 3),
+                                  border: Border.all(color: Color(0xffCAC7C7))),
+                            ),
                           ),
                         ),
                       ),
@@ -710,5 +704,151 @@ Future<User?> signInWithGoogle(BuildContext context) async {
     return null;
   }
 }
+Future<User?> signInWithApple(BuildContext context) async {
+  try {
+    // Sign in with Apple
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
 
+    // Create Firebase Auth Credential
+    final AuthCredential credential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      accessToken: appleCredential.authorizationCode,
+    );
+
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    final User? user = userCredential.user;
+
+    if (user != null) {
+      final String? email = user.email;
+      final String? displayName = user.displayName ?? appleCredential.givenName;
+
+      // Firestore references
+      final userDoc =
+          FirebaseFirestore.instance.collection('Ambassdor').doc(email);
+      final ambassadorDoc =
+          FirebaseFirestore.instance.collection('users').doc(email);
+      final deleteDoc =
+          FirebaseFirestore.instance.collection('delete').doc(email);
+
+      // Check Firestore for user document
+      final userSnapshot = await userDoc.get();
+      final ambassadorSnapshot = await ambassadorDoc.get();
+      final deleteSnapshot = await deleteDoc.get();
+
+      if (!userSnapshot.exists && !ambassadorSnapshot.exists && !deleteSnapshot.exists) {
+        // Request location permission
+        PermissionStatus locationPermission = await Permission.location.request();
+
+        if (locationPermission.isGranted) {
+          // Get user's current location
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          double latitude = position.latitude;
+          double longitude = position.longitude;
+
+          // Create new ambassador document
+          await userDoc.set({
+            'name': displayName ?? 'Unknown User',
+            'email': email,
+            'Address': '',
+            'Age': 18,
+            'Gender': '',
+            'Icon': [],
+            'Interest': [],
+            'Phonenumber': '',
+            'X': latitude,
+            'Y': longitude,
+            'images': [],
+            'profile_pic': '',
+            'lastSeen': FieldValue.serverTimestamp(),
+            'status': 'Online',
+            'height': '0 cm',
+            "languages": [],
+            'education': '',
+            "match_count": 0,
+            'addedusers': [],
+            "rating": [],
+            'description': '',
+            'statusType': "active",
+            'Logged': 'true',
+            'deviceToken': await FirebaseMessaging.instance.getToken(),
+          });
+
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => A_landingpage()), // Replace with your landing page widget
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          // Handle denied location permissions
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "Location permission is required to complete the registration.",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        }
+      } else if (userSnapshot.exists) {
+        // Update device token
+        await userDoc.update({'deviceToken': await FirebaseMessaging.instance.getToken()});
+
+        // Fetch updated user document
+        final updatedUserDoc = await userDoc.get();
+        final data = updatedUserDoc.data() as Map<String, dynamic>?;
+
+        if (data!['statusType'] == 'active') {
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          double latitude = position.latitude;
+          double longitude = position.longitude;
+
+          await userDoc.update({'Logged': 'true'});
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => A_MainScreen()), // Replace with your main screen widget
+            (Route<dynamic> route) => false,
+          );
+        } else if (data!['statusType'] == 'block') {
+          await FirebaseAuth.instance.signOut();
+
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => block()), // Replace with your block page widget
+            (Route<dynamic> route) => false,
+          );
+        } else if (data!['statusType'] == 'delete') {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => DeleteAccountPage(
+              initiateDelete: true,
+              who: 'Ambassdor',
+            ), // Replace with your delete account page widget
+          ));
+        } else {
+          await FirebaseAuth.instance.signOut();
+
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => deactivepage()), // Replace with your deactivation page widget
+            (Route<dynamic> route) => false,
+          );
+        }
+      } else {
+        await FirebaseAuth.instance.signOut();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("This Email Not Valid in the Ambassador Account",
+              style: TextStyle(color: Colors.white)),
+        ));
+      }
+    }
+
+    return user;
+  } catch (e) {
+    print('Error signing in with Apple: $e');
+    return null;
+  }
+}
 }
