@@ -20,9 +20,21 @@
 		    </array>
 	    </dict>
     </array>
-<!-- End of the Google Sign-in Section -->
-<key>NSUserAuthenticationUsageDescription</key>
-<string>Allow using your Apple ID to sign in.</string>
+	<!-- End of the Google Sign-in Section -->
+	<key>NSUserAuthenticationUsageDescription</key>
+	<string>Allow using your Apple ID to sign in.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to allow you to upload images for your profile or share photos with friends in the app.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to show nearby services and provide a personalized experience based on your location.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We use your location to send location-based notifications and recommendations, even when the app is in the background.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need camera access to let you take photos and videos for uploading to your profile or sharing with others.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need microphone access to enable voice chat and recording features within the app.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>We need access to your contacts to allow you to invite friends to the app and connect with them more easily.</string>
 
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
