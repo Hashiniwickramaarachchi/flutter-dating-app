@@ -98,7 +98,11 @@ class _homepageState extends State<homepage> {
         }
       }
 
-      setState(() {});
+      if (mounted) {
+  setState(() {
+    // Your state updates
+  });
+}
     }
   }
 

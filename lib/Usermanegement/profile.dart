@@ -331,6 +331,7 @@ class _profileState extends State<profile> {
                                       context,
                                       userData['Interest'][index],
                                       userData['Icon'][index],
+                                      userData['name'],
                                       height);
                                 },
                               )),
@@ -389,23 +390,49 @@ class _profileState extends State<profile> {
   }
 
   Widget _buildInterestChip(String email, BuildContext context, String label,
-      int iconname, final height) {
-    return Chip(
-        shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(30)),
-        avatar: Icon(
-          size: 18,
-          IconData(iconname, fontFamily: 'MaterialIcons'),
-          color: Color(0xff565656),
-        ), // Ensure the correct font family
-        label: Text(
-          label,
-          style: TextStyle(
-              color: const Color(0xff565656),
-              fontFamily: "defaultfontsbold",
-              fontSize: 10),
-        ),
-        backgroundColor: Color(0xffD9D9D9));
+      int iconname, String name,final height) {
+    return GestureDetector(
+      onTap: () {
+              _showChipDialog(context, label,name);
+
+      },
+      child: Chip(
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(30)),
+          avatar: Icon(
+            size: 18,
+            IconData(iconname, fontFamily: 'MaterialIcons'),
+            color: Color(0xff565656),
+          ), // Ensure the correct font family
+          label: Text(
+            label,
+            style: TextStyle(
+                color: const Color(0xff565656),
+                fontFamily: "defaultfontsbold",
+                fontSize: 10),
+          ),
+          backgroundColor: Color(0xffD9D9D9)),
+    );
   }
+  void _showChipDialog(BuildContext context, String label,String name) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text(''),
+        content: Text("${label} is one of ${name}'s favorite things!"),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Close'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 }

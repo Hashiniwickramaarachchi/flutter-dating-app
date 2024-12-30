@@ -160,20 +160,23 @@ class _detailsaddingState extends State<detailsadding> {
                     if (firstname.text.isNotEmpty &&
                         middlename.text.isNotEmpty &&
                         lastname.text.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PaymentPage(
-                                  firstname: firstname.text.trim(),
-                                  lastname: lastname.text.trim(),
-                                  middlename: middlename.text.trim(),
-                                  number: widget.phonenumber,
-                                  amoount: widget.Amount,
-                                  email: widget.dbemail,
-                                  dbemail: widget.dbemail,
-                                  version: widget.version,
-                                )),
-                      );
+      Navigator.pushAndRemoveUntil(
+  context,
+  MaterialPageRoute(
+    builder: (context) => PaymentPage(
+      firstname: firstname.text.trim(),
+      lastname: lastname.text.trim(),
+      middlename: middlename.text.trim(),
+      number: widget.phonenumber,
+      email: widget.dbemail,
+      dbemail: widget.dbemail,
+      version: widget.version,
+      amoount: widget.Amount,
+    ),
+  ),
+  (route) => false, // Removes all previous routes from the stack
+);
+
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Fill the lines')),
