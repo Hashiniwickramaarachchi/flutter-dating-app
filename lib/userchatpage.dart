@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/ambassdor/chatpage.dart';
 import 'package:datingapp/ambassdor/olduser/ambassdorshowchat.dart';
 import 'package:datingapp/ambassdor/olduser/userprofile.dart';
+import 'package:datingapp/blockpage.dart';
 import 'package:datingapp/chatpage.dart';
 import 'package:datingapp/history.dart';
 import 'package:datingapp/push_notification_service.dart';
+import 'package:datingapp/reprt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -417,6 +419,45 @@ final FocusNode _messageFocusNode = FocusNode();
                                     style: TextStyle(color: Colors.red),
                                   )));
                                 }
+                                case 2:
+                                       showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(50),
+                                                topRight: Radius.circular(50),
+                                              ),
+                                            ),
+                                            backgroundColor: Colors.amber,
+                                            context: context,
+                                            builder: (context) {
+                                              return blockpage(
+                                                blockemail: widget.chatPartnerEmail,
+                                                blockname: widget.chatPartnername,
+                                                blockpic: widget.chatPartnerimage,
+                                              );
+                                            },
+                                          );
+                                          break;
+                                        case 3:
+                                          showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(50),
+                                                topRight: Radius.circular(50),
+                                              ),
+                                            ),
+                                            backgroundColor: Colors.amber,
+                                            context: context,
+                                            builder: (context) {
+                                              return reprt(
+                                                reprtusername: widget.chatPartnername,
+                                                reprtuser: widget.chatPartnerEmail,
+                                              );
+                                            },
+                                          );
+                                          break;
                             }
                           },
                           itemBuilder: (BuildContext context) =>
@@ -444,54 +485,54 @@ final FocusNode _messageFocusNode = FocusNode();
                                     )
                                   ],
                                 )),
-                            // PopupMenuItem<int>(
-                              // value: 2,
-                              // child: Row(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                // children: [
-                                  // Icon(
-                                    // Icons.call_outlined,
-                                    // color: Color(0xff565656),
-                                    // size: 25,
-                                  // ),
-                                  // SizedBox(
-                                    // width: width / 30,
-                                  // ),
-                                  // Text(
-                                    // "Voice Call",
-                                    // style: TextStyle(
-                                      // color: Color(0xff565656),
-                                      // fontSize: 18,
-                                      // fontFamily: "defaultfontsbold",
-                                    // ),
-                                  // )
-                                // ],
-                              // ),
-                            // ),
-                            // PopupMenuItem<int>(
-                              // value: 3,
-                              // child: Row(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                // children: [
-                                  // Icon(
-                                    // Icons.video_call_outlined,
-                                    // color: Color(0xff565656),
-                                    // size: 25,
-                                  // ),
-                                  // SizedBox(
-                                    // width: width / 30,
-                                  // ),
-                                  // Text(
-                                    // "Video Call",
-                                    // style: TextStyle(
-                                      // color: Color(0xff565656),
-                                      // fontSize: 18,
-                                      // fontFamily: "defaultfontsbold",
-                                    // ),
-                                  // )
-                                // ],
-                              // ),
-                            // ),
+                            PopupMenuItem<int>(
+                              value: 2,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.block,
+                                    color: Color(0xff565656),
+                                    size: 25,
+                                  ),
+                                  SizedBox(
+                                    width: width / 30,
+                                  ),
+                                  Text(
+                                    "Block User",
+                                    style: TextStyle(
+                                      color: Color(0xff565656),
+                                      fontSize: 18,
+                                      fontFamily: "defaultfontsbold",
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<int>(
+                              value: 3,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.report,
+                                    color: Color(0xff565656),
+                                    size: 25,
+                                  ),
+                                  SizedBox(
+                                    width: width / 30,
+                                  ),
+                                  Text(
+                                    "Report User",
+                                    style: TextStyle(
+                                      color: Color(0xff565656),
+                                      fontSize: 18,
+                                      fontFamily: "defaultfontsbold",
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

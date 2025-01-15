@@ -29,7 +29,7 @@ NotificationService notificationService = NotificationService();
     super.initState();
     // Check if the user is logged in
     notificationService.requestNotificationPermition();
-    Timer(const Duration(seconds: 1), () async {
+    Timer(const Duration(seconds: 5), () async {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
 

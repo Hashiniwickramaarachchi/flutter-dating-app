@@ -357,6 +357,7 @@ class _viewpageState extends State<viewpage> {
                                             context: context,
                                             builder: (context) {
                                               return reprt(
+                                                reprtusername: widget.name,
                                                 reprtuser: widget.ID,
                                               );
                                             },

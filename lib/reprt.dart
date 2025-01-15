@@ -8,9 +8,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class reprt extends StatefulWidget {
   String reprtuser;
+
+    String reprtusername;
+
   reprt({
     required this.reprtuser,
-    
+    required this.reprtusername,
     super.key});
 
   @override
@@ -203,7 +206,7 @@ class _reprtState extends State<reprt> {
     }, SetOptions(merge: true));
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(
-    "${widget.reprtuser} Reported",
+    "${widget.reprtusername} Reported",
     style: TextStyle(color: Colors.white),
     ),
     ));

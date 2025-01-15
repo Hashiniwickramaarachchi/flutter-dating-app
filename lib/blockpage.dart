@@ -182,7 +182,7 @@ class _blockpageState extends State<blockpage> {
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-            "${widget.blockemail} Blaocked",
+            "${widget.blockname} Blaocked",
             style: TextStyle(color: Colors.white),
           ),
         ));
