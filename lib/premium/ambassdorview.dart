@@ -221,7 +221,7 @@ class _ambbasdorviewState extends State<ambbasdorview> {
                                   chatPartnerimage: widget.profileimage,
                                   onlinecheck: widget.onlinecheck,
                                   statecolour: widget.statecolour,
-                                  who: 'ambassdor',
+                                  who: 'Ambassdor',
                                 );
                               },
                             ));

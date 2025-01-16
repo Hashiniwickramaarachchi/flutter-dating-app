@@ -253,7 +253,7 @@ Navigator.of(context).push(MaterialPageRoute(builder:(context) {
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(builder:(context) {
                           return ChatPage(chatPartnerEmail: widget.ID, chatPartnername: widget.name, 
-                          chatPartnerimage: widget.profileimage, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, who: 'ambassdor',);
+                          chatPartnerimage: widget.profileimage, onlinecheck: widget.onlinecheck, statecolour: widget.statecolour, who: 'Ambassdor',);
                         },));
                       },
                       child: Container(

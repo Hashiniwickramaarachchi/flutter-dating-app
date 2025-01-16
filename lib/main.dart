@@ -45,7 +45,7 @@ void main() async {
             chatPartnerimage: 'image_url',
             onlinecheck: 'online',
             statecolour: Colors.green,
-            who: 'user',
+            who: 'users',
           ),
         ),
       ],

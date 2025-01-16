@@ -53,7 +53,7 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
   @override
   Widget build(BuildContext context) {
     final User? currentUser = FirebaseAuth.instance.currentUser;
-
+print(widget.who);
     if (currentUser == null) {
       // Handle unauthenticated user state (e.g., redirect to login page or show a
       return Center(child: Text('No user is logged in.'));

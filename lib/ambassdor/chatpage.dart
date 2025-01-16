@@ -431,7 +431,7 @@ class _A_ChatscreenState extends State<A_Chatscreen> {
                                                  user['profile_pic'],
                                              onlinecheck: lastSeen,
                                              statecolour: statecolour,
-                                             who: 'user',
+                                             who: 'Ambassdor',
                                            ),
                                          ),
                                        );

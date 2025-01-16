@@ -337,6 +337,7 @@ class _viewpageState extends State<viewpage> {
                                             context: context,
                                             builder: (context) {
                                               return blockpage(
+                                                who: "users",
                                                 blockemail: widget.ID,
                                                 blockname: widget.name,
                                                 blockpic: widget.image,
@@ -357,6 +358,7 @@ class _viewpageState extends State<viewpage> {
                                             context: context,
                                             builder: (context) {
                                               return reprt(
+                                                who: "users",
                                                 reprtusername: widget.name,
                                                 reprtuser: widget.ID,
                                               );
@@ -610,7 +612,7 @@ class _viewpageState extends State<viewpage> {
                 chatPartnerimage: widget.image,
                 onlinecheck: widget.onlinecheck,
                 statecolour: widget.statecolour,
-                who: 'user',
+                who: 'users',
               );
             },
           ));

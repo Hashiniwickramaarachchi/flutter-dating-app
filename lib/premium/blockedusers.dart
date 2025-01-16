@@ -14,7 +14,7 @@ import 'package:geolocator/geolocator.dart';
 class blockeduserss extends StatefulWidget {
   String ID;
   String gender;
-  
+  String who;
   String profileimage;
   String name;
   String location;
@@ -44,6 +44,7 @@ String description;
       {required this.ID,
       required this.filteredUsers,
       required this.education,
+      required this.who,
       required this.gender,
       required this.onlinecheck,
       required this.languages,
@@ -192,17 +193,20 @@ class _blockeduserssState extends State<blockeduserss> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: const Color(0xff565656),
-                            fontFamily: "defaultfontsbold",
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16),
-                      maxLines: 1, // Display only one line
-                       overflow: TextOverflow.ellipsis, // Truncate and show '...'
-                       
+                      Container(
+                        width: width/3,
+                        child: Text(
+                          widget.name,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: const Color(0xff565656),
+                              fontFamily: "defaultfontsbold",
+                              fontWeight: FontWeight.w900,
+                              fontSize: 16),
+                        maxLines: 1, // Display only one line
+                         overflow: TextOverflow.ellipsis, // Truncate and show '...'
+                         
+                        ),
                       ),
                       Text(
                         widget.location,
@@ -296,7 +300,7 @@ ElevatedButton(
             chatPartnerimage: widget.profileimage,
             onlinecheck: widget.onlinecheck,
             statecolour: widget.statecolour,
-            who: 'user',
+            who: widget.who,
           );
         },
       ));

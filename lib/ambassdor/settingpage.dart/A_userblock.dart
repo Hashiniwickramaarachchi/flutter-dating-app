@@ -20,12 +20,12 @@ import 'dart:ui' as ui;
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
-class unblock extends StatefulWidget {
+class A_unblock extends StatefulWidget {
   final double userLatitude;
   final double userLongitude;
   final String useremail;
 String who;
-   unblock({
+   A_unblock({
     Key? key,
     required this.userLatitude,
     required this.userLongitude,
@@ -34,16 +34,16 @@ String who;
   }) : super(key: key);
 
   @override
-  _unblockState createState() => _unblockState();
+  _A_unblockState createState() => _A_unblockState();
 }
 
-class _unblockState extends State<unblock> {
+class _A_unblockState extends State<A_unblock> {
   final Completer<GoogleMapController> _controller = Completer();
   List<Map<String, dynamic>> filteredUsers = []; // List to hold filtered users
   Map<String, bool> favStatus = {}; // Map to track favorite status by email
 
 
-  final OnlineStatusService _onlineStatusService = OnlineStatusService();
+  final A_OnlineStatusService _onlineStatusService = A_OnlineStatusService();
   final DatabaseReference _databaseRef = FirebaseDatabase.instance.ref();
   Map<String, dynamic> usersStatusDetails = {}; // Change from List to Map
   List<Map<String, dynamic>> allUsers =

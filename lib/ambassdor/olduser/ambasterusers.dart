@@ -181,7 +181,7 @@ class _A_usersState extends State<A_users> {
                               chatPartnerimage: widget.profileimage,
                               onlinecheck: widget.onlinecheck,
                               statecolour: widget.statecolour,
-                              who: 'ambassdor',
+                              who: 'Ambassdor',
                             );
                           },
                         ));

@@ -318,7 +318,7 @@ return checkInterestMatch();
             chatPartnerimage: widget.profileimage,
             onlinecheck: widget.onlinecheck,
             statecolour: widget.statecolour,
-            who: 'user',
+            who: 'users',
           );
         },
       ));

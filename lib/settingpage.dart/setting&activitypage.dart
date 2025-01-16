@@ -545,7 +545,7 @@ class _settingactivityState extends State<settingactivity> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) {
-                              return unblock(userLatitude: userData["X"], userLongitude: userData['Y'], useremail: userData['email'],);
+                              return unblock(userLatitude: userData["X"], userLongitude: userData['Y'], useremail: userData['email'],who: 'users',);
                             },
                           ));
                         },
