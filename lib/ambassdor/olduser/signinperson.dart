@@ -272,7 +272,7 @@ class _signinpersonState extends State<signinperson> {
                                     chatPartnername: widget.name,
                                     chatPartnerimage: widget.profileimage,
                                     onlinecheck: widget.onlinecheck,
-                                    statecolour: widget.statecolour, who: 'ambassdor',);
+                                    statecolour: widget.statecolour, who: 'Ambassdor',);
                               },
                             ));
                           },

@@ -747,7 +747,7 @@ class _ChatscreenState extends State<Chatscreen> {
                         padding: EdgeInsets.only(
                             top: height / 30, bottom: height / 10),
                         child: ChatHistoryPage(
-                          who: 'user',
+                          who: 'users',
                         ),
                       ),
                     ),
@@ -817,7 +817,7 @@ class _ChatscreenState extends State<Chatscreen> {
                 chatPartnerimage: image,
                 onlinecheck: lastseen,
                 statecolour: stateColor,
-                who: 'user',
+                who: 'users',
               ),
             ),
           );

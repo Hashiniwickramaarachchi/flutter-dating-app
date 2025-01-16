@@ -302,7 +302,7 @@ final FocusNode _messageFocusNode = FocusNode();
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
+print(widget.who);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: height / 400,
@@ -432,6 +432,7 @@ final FocusNode _messageFocusNode = FocusNode();
                                             context: context,
                                             builder: (context) {
                                               return blockpage(
+                                                who: widget.who,
                                                 blockemail: widget.chatPartnerEmail,
                                                 blockname: widget.chatPartnername,
                                                 blockpic: widget.chatPartnerimage,
@@ -452,6 +453,7 @@ final FocusNode _messageFocusNode = FocusNode();
                                             context: context,
                                             builder: (context) {
                                               return reprt(
+                                                who: widget.who,
                                                 reprtusername: widget.chatPartnername,
                                                 reprtuser: widget.chatPartnerEmail,
                                               );

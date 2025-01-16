@@ -8,12 +8,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class reprt extends StatefulWidget {
   String reprtuser;
+  String who;
 
     String reprtusername;
 
   reprt({
     required this.reprtuser,
     required this.reprtusername,
+    required this.who,
     super.key});
 
   @override
@@ -57,7 +59,7 @@ class _reprtState extends State<reprt> {
     final curentuser = FirebaseAuth.instance.currentUser!;
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
-            .collection("users")
+            .collection(widget.who)
             .doc(curentuser.email!)
             .snapshots(),
         builder: (context, snapshot) {

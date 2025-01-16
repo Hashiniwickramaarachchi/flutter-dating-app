@@ -255,7 +255,7 @@ class _A_viewpageState extends State<A_viewpage> {
                                           chatPartnerimage: widget.image,
                                           onlinecheck: widget.onlinecheck,
                                           statecolour: widget.statecolour,
-                                          who: 'ambassdor',
+                                          who: 'Ambassdor',
                                         );
                                       },
                                     ));

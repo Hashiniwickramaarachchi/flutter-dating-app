@@ -10,10 +10,12 @@ class blockpage extends StatefulWidget {
   String blockemail;
   String blockpic;
   String blockname;
+  String who;
   blockpage(
       {required this.blockemail,
       required this.blockname,
       required this.blockpic,
+      required this.who,
       super.key});
 
   @override
@@ -28,7 +30,7 @@ class _blockpageState extends State<blockpage> {
     final curentuser = FirebaseAuth.instance.currentUser!;
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
-            .collection("users")
+            .collection(widget.who)
             .doc(curentuser.email!)
             .snapshots(),
         builder: (context, snapshot) {
