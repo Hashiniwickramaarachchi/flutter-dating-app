@@ -363,7 +363,7 @@ Future<void> unblockUser(String blockerEmail) async {
       print('No document found for blocker: $blockerEmail');
     }
   } catch (e) {
-    print('Error unblocking user: $e');
+    print('Error unblocking User: $e');
   }
 }
 
