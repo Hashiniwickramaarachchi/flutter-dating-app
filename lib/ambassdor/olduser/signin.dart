@@ -362,25 +362,10 @@ class _A_signinState extends State<A_signin> {
 
             try {
               // Check for location permission
-              LocationPermission permission =
-                  await Geolocator.checkPermission();
-              if (permission == LocationPermission.denied) {
-                permission = await Geolocator.requestPermission();
-                if (permission == LocationPermission.denied) {
-                  throw Exception('Location permissions are denied');
-                }
-              }
-
-              if (permission == LocationPermission.deniedForever) {
-                throw Exception(
-                    'Location permissions are permanently denied. Enable them from settings.');
-              }
 
               // Fetch the location if permissions are granted
-              Position position = await Geolocator.getCurrentPosition(
-                  desiredAccuracy: LocationAccuracy.high);
-              double latitude = position.latitude;
-              double longitude = position.longitude;
+             
+            
               await FirebaseFirestore.instance
                   .collection('Ambassdor')
                   .doc(email.text.trim())
@@ -529,14 +514,41 @@ class _A_signinState extends State<A_signin> {
 
     } else if (locationPermission.isDenied || locationPermission.isPermanentlyDenied) {
           // Handle denied location permissions
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "Location permission is required to complete the registration.",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+                 await FirebaseFirestore.instance
+              .collection('Ambassdor')
+              .doc(user.email)
+              .set({
+            'name': user.displayName,
+            'email': user.email,
+            'Address': '',
+            'Age': 18,
+            'Gender': '',
+            'Icon': [],
+            'Interest': [],
+            'Phonenumber': '',
+            'X': 37.7749,
+            'Y': -122.4194,
+            'images': [],
+            'profile_pic': '',
+            'lastSeen': FieldValue.serverTimestamp(),
+            'status': 'Online',
+            'height': '0 cm',
+            "languages": [],
+            'education': '',
+            "match_count": 0,
+            'addedusers': [],
+            "rating": [],
+            'description': '',
+            'statusType': "active",
+            'Logged': 'true',
+            'deviceToken': await FirebaseMessaging.instance.getToken()
+          });
+
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => A_landingpage()),
+            (Route<dynamic> route) => false,
           );
+
         }
 
 
@@ -704,13 +716,36 @@ Future<User?> signInWithApple(BuildContext context) async {
           );
         } else {
           // Handle denied location permissions
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "Location permission is required to complete the registration.",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+          await userDoc.set({
+            'name': displayName ?? 'Unknown User',
+            'email': email,
+            'Address': '',
+            'Age': 18,
+            'Gender': '',
+            'Icon': [],
+            'Interest': [],
+            'Phonenumber': '',
+            'X': 37.7749,
+            'Y': -122.4194,
+            'images': [],
+            'profile_pic': '',
+            'lastSeen': FieldValue.serverTimestamp(),
+            'status': 'Online',
+            'height': '0 cm',
+            "languages": [],
+            'education': '',
+            "match_count": 0,
+            'addedusers': [],
+            "rating": [],
+            'description': '',
+            'statusType': "active",
+            'Logged': 'true',
+            'deviceToken': await FirebaseMessaging.instance.getToken(),
+          });
+
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => A_landingpage()), // Replace with your landing page widget
+            (Route<dynamic> route) => false,
           );
         }
       } else if (userSnapshot.exists) {

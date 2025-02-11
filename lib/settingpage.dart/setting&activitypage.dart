@@ -26,6 +26,8 @@ class _settingactivityState extends State<settingactivity> {
   final OnlineStatusService _onlineStatusService =
       OnlineStatusService(); // Instantiate the service
   String shareMessage = '';
+    bool showPremiumUpgrade = false;
+
 @override
   void initState() {
     super.initState();
@@ -39,6 +41,8 @@ class _settingactivityState extends State<settingactivity> {
       await remoteConfig.fetchAndActivate();
       setState(() {
         shareMessage = remoteConfig.getString('sharing_message');
+        showPremiumUpgrade = remoteConfig.getBool('show_premium_upgrade');
+
       });
     } catch (e) {
       print('Error fetching remote config: $e');
@@ -179,7 +183,7 @@ class _settingactivityState extends State<settingactivity> {
                         ),
                       ),
                       SizedBox(height: height / 20),
-                      GestureDetector(
+                  showPremiumUpgrade?    GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) {
@@ -224,8 +228,9 @@ class _settingactivityState extends State<settingactivity> {
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
+                      )        : SizedBox.shrink(), // Hide if `showPremiumUpgrade` is false
+
+                 showPremiumUpgrade?     Padding(
                         padding: EdgeInsets.only(
                             left: width / 30, right: width / 30, top: height / 30),
                         child: Container(
@@ -235,9 +240,9 @@ class _settingactivityState extends State<settingactivity> {
                             color: const Color(0xffCAC7C7),
                           ),
                         ),
-                      ),
+                      ):SizedBox.shrink(),
                       SizedBox(
-                        height: height / 30,
+                        height: showPremiumUpgrade?height / 30:0,
                       ),
                       GestureDetector(
                         onTap: () {

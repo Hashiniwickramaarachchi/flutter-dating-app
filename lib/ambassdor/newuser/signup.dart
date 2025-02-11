@@ -276,18 +276,20 @@ class _A_signupState extends State<A_signup> {
                               left: height / 55,
                               right: height / 55),
                           child: GestureDetector(
-                            onTap: () async{
-                                  final user = await signInWithApple(context);
-    if (user != null) {
-      print("Signed in as: ${user.email}");
-    } else {
-      print("Apple Sign-In canceled or failed");
-    }
+                            onTap: () async {
+                              final user = await signInWithApple(context);
+                              if (user != null) {
+                                print("Signed in as: ${user.email}");
+                              } else {
+                                print("Apple Sign-In canceled or failed");
+                              }
                             },
                             child: Container(
-                              child: Image(image: AssetImage("images/Group.png")),
+                              child:
+                                  Image(image: AssetImage("images/Group.png")),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(height / 3),
+                                  borderRadius:
+                                      BorderRadius.circular(height / 3),
                                   border: Border.all(color: Color(0xffCAC7C7))),
                             ),
                           ),
@@ -421,19 +423,24 @@ class _A_signupState extends State<A_signup> {
 
       // Request location permission
       LocationPermission permission = await Geolocator.requestPermission();
+      double latitude = 37.7749; // Example: San Francisco
+    double  longitude = -122.4194;// Default longitude
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
-        setState(() {
-          isLoading = false; // Stop loading
-        });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            "Location permission is required for account creation. Please enable it in settings.",
-            style: TextStyle(color: Colors.red),
-          ),
-        ));
-        return;
+     try {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        latitude = position.latitude;
+        longitude = position.longitude;
+      } catch (e) {
+        print("Error getting location: $e");
       }
+      } else {
+      // User denied location permission - use default coordinates
+      latitude = 37.7749; // Example: San Francisco
+      longitude = -122.4194;
+    }
+
 
       try {
         UserCredential userCredential = await FirebaseAuth.instance
@@ -441,10 +448,7 @@ class _A_signupState extends State<A_signup> {
                 email: email.text.trim(), password: password.text.trim());
 
         // Get user location
-        Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
-        double latitude = position.latitude;
-        double longitude = position.longitude;
+      
 
         // Save user data in Firestore
         FirebaseFirestore.instance
@@ -506,349 +510,404 @@ class _A_signupState extends State<A_signup> {
       ));
     }
   }
-Future<User?> signInWithGoogle(BuildContext context) async {
-  try {
-    // Sign out of Google Sign-In to ensure the sign-in screen shows up
-    await GoogleSignIn().signOut();
 
-    // Trigger Google sign-in
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    if (googleUser == null) {
-      return null; // The user canceled the sign-in
-    }
-                PermissionStatus locationPermission = await Permission.location.request();
+  Future<User?> signInWithGoogle(BuildContext context) async {
+    try {
+      // Sign out of Google Sign-In to ensure the sign-in screen shows up
+      await GoogleSignIn().signOut();
 
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+      // Trigger Google sign-in
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        return null; // The user canceled the sign-in
+      }
+      PermissionStatus locationPermission = await Permission.location.request();
 
-    // Sign in with Firebase
-    final UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    final User? user = userCredential.user;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-    if (user != null) {
-      // Normalize the email to avoid case sensitivity issues
-      final String normalizedEmail = user.email!.toLowerCase().trim();
+      // Sign in with Firebase
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = userCredential.user;
 
-      // Check if the user exists in the Ambassdor collection
-      final DocumentSnapshot ambassadorDoc = await FirebaseFirestore.instance
-          .collection('Ambassdor')
-          .doc(normalizedEmail)
-          .get();
+      if (user != null) {
+        // Normalize the email to avoid case sensitivity issues
+        final String normalizedEmail = user.email!.toLowerCase().trim();
 
-      if (ambassadorDoc.exists) {
+        // Check if the user exists in the Ambassdor collection
+        final DocumentSnapshot ambassadorDoc = await FirebaseFirestore.instance
+            .collection('Ambassdor')
+            .doc(normalizedEmail)
+            .get();
 
-                           await FirebaseFirestore.instance
-   .collection("Ambassdor")
-   .doc(user.email)
-   .update(
-       {'deviceToken': await FirebaseMessaging.instance.getToken()});
-        // Ambassdor account exists, check the account's status
-        final data = ambassadorDoc.data() as Map<String, dynamic>?;
-        if (data != null) {
-          switch (data['statusType']) {
-            case 'active':
-              // Update user's login status and navigate to the main screen
+        if (ambassadorDoc.exists) {
+          await FirebaseFirestore.instance
+              .collection("Ambassdor")
+              .doc(user.email)
+              .update(
+                  {'deviceToken': await FirebaseMessaging.instance.getToken()});
+          // Ambassdor account exists, check the account's status
+          final data = ambassadorDoc.data() as Map<String, dynamic>?;
+          if (data != null) {
+            switch (data['statusType']) {
+              case 'active':
+                // Update user's login status and navigate to the main screen
+                await FirebaseFirestore.instance
+                    .collection('Ambassdor')
+                    .doc(normalizedEmail)
+                    .update({'Logged': 'true'});
+
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => A_MainScreen()),
+                  (Route<dynamic> route) => false,
+                );
+                break;
+
+              case 'block':
+                // Handle blocked account
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => block()),
+                  (Route<dynamic> route) => false,
+                );
+                break;
+
+              case 'delete':
+                // Navigate to account deletion page
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) {
+                    return DeleteAccountPage(
+                      initiateDelete: true,
+                      who: 'Ambassdor',
+                    );
+                  }),
+                );
+                break;
+
+              default:
+                // Handle other statuses (e.g., deactivated)
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => deactivepage()),
+                  (Route<dynamic> route) => false,
+                );
+            }
+          }
+        } else {
+          // New user; check if the user exists in other collections
+          PermissionStatus locationPermission =
+              await Permission.location.request();
+
+          final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(normalizedEmail)
+              .get();
+          final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
+              .collection('delete')
+              .doc(normalizedEmail)
+              .get();
+
+          if (!userDoc.exists && !deleteDoc.exists) {
+            // Register the new Ambassdor account
+
+            if (locationPermission.isGranted) {
+              // Get user's current location
+              Position position = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high);
+              double latitude = position.latitude;
+              double longitude = position.longitude;
+
               await FirebaseFirestore.instance
                   .collection('Ambassdor')
                   .doc(normalizedEmail)
-                  .update({'Logged': 'true'});
+                  .set({
+                'name': user.displayName,
+                'email': normalizedEmail,
+                'Address': '',
+                'Age': 18,
+                'Gender': '',
+                'Icon': [],
+                'Interest': [],
+                'Phonenumber': '',
+                'X': latitude,
+                'Y': longitude,
+                'images': [],
+                'profile_pic': '',
+                'lastSeen': FieldValue.serverTimestamp(),
+                'status': 'Online',
+                'height': '0 cm',
+                "languages": [],
+                'education': '',
+                "match_count": 0,
+                'addedusers': [],
+                "rating": [],
+                'description': '',
+                'statusType': "active",
+                'Logged': 'true',
+                'deviceToken': await FirebaseMessaging.instance.getToken()
+              });
 
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => A_MainScreen()),
+                MaterialPageRoute(builder: (context) => A_landingpage()),
                 (Route<dynamic> route) => false,
               );
-              break;
+            } else if (locationPermission.isDenied ||
+                locationPermission.isPermanentlyDenied) {
+              // Handle denied location permissions
+              await FirebaseFirestore.instance
+                  .collection('Ambassdor')
+                  .doc(normalizedEmail)
+                  .set({
+                'name': user.displayName,
+                'email': normalizedEmail,
+                'Address': '',
+                'Age': 18,
+                'Gender': '',
+                'Icon': [],
+                'Interest': [],
+                'Phonenumber': '',
+                'X': 37.7749,
+                'Y': -122.4194,
+                'images': [],
+                'profile_pic': '',
+                'lastSeen': FieldValue.serverTimestamp(),
+                'status': 'Online',
+                'height': '0 cm',
+                "languages": [],
+                'education': '',
+                "match_count": 0,
+                'addedusers': [],
+                "rating": [],
+                'description': '',
+                'statusType': "active",
+                'Logged': 'true',
+                'deviceToken': await FirebaseMessaging.instance.getToken()
+              });
 
-            case 'block':
-              // Handle blocked account
-              await FirebaseAuth.instance.signOut();
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => block()),
+                MaterialPageRoute(builder: (context) => A_landingpage()),
                 (Route<dynamic> route) => false,
               );
-              break;
+            }
+          } else {
+            // User email is invalid for registration
+            await FirebaseAuth.instance.signOut();
 
-            case 'delete':
-              // Navigate to account deletion page
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) {
-                  return DeleteAccountPage(
-                    initiateDelete: true,
-                    who: 'Ambassdor',
-                  );
-                }),
-              );
-              break;
-
-            default:
-              // Handle other statuses (e.g., deactivated)
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => deactivepage()),
-                (Route<dynamic> route) => false,
-              );
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  "This Email Not Valid in the Ambassador Account",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            );
           }
         }
-      } else {
-        // New user; check if the user exists in other collections
-                PermissionStatus locationPermission = await Permission.location.request();
-
-        final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(normalizedEmail)
-            .get();
-        final DocumentSnapshot deleteDoc = await FirebaseFirestore.instance
-            .collection('delete')
-            .doc(normalizedEmail)
-            .get();
-
-        if (!userDoc.exists && !deleteDoc.exists) {
-          // Register the new Ambassdor account
-    
-         
-         
-         if (locationPermission.isGranted) {
-          // Get user's current location
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          double latitude = position.latitude;
-          double longitude = position.longitude;
-         
-    
-    
-
-          await FirebaseFirestore.instance
-              .collection('Ambassdor')
-              .doc(normalizedEmail)
-              .set({
-            'name': user.displayName,
-            'email': normalizedEmail,
-            'Address': '',
-            'Age': 18,
-            'Gender': '',
-            'Icon': [],
-            'Interest': [],
-            'Phonenumber': '',
-            'X': latitude,
-            'Y': longitude,
-            'images': [],
-            'profile_pic': '',
-            'lastSeen': FieldValue.serverTimestamp(),
-            'status': 'Online',
-            'height': '0 cm',
-            "languages": [],
-            'education': '',
-            "match_count": 0,
-            'addedusers': [],
-            "rating": [],
-            'description': '',
-            'statusType': "active",
-            'Logged': 'true',
-            'deviceToken': await FirebaseMessaging.instance.getToken()
-          });
-
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => A_landingpage()),
-            (Route<dynamic> route) => false,
-          );
-      
-      
-           } else if (locationPermission.isDenied || locationPermission.isPermanentlyDenied) {
-          // Handle denied location permissions
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "Location permission is required to complete the registration.",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          );
-        }
-      
-      
-        } 
-        
-        
-        
-        else {
-          // User email is invalid for registration
-              await FirebaseAuth.instance.signOut();
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "This Email Not Valid in the Ambassador Account",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          );
-        }
       }
-    }
 
-    return user;
-  } catch (e) {
-    print('Error during Google Sign-In: $e');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "An error occurred during Google Sign-In. Please try again.",
-          style: TextStyle(color: Colors.white),
+      return user;
+    } catch (e) {
+      print('Error during Google Sign-In: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "An error occurred during Google Sign-In. Please try again.",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-    );
-    return null;
-  }
-}
-Future<User?> signInWithApple(BuildContext context) async {
-  try {
-    // Sign in with Apple
-    final appleCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
-
-    // Create Firebase Auth Credential
-    final AuthCredential credential = OAuthProvider("apple.com").credential(
-      idToken: appleCredential.identityToken,
-      accessToken: appleCredential.authorizationCode,
-    );
-
-    final UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    final User? user = userCredential.user;
-
-    if (user != null) {
-      final String? email = user.email;
-      final String? displayName = user.displayName ?? appleCredential.givenName;
-
-      // Firestore references
-      final userDoc =
-          FirebaseFirestore.instance.collection('Ambassdor').doc(email);
-      final ambassadorDoc =
-          FirebaseFirestore.instance.collection('users').doc(email);
-      final deleteDoc =
-          FirebaseFirestore.instance.collection('delete').doc(email);
-
-      // Check Firestore for user document
-      final userSnapshot = await userDoc.get();
-      final ambassadorSnapshot = await ambassadorDoc.get();
-      final deleteSnapshot = await deleteDoc.get();
-
-      if (!userSnapshot.exists && !ambassadorSnapshot.exists && !deleteSnapshot.exists) {
-        // Request location permission
-        PermissionStatus locationPermission = await Permission.location.request();
-
-        if (locationPermission.isGranted) {
-          // Get user's current location
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          double latitude = position.latitude;
-          double longitude = position.longitude;
-
-          // Create new ambassador document
-          await userDoc.set({
-            'name': displayName ?? 'Unknown User',
-            'email': email,
-            'Address': '',
-            'Age': 18,
-            'Gender': '',
-            'Icon': [],
-            'Interest': [],
-            'Phonenumber': '',
-            'X': latitude,
-            'Y': longitude,
-            'images': [],
-            'profile_pic': '',
-            'lastSeen': FieldValue.serverTimestamp(),
-            'status': 'Online',
-            'height': '0 cm',
-            "languages": [],
-            'education': '',
-            "match_count": 0,
-            'addedusers': [],
-            "rating": [],
-            'description': '',
-            'statusType': "active",
-            'Logged': 'true',
-            'deviceToken': await FirebaseMessaging.instance.getToken(),
-          });
-
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => A_landingpage()), // Replace with your landing page widget
-            (Route<dynamic> route) => false,
-          );
-        } else {
-          // Handle denied location permissions
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "Location permission is required to complete the registration.",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          );
-        }
-      } else if (userSnapshot.exists) {
-        // Update device token
-        await userDoc.update({'deviceToken': await FirebaseMessaging.instance.getToken()});
-
-        // Fetch updated user document
-        final updatedUserDoc = await userDoc.get();
-        final data = updatedUserDoc.data() as Map<String, dynamic>?;
-
-        if (data!['statusType'] == 'active') {
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          double latitude = position.latitude;
-          double longitude = position.longitude;
-
-          await userDoc.update({'Logged': 'true'});
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => A_MainScreen()), // Replace with your main screen widget
-            (Route<dynamic> route) => false,
-          );
-        } else if (data!['statusType'] == 'block') {
-          await FirebaseAuth.instance.signOut();
-
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => block()), // Replace with your block page widget
-            (Route<dynamic> route) => false,
-          );
-        } else if (data!['statusType'] == 'delete') {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => DeleteAccountPage(
-              initiateDelete: true,
-              who: 'Ambassdor',
-            ), // Replace with your delete account page widget
-          ));
-        } else {
-          await FirebaseAuth.instance.signOut();
-
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => deactivepage()), // Replace with your deactivation page widget
-            (Route<dynamic> route) => false,
-          );
-        }
-      } else {
-        await FirebaseAuth.instance.signOut();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("This Email Not Valid in the Ambassador Account",
-              style: TextStyle(color: Colors.white)),
-        ));
-      }
+      );
+      return null;
     }
-
-    return user;
-  } catch (e) {
-    print('Error signing in with Apple: $e');
-    return null;
   }
-}
+
+  Future<User?> signInWithApple(BuildContext context) async {
+    try {
+      // Sign in with Apple
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      // Create Firebase Auth Credential
+      final AuthCredential credential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        final String? email = user.email;
+        final String? displayName =
+            user.displayName ?? appleCredential.givenName;
+
+        // Firestore references
+        final userDoc =
+            FirebaseFirestore.instance.collection('Ambassdor').doc(email);
+        final ambassadorDoc =
+            FirebaseFirestore.instance.collection('users').doc(email);
+        final deleteDoc =
+            FirebaseFirestore.instance.collection('delete').doc(email);
+
+        // Check Firestore for user document
+        final userSnapshot = await userDoc.get();
+        final ambassadorSnapshot = await ambassadorDoc.get();
+        final deleteSnapshot = await deleteDoc.get();
+
+        if (!userSnapshot.exists &&
+            !ambassadorSnapshot.exists &&
+            !deleteSnapshot.exists) {
+          // Request location permission
+          PermissionStatus locationPermission =
+              await Permission.location.request();
+
+          if (locationPermission.isGranted) {
+            // Get user's current location
+            Position position = await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high);
+            double latitude = position.latitude;
+            double longitude = position.longitude;
+
+            // Create new ambassador document
+            await userDoc.set({
+              'name': displayName ?? 'Unknown User',
+              'email': email,
+              'Address': '',
+              'Age': 18,
+              'Gender': '',
+              'Icon': [],
+              'Interest': [],
+              'Phonenumber': '',
+              'X': latitude,
+              'Y': longitude,
+              'images': [],
+              'profile_pic': '',
+              'lastSeen': FieldValue.serverTimestamp(),
+              'status': 'Online',
+              'height': '0 cm',
+              "languages": [],
+              'education': '',
+              "match_count": 0,
+              'addedusers': [],
+              "rating": [],
+              'description': '',
+              'statusType': "active",
+              'Logged': 'true',
+              'deviceToken': await FirebaseMessaging.instance.getToken(),
+            });
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      A_landingpage()), // Replace with your landing page widget
+              (Route<dynamic> route) => false,
+            );
+          } else {
+            // Handle denied location permissions
+             await userDoc.set({
+              'name': displayName ?? 'Unknown User',
+              'email': email,
+              'Address': '',
+              'Age': 18,
+              'Gender': '',
+              'Icon': [],
+              'Interest': [],
+              'Phonenumber': '',
+              'X': 37.7749,
+              'Y': -122.4194,
+              'images': [],
+              'profile_pic': '',
+              'lastSeen': FieldValue.serverTimestamp(),
+              'status': 'Online',
+              'height': '0 cm',
+              "languages": [],
+              'education': '',
+              "match_count": 0,
+              'addedusers': [],
+              "rating": [],
+              'description': '',
+              'statusType': "active",
+              'Logged': 'true',
+              'deviceToken': await FirebaseMessaging.instance.getToken(),
+            });
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      A_landingpage()), // Replace with your landing page widget
+              (Route<dynamic> route) => false,
+            );
+          }
+        } else if (userSnapshot.exists) {
+          // Update device token
+          await userDoc.update(
+              {'deviceToken': await FirebaseMessaging.instance.getToken()});
+
+          // Fetch updated user document
+          final updatedUserDoc = await userDoc.get();
+          final data = updatedUserDoc.data() as Map<String, dynamic>?;
+
+          if (data!['statusType'] == 'active') {
+            Position position = await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high);
+            double latitude = position.latitude;
+            double longitude = position.longitude;
+
+            await userDoc.update({'Logged': 'true'});
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      A_MainScreen()), // Replace with your main screen widget
+              (Route<dynamic> route) => false,
+            );
+          } else if (data!['statusType'] == 'block') {
+            await FirebaseAuth.instance.signOut();
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      block()), // Replace with your block page widget
+              (Route<dynamic> route) => false,
+            );
+          } else if (data!['statusType'] == 'delete') {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => DeleteAccountPage(
+                initiateDelete: true,
+                who: 'Ambassdor',
+              ), // Replace with your delete account page widget
+            ));
+          } else {
+            await FirebaseAuth.instance.signOut();
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      deactivepage()), // Replace with your deactivation page widget
+              (Route<dynamic> route) => false,
+            );
+          }
+        } else {
+          await FirebaseAuth.instance.signOut();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("This Email Not Valid in the Ambassador Account",
+                style: TextStyle(color: Colors.white)),
+          ));
+        }
+      }
+
+      return user;
+    } catch (e) {
+      print('Error signing in with Apple: $e');
+      return null;
+    }
+  }
 }
