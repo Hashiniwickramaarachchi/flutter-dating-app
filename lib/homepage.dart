@@ -99,10 +99,10 @@ class _homepageState extends State<homepage> {
       }
 
       if (mounted) {
-  setState(() {
-    // Your state updates
-  });
-}
+        setState(() {
+          // Your state updates
+        });
+      }
     }
   }
 
@@ -725,15 +725,8 @@ class _homepageState extends State<homepage> {
                                               return person(
                                                 onlinecheck: lastSeen,
                                                 statecolour: stateColor,
-                                                profileimage: 
-                                            CachedNetworkImage(
-                  imageUrl: user['profile_pic'] ??
-                      "https://img.freepik.com/premium-vector/data-loading-icon-waiting-program-vector-image-file-upload_652575-2",
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ).toString(),
-                                            
-                                            
+                                                profileimage:
+                                                    user['profile_pic'],
                                                 name: user['name']
                                                     .toString()
                                                     .toUpperCase(),

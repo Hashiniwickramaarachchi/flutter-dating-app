@@ -72,7 +72,6 @@ class _CoupleAddingPageState extends State<CoupleAddingPage> {
     final job = TextEditingController();
    final _height =TextEditingController();
 
-  final password = TextEditingController();
   bool passwordshow = true;
   String? selectedgender;
 
@@ -240,35 +239,6 @@ class _CoupleAddingPageState extends State<CoupleAddingPage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: height / 47,
-                ),
-                child: TextField(
-                  controller: password,
-                  obscureText: passwordshow,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(),
-                    hintText: 'Password',
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            passwordshow = !passwordshow;
-                          });
-                        },
-                        icon: Icon(
-                          passwordshow
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Color(0xff4D4D4D),
-                          size: height / 40,
-                        )),
-                    contentPadding:
-                        EdgeInsets.only(left: width / 50, top: height / 50),
-                  ),
-                ),
-              ),
                        Padding(
          padding: EdgeInsets.only(
            bottom: height / 47,
@@ -395,7 +365,6 @@ class _CoupleAddingPageState extends State<CoupleAddingPage> {
 
   Future Singupcheck(User currentuserlog) async {
     if (name.text.isNotEmpty &&
-        password.text.isNotEmpty &&
         email.text.isNotEmpty &&
         education.text.isNotEmpty &&
         selectedgender.toString().isNotEmpty &&

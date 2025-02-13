@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datingapp/userchatpage.dart';
 import 'package:datingapp/viewpage.dart';
@@ -111,96 +112,114 @@ class _personState extends State<person> {
                       },
                     ));
                   },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                            image: NetworkImage(widget.profileimage),
-                            fit: BoxFit.cover)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Stack(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: height / 60,
-                              left: width / 50,
-                              right: width / 3),
-                          child: Container(
-                            height: height / 16,
-                            width: width,
-                            decoration: BoxDecoration(
-                              color: Color(0xff7905F5),
-                              borderRadius: BorderRadius.circular(height / 10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "${calculateDistance(widget.startLatitude, widget.startLongitude, widget.endLatitude, widget.endLongitude).toInt()}Km far away",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ),
-                          ),
+                        Image.asset(
+                          'images/placeholder.png',
+                          fit: BoxFit.cover,
                         ),
-                        Container(
-                          height: height / 8,
-                          width: width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15)),
-                            color: Colors.white
-                                .withOpacity(0.2), // Optional for color overlay
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                            ),
-                            child: BackdropFilter(
-                              filter:
-                                  ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+                        CachedNetworkImage(
+                          imageUrl: widget.profileimage,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, error, stackTrace) {
+                            return Image.asset(
+                              'images/placeholder.png', // Path to your p
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: height / 60,
+                                  left: width / 50,
+                                  right: width / 3),
                               child: Container(
-                                child: Container(
-                                  color:
-                                      const Color.fromARGB(255, 124, 124, 124)
-                                          .withOpacity(0.2),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          widget.name,
-                                          style: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontFamily: "defaultfontsbold",
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 24),
-                                          maxLines: 1, // Limit to one line
-                                          overflow: TextOverflow
-                                              .ellipsis, // Adds "..." if the text is too long
-                                        ),
-                                      ),
-                                      Text(
-                                        textAlign: TextAlign.center,
-                                        widget.location,
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontFamily: "defaultfonts",
-                                            fontSize: 20),
-                                      ),
-                                    ],
+                                height: height / 16,
+                                width: width,
+                                decoration: BoxDecoration(
+                                  color: Color(0xff7905F5),
+                                  borderRadius:
+                                      BorderRadius.circular(height / 10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "${calculateDistance(widget.startLatitude, widget.startLongitude, widget.endLatitude, widget.endLongitude).toInt()}Km far away",
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
+                            Container(
+                              height: height / 8,
+                              width: width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(15),
+                                    bottomRight: Radius.circular(15)),
+                                color: Colors.white.withOpacity(
+                                    0.2), // Optional for color overlay
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                ),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaX: 4.0, sigmaY: 4.0),
+                                  child: Container(
+                                    child: Container(
+                                      color: const Color.fromARGB(
+                                              255, 124, 124, 124)
+                                          .withOpacity(0.2),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Text(
+                                              textAlign: TextAlign.center,
+                                              widget.name,
+                                              style: TextStyle(
+                                                  color: const Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  fontFamily:
+                                                      "defaultfontsbold",
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 24),
+                                              maxLines: 1, // Limit to one line
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Adds "..." if the text is too long
+                                            ),
+                                          ),
+                                          Text(
+                                            textAlign: TextAlign.center,
+                                            widget.location,
+                                            style: TextStyle(
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontFamily: "defaultfonts",
+                                                fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -312,19 +331,18 @@ class _personState extends State<person> {
                     ),
                     GestureDetector(
                       onTap: () {
-
- return  checkInterestMatch();
+                        return checkInterestMatch();
                         // Navigator.of(context).push(MaterialPageRoute(
-                          // builder: (context) {
-                            // return ChatPage(
-                              // chatPartnerEmail: widget.ID,
-                              // chatPartnername: widget.name,
-                              // chatPartnerimage: widget.profileimage,
-                              // onlinecheck: widget.onlinecheck,
-                              // statecolour: widget.statecolour,
-                              // who: 'user',
-                            // );
-                          // },
+                        // builder: (context) {
+                        // return ChatPage(
+                        // chatPartnerEmail: widget.ID,
+                        // chatPartnername: widget.name,
+                        // chatPartnerimage: widget.profileimage,
+                        // onlinecheck: widget.onlinecheck,
+                        // statecolour: widget.statecolour,
+                        // who: 'user',
+                        // );
+                        // },
                         // ));
                       },
                       child: Container(
@@ -364,7 +382,8 @@ class _personState extends State<person> {
 
     return distanceInKilometers;
   }
-   void checkInterestMatch() async {
+
+  void checkInterestMatch() async {
     try {
       // Get logged-in user's email
 
@@ -392,20 +411,18 @@ class _personState extends State<person> {
 
         // Navigate or show message
         if (matchPercentage >= 60) {
-      
-            Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) {
-          return ChatPage(
-            chatPartnerEmail: widget.ID,
-            chatPartnername: widget.name,
-            chatPartnerimage: widget.profileimage,
-            onlinecheck: widget.onlinecheck,
-            statecolour: widget.statecolour,
-            who: 'users',
-          );
-        },
-      ));
-      
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return ChatPage(
+                chatPartnerEmail: widget.ID,
+                chatPartnername: widget.name,
+                chatPartnerimage: widget.profileimage,
+                onlinecheck: widget.onlinecheck,
+                statecolour: widget.statecolour,
+                who: 'users',
+              );
+            },
+          ));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -426,5 +443,4 @@ class _personState extends State<person> {
       );
     }
   }
-
 }

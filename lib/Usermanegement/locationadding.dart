@@ -20,7 +20,7 @@ class _loactionaddingState extends State<loactionadding> {
   String? _currentLocationName; // Variable to store the location name
   String? _currentlocationcountry;
   GoogleMapController? _mapController;
-
+  bool isloading= true;
   @override
   void initState() {
     super.initState();
@@ -49,6 +49,10 @@ class _loactionaddingState extends State<loactionadding> {
   }
 
   Future<void> _getCurrentLocation() async {
+    setState(() {
+     isloading=false;
+     
+    });
     try {
       final locationData = await _location.getLocation();
       setState(() {
@@ -81,6 +85,10 @@ class _loactionaddingState extends State<loactionadding> {
     } catch (e) {
       print('Error getting location: $e');
     }
+    setState(() {
+      isloading=true;
+    
+    });
   }
 
   @override
@@ -191,10 +199,12 @@ class _loactionaddingState extends State<loactionadding> {
                         borderRadius: BorderRadius.circular(height / 10),
                       ),
                       child: Center(
-                        child: Text(
-                          "Allow location access",
+                        child: isloading ?
+                        Text(
+                          "Allow live location access",
                           style: Theme.of(context).textTheme.bodySmall,
-                        ),
+                        ):CircularProgressIndicator(color: Colors.white)
+,
                       ),
                     ),
                   ),
@@ -213,7 +223,8 @@ class _loactionaddingState extends State<loactionadding> {
                     child: Padding(
                       padding: EdgeInsets.only(
                           bottom: height / 90, top: height / 50),
-                      child: Text(
+                      child: 
+                      Text(
                         "Enter location manually",
                         style: TextStyle(
                             color: const Color(0xff7D7676),
