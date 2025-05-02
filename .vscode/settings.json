@@ -1,4 +1,8 @@
 {
-    "FSharp.suggestGitignore": false,
-    "java.configuration.updateBuildConfiguration": "interactive"
+  "FSharp.suggestGitignore": false,
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "flutterTools.displayGetxContextMenu": false,
+  "flutterTools.displayMobxContextMenu": false,
+  "flutterTools.displayRiverpodContextMenu": false,
+  "flutterTools.displayModularContextMenu": false
 }
